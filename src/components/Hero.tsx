@@ -20,8 +20,8 @@ const Hero = () => {
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium mb-8">
-            <span className="w-2 h-2 bg-accent rounded-full mr-2"></span>
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white text-sm font-medium mb-8 animate-fade-in shadow-glow">
+            <span className="w-2 h-2 bg-accent rounded-full mr-3 animate-pulse"></span>
             Leading Energy Consulting Experts
           </div>
 
@@ -40,13 +40,13 @@ const Hero = () => {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="gradient" size="xl" className="group">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in">
+            <Button variant="gradient" size="xl" className="group hover:shadow-glow hover:scale-105 transition-all duration-300">
               Start Your Transition
-              <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-smooth" />
+              <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-all duration-300" />
             </Button>
             
-            <Button variant="outline" size="xl" className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm">
+            <Button variant="outline" size="xl" className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-md hover:scale-105 transition-all duration-300">
               <Play className="mr-2 w-5 h-5" />
               Watch Our Story
             </Button>
@@ -71,9 +71,9 @@ const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white rounded-full mt-2 animate-bounce"></div>
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-float">
+        <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center backdrop-blur-sm bg-white/5">
+          <div className="w-1 h-3 bg-white rounded-full mt-2 animate-bounce shadow-sm"></div>
         </div>
       </div>
     </section>

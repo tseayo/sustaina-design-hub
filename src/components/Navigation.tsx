@@ -18,15 +18,15 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border shadow-soft ${className}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-elegant ${className}`}>
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-18">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 gradient-hero rounded-lg flex items-center justify-center">
+          <div className="flex items-center space-x-3 group cursor-pointer">
+            <div className="w-11 h-11 gradient-hero rounded-xl flex items-center justify-center shadow-soft group-hover:shadow-medium transition-all duration-300 group-hover:scale-105">
               <Leaf className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-heading font-semibold text-foreground">
+            <span className="text-xl font-heading font-bold text-foreground group-hover:text-primary transition-smooth">
               NetZero Energy
             </span>
           </div>

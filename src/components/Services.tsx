@@ -93,26 +93,30 @@ const Services = () => {
           {services.map((service) => {
             const IconComponent = service.icon;
             return (
-              <Card key={service.id} className="group hover:shadow-elegant transition-smooth bg-card border-border h-full">
-                <CardHeader>
-                  <div className="w-12 h-12 gradient-hero rounded-lg flex items-center justify-center mb-4">
-                    <IconComponent className="w-6 h-6 text-white" />
+              <Card key={service.id} className="group hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 bg-card border-border overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardHeader className="relative z-10">
+                  <div className="w-14 h-14 gradient-hero rounded-xl flex items-center justify-center mb-6 shadow-soft group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-xl font-heading text-foreground group-hover:text-primary transition-smooth">
+                  <CardTitle className="text-xl font-heading text-foreground group-hover:text-primary transition-smooth leading-tight">
                     {service.title}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col h-full">
-                  <p className="text-muted-foreground mb-6 leading-relaxed flex-grow">
+                <CardContent className="relative z-10 flex flex-col min-h-[280px]">
+                  <p className="text-muted-foreground mb-8 leading-relaxed text-[15px]">
                     {service.description}
                   </p>
                   
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-foreground text-sm">Key Features:</h4>
-                    <ul className="space-y-2">
+                  <div className="mt-auto">
+                    <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center">
+                      <span className="w-2 h-2 bg-accent rounded-full mr-2"></span>
+                      Key Features
+                    </h4>
+                    <ul className="space-y-3">
                       {service.features.map((feature, index) => (
-                        <li key={index} className="text-sm text-muted-foreground flex items-start">
-                          <span className="w-1.5 h-1.5 bg-accent rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                        <li key={index} className="text-sm text-muted-foreground flex items-start leading-relaxed">
+                          <span className="w-1.5 h-1.5 bg-primary/60 rounded-full mr-3 mt-2.5 flex-shrink-0 group-hover:bg-primary transition-colors duration-300"></span>
                           {feature}
                         </li>
                       ))}
