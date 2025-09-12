@@ -22,6 +22,8 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          light: "hsl(var(--primary-light))",
+          dark: "hsl(var(--primary-dark))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -57,6 +59,16 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+        heading: ["Poppins", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        "display-xl": ["4.5rem", { lineHeight: "1.1", fontWeight: "800" }],
+        "display-lg": ["3.75rem", { lineHeight: "1.1", fontWeight: "700" }],
+        "display-md": ["3rem", { lineHeight: "1.2", fontWeight: "700" }],
+        "display-sm": ["2.25rem", { lineHeight: "1.3", fontWeight: "600" }],
       },
       borderRadius: {
         lg: "var(--radius)",

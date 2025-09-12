@@ -1,0 +1,95 @@
+import { Button } from "@/components/ui/button";
+import { Menu, X, Leaf } from "lucide-react";
+import { useState } from "react";
+
+interface NavigationProps {
+  className?: string;
+}
+
+const Navigation = ({ className = "" }: NavigationProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navItems = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "#about" },
+    { name: "Services", href: "#services" },
+    { name: "Case Studies", href: "#case-studies" },
+    { name: "Contact", href: "#contact" },
+  ];
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border shadow-soft ${className}`}>
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <div className="w-10 h-10 gradient-hero rounded-lg flex items-center justify-center">
+              <Leaf className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-heading font-semibold text-foreground">
+              NetZero Energy
+            </span>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+              >
+                {item.name}
+              </a>
+            ))}
+          </div>
+
+          {/* CTA Button */}
+          <div className="hidden md:block">
+            <Button variant="hero" size="lg">
+              Get Started
+            </Button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? (
+              <X className="w-6 h-6 text-foreground" />
+            ) : (
+              <Menu className="w-6 h-6 text-foreground" />
+            )}
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden py-4 border-t border-border">
+            <div className="flex flex-col space-y-4">
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </a>
+              ))}
+              <div className="pt-4">
+                <Button variant="hero" size="lg" className="w-full">
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navigation;
