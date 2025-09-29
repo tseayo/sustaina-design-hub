@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, Leaf } from "lucide-react";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, X, Leaf, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface NavigationProps {
   className?: string;
@@ -12,9 +19,22 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "About", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Case Studies", href: "#case-studies" },
-    { name: "Contact", href: "#contact" },
+  ];
+
+  const focusAreas = [
+    "Solar Power",
+    "Emission Reduction", 
+    "Hydrogen",
+    "E-mobility Charging",
+    "Hydropower",
+    "Bioenergy"
+  ];
+
+  const serviceItems = [
+    "Energy Credits",
+    "Renewable Energy Solutions",
+    "GHG Accounting and Carbon Credit Certification",
+    "Training and Workshops"
   ];
 
   return (
@@ -42,6 +62,53 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                 {item.name}
               </a>
             ))}
+            
+            {/* Focus Areas Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium">
+                Focus Areas
+                <ChevronDown className="ml-1 w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-background border border-border shadow-elegant">
+                {focusAreas.map((area) => (
+                  <DropdownMenuItem key={area} asChild>
+                    <Link to="/focus-areas" className="w-full cursor-pointer">
+                      {area}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Services Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium">
+                Services
+                <ChevronDown className="ml-1 w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-background border border-border shadow-elegant">
+                {serviceItems.map((service) => (
+                  <DropdownMenuItem key={service} asChild>
+                    <a href="#services" className="w-full cursor-pointer">
+                      {service}
+                    </a>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <a
+              href="#case-studies"
+              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+            >
+              Case Studies
+            </a>
+            <a
+              href="#contact"
+              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+            >
+              Contact
+            </a>
           </div>
 
           {/* CTA Button */}
@@ -79,6 +146,41 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   {item.name}
                 </a>
               ))}
+              
+              <div className="px-2 py-1">
+                <Link 
+                  to="/focus-areas" 
+                  className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Focus Areas
+                </Link>
+              </div>
+              
+              <a
+                href="#services"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Services
+              </a>
+              
+              <a
+                href="#case-studies"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Case Studies
+              </a>
+              
+              <a
+                href="#contact"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Contact
+              </a>
+              
               <div className="pt-4">
                 <Button variant="hero" size="lg" className="w-full">
                   Get Started

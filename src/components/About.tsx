@@ -42,7 +42,7 @@ const About = () => {
           </h2>
           
           <p className="text-xl text-muted-foreground leading-relaxed">
-            We are a dedicated team of energy professionals committed to driving sustainability and innovation in the energy sector.
+            Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission, optimize efficiency, and transition to sustainable energy solutions.
           </p>
         </div>
 

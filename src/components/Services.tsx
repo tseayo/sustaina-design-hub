@@ -37,14 +37,14 @@ const Services = () => {
     },
     {
       id: 3,
-      title: "Sustainability Strategy Development", 
-      description: "Customized sustainability strategies aligned with your organization's objectives, incorporating industry best practices and regulatory compliance.",
+      title: "Greenhouse Gas (GHG) Accounting & Carbon Credit Certification", 
+      description: "Quantify your carbon footprint and achieve sustainability goals with verified GHG accounting and high-quality carbon credit solutions.",
       icon: Target,
       features: [
-        "Strategic roadmap development",
-        "Stakeholder engagement planning",
-        "Regulatory compliance guidance",
-        "Long-term goal setting"
+        "Comprehensive GHG emissions measurement",
+        "GHG reporting and documentation",
+        "Carbon reduction strategy development",
+        "Carbon credit procurement and certification"
       ]
     },
     {
