@@ -74,53 +74,69 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-24 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4">
-            Our Expertise
-          </Badge>
-          <h2 className="font-heading text-display-md text-foreground mb-6">
-            Comprehensive Energy Solutions
+    <section id="services" className="py-32 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
+      
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-20 space-y-8">
+          <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 text-primary px-6 py-3 rounded-full text-sm font-medium animate-fade-in">
+            <Search className="w-4 h-4" />
+            Our Services
+          </div>
+          <h2 className="text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            Comprehensive Energy{' '}
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Solutions
+            </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            We provide a comprehensive range of services to help businesses and communities 
-            transition toward a sustainable, net-zero future across multiple areas of expertise.
+          <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            From initial assessment to full implementation, we provide end-to-end energy consulting services tailored to your unique needs.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {services.map((service) => {
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
-              <Card key={service.id} className="group hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 bg-card border-border overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <CardHeader className="relative z-10">
-                  <div className="w-14 h-14 gradient-hero rounded-xl flex items-center justify-center mb-6 shadow-soft group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="w-7 h-7 text-white" />
+              <Card 
+                key={service.id} 
+                className="group relative overflow-hidden border-0 bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 animate-fade-in"
+                style={{ animationDelay: `${0.1 * index}s` }}
+              >
+                {/* Gradient Border Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                
+                <CardHeader className="pb-6 relative z-10">
+                  <div className="relative">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                      <IconComponent className="w-8 h-8 text-white" />
+                    </div>
+                    {/* Floating dot */}
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
-                  <CardTitle className="text-xl font-heading text-foreground group-hover:text-primary transition-smooth leading-tight">
+                  <CardTitle className="text-2xl font-heading font-bold group-hover:text-primary transition-colors duration-300 mb-3">
                     {service.title}
                   </CardTitle>
-                </CardHeader>
-                <CardContent className="relative z-10 flex flex-col min-h-[280px]">
-                  <p className="text-muted-foreground mb-8 leading-relaxed text-[15px]">
+                  <p className="text-muted-foreground leading-relaxed">
                     {service.description}
                   </p>
-                  
-                  <div className="mt-auto">
+                </CardHeader>
+                <CardContent className="relative z-10">
+                  <div className="space-y-4">
                     <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center">
                       <span className="w-2 h-2 bg-accent rounded-full mr-2"></span>
                       Key Features
                     </h4>
-                    <ul className="space-y-3">
-                      {service.features.map((feature, index) => (
-                        <li key={index} className="text-sm text-muted-foreground flex items-start leading-relaxed">
-                          <span className="w-1.5 h-1.5 bg-primary/60 rounded-full mr-3 mt-2.5 flex-shrink-0 group-hover:bg-primary transition-colors duration-300"></span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+                    {service.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-start gap-3 text-sm">
+                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        </div>
+                        <span className="text-muted-foreground">{feature}</span>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
