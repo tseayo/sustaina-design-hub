@@ -22,7 +22,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   ];
 
   const expertiseAreas = [
-    { name: "Solar Power", path: "/focus-areas" },
+    { name: "Solar Power", path: "/solar-power" },
     { name: "Emission Reduction", path: "/emission-reduction" },
     { name: "Hydrogen", path: "/focus-areas" },
     { name: "E-mobility Charging", path: "/focus-areas" },
