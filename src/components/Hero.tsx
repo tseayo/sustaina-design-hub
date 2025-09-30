@@ -81,8 +81,7 @@ const Hero = () => {
                 </h1>
 
                 <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl font-light">
-                  Transform your energy future with expert consulting that reduces emissions, improves efficiency, and
-                  accelerates sustainable growth.
+                  Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission, optimize efficiency, and transition to sustainable energy solutions.
                 </p>
               </div>
 

@@ -21,16 +21,16 @@ const Navigation = ({ className = "" }: NavigationProps) => {
     { name: "About", href: "#about" },
   ];
 
-  const focusAreas = [
-    "Solar Power",
-    "Emission Reduction", 
-    "Hydrogen",
-    "E-mobility Charging",
-    "Hydropower",
-    "Bioenergy"
+  const expertiseAreas = [
+    { name: "Solar Power", path: "/focus-areas" },
+    { name: "Emission Reduction", path: "/emission-reduction" },
+    { name: "Hydrogen", path: "/focus-areas" },
+    { name: "E-mobility Charging", path: "/focus-areas" },
+    { name: "Hydropower", path: "/focus-areas" },
+    { name: "Bioenergy", path: "/focus-areas" }
   ];
 
-  const serviceItems = [
+  const solutionItems = [
     "Energy Credits",
     "Renewable Energy Solutions",
     "GHG Accounting and Carbon Credit Certification",
@@ -47,7 +47,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               <Leaf className="w-6 h-6 text-white" />
             </div>
             <span className="text-xl font-heading font-bold text-foreground group-hover:text-primary transition-smooth">
-              NetZero Energy
+              NECL
             </span>
           </div>
 
@@ -63,31 +63,31 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               </a>
             ))}
             
-            {/* Focus Areas Dropdown */}
+            {/* Expertise Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium">
-                Focus Areas
+                Expertise
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-background border border-border shadow-elegant">
-                {focusAreas.map((area) => (
-                  <DropdownMenuItem key={area} asChild>
-                    <Link to="/focus-areas" className="w-full cursor-pointer">
-                      {area}
+                {expertiseAreas.map((area) => (
+                  <DropdownMenuItem key={area.name} asChild>
+                    <Link to={area.path} className="w-full cursor-pointer">
+                      {area.name}
                     </Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Services Dropdown */}
+            {/* Solutions Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium">
-                Services
+                Solutions
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-background border border-border shadow-elegant">
-                {serviceItems.map((service) => (
+                {solutionItems.map((service) => (
                   <DropdownMenuItem key={service} asChild>
                     <a href="#services" className="w-full cursor-pointer">
                       {service}
@@ -153,7 +153,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   className="text-muted-foreground hover:text-primary transition-smooth font-medium"
                   onClick={() => setIsOpen(false)}
                 >
-                  Focus Areas
+                  Expertise
                 </Link>
               </div>
               
@@ -162,7 +162,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                 className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
-                Services
+                Solutions
               </a>
               
               <a

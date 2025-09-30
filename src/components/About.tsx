@@ -1,28 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Leaf, Lightbulb, Shield, Users, Target, Award } from "lucide-react";
+import { Zap, UserCheck, DollarSign, ThumbsUp, ShieldCheck, Users, Target, Award } from "lucide-react";
 
 const About = () => {
   const values = [
     {
-      icon: Leaf,
-      title: "Sustainability",
-      description: "Committed to protecting the planet by promoting responsible energy practices and reducing environmental impact."
+      icon: Zap,
+      title: "Energy Availability",
+      description: "Ensuring reliable and consistent access to energy resources for sustainable development and growth."
     },
     {
-      icon: Lightbulb,
-      title: "Innovation", 
-      description: "Embracing cutting-edge technologies and forward-thinking strategies to deliver the most effective energy solutions."
+      icon: UserCheck,
+      title: "Accessibility", 
+      description: "Making clean energy solutions accessible to all communities and stakeholders, regardless of location or scale."
     },
     {
-      icon: Shield,
-      title: "Integrity",
-      description: "Believing in transparency, honesty, and ethical decision-making in all aspects of our work."
+      icon: DollarSign,
+      title: "Affordability",
+      description: "Delivering cost-effective energy solutions that maximize value while minimizing financial barriers."
     },
     {
-      icon: Users,
-      title: "Collaboration",
-      description: "Working closely with clients, partners, and stakeholders to develop solutions that create lasting positive change."
+      icon: ThumbsUp,
+      title: "Acceptability",
+      description: "Promoting energy solutions that align with social, cultural, and environmental values of communities."
+    },
+    {
+      icon: ShieldCheck,
+      title: "Assurance",
+      description: "Providing trusted expertise and guaranteed quality in all our energy consulting and implementation services."
     }
   ];
 
@@ -115,7 +120,7 @@ const About = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
           {values.map((value, index) => (
             <Card key={index} className="group hover:shadow-elegant hover:scale-105 transition-all duration-300 cursor-pointer border border-border/50 overflow-hidden relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
