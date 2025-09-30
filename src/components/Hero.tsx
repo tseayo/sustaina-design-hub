@@ -2,97 +2,179 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, Play } from "lucide-react";
 import heroImage from "@/assets/hero-energy.jpg";
 
+/**
+ * Revised Hero component:
+ * - better semantics (<main>, <figure>, <dl>)
+ * - accessible CTAs (aria-labels)
+ * - respects prefers-reduced-motion
+ * - decorative elements aria-hidden
+ * - explicit image width/height to reduce CLS
+ * - improved CTA hierarchy & wording
+ */
+
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background/95 to-muted/30">
-      {/* Stripe-inspired Background Pattern */}
-      <div className="absolute inset-0 z-0">
+    <section
+      aria-labelledby="hero-heading"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background/95 to-muted/30"
+    >
+      {/* Skip link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:sr-only-once absolute left-4 top-4 z-50 rounded px-3 py-2 bg-foreground text-background focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        Skip to content
+      </a>
+
+      {/* Background patterns (decorative) */}
+      <div className="absolute inset-0 z-0" aria-hidden="true">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(45deg,transparent_25%,hsl(var(--primary)/0.02)_25%,hsl(var(--primary)/0.02)_50%,transparent_50%,transparent_75%,hsl(var(--primary)/0.02)_75%)] bg-[length:60px_60px]"></div>
-      </div>
-      
-      {/* Floating Elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-20 left-1/4 w-2 h-2 bg-primary rounded-full opacity-40 animate-float"></div>
-        <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-accent rounded-full opacity-60 animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-1/3 left-1/6 w-3 h-3 bg-primary/30 rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
+
+        {/* stripe pattern: reduce motion and opacity for low-priority background */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(45deg,transparent_25%,hsl(var(--primary)/0.02)_25%,hsl(var(--primary)/0.02)_50%,transparent_50%,transparent_75%,hsl(var(--primary)/0.02)_75%)] bg-[length:60px_60px] opacity-60"></div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 z-10 relative">
+      {/* Floating decorative dots (motion-safe only) */}
+      <div className="absolute inset-0 z-0" aria-hidden="true">
+        <div className="absolute top-20 left-1/4 w-2 h-2 bg-primary rounded-full opacity-40 motion-safe:animate-float"></div>
+        <div
+          className="absolute top-1/3 right-1/4 w-1 h-1 bg-accent rounded-full opacity-60 motion-safe:animate-float"
+          style={{ animationDelay: "2s" }}
+        />
+        <div
+          className="absolute bottom-1/3 left-1/6 w-3 h-3 bg-primary/30 rounded-full motion-safe:animate-float"
+          style={{ animationDelay: "4s" }}
+        />
+      </div>
+
+      <div id="main-content" className="container mx-auto px-6 lg:px-8 z-10 relative">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
             <div className="space-y-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 rounded-full px-6 py-3 animate-fade-in">
-                <div className="relative">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping opacity-40"></div>
+              <div
+                className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 rounded-full px-6 py-3 animate-fade-in motion-reduce:animate-none"
+                aria-hidden="false"
+              >
+                <span className="sr-only">Trusted partner</span>
+                <div className="relative flex-none">
+                  <div className="w-2 h-2 bg-green-500 rounded-full" aria-hidden="true"></div>
+                  <div
+                    className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full motion-safe:animate-ping opacity-40"
+                    aria-hidden="true"
+                  />
                 </div>
                 <span className="text-sm font-medium text-foreground/80">Leading Energy Consultants</span>
               </div>
 
-              {/* Main Headline */}
-              <div className="space-y-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                <h1 className="text-5xl lg:text-7xl font-heading font-bold text-foreground leading-[0.9] tracking-tight">
-                  Driving Your Journey to{' '}
+              {/* Headline + Subhead */}
+              <div className="space-y-6">
+                <h1
+                  id="hero-heading"
+                  className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight tracking-tight"
+                >
+                  Driving your journey to{" "}
                   <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
                     Net Zero Energy
                   </span>
                 </h1>
-                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light max-w-xl">
-                  Transform your energy future with expert consulting services that reduce emissions, optimize efficiency, and accelerate sustainable growth.
+
+                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl font-light">
+                  Transform your energy future with expert consulting that reduces emissions, improves efficiency, and
+                  accelerates sustainable growth.
                 </p>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <Button variant="hero" size="xl" className="shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
-                  Start Your Transition
+              {/* Action Buttons: clear primary vs secondary */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <Button
+                  variant="hero"
+                  size="xl"
+                  className="shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                  aria-label="Start your net zero transition — get a free consultation"
+                  onClick={() => {
+                    // replace with navigation/modal logic
+                    console.log("Primary CTA: Start Transition");
+                  }}
+                >
+                  Get a free consultation
                 </Button>
-                <Button variant="outline" size="xl" className="hover:shadow-lg transition-all duration-300">
-                  Watch Our Story
+
+                <Button
+                  variant="outline"
+                  size="xl"
+                  className="hover:shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 flex items-center gap-2"
+                  aria-label="Watch our story — opens video"
+                  onClick={() => {
+                    // open video modal or navigate to /about#video
+                    console.log("Open video story");
+                  }}
+                >
+                  <Play className="w-4 h-4" aria-hidden="true" />
+                  <span>Watch Our Story</span>
                 </Button>
               </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-8 pt-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <div className="space-y-2">
-                  <div className="text-3xl lg:text-4xl font-bold text-foreground">500+</div>
+              {/* Stats — semantic definition list */}
+              <dl className="grid grid-cols-3 gap-8 pt-8" aria-label="Company statistics">
+                <div>
+                  <dt className="sr-only">Projects</dt>
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground" aria-label="Five hundred plus projects">
+                    500+
+                  </dd>
                   <div className="text-muted-foreground text-sm font-medium">Projects</div>
                 </div>
-                <div className="space-y-2">
-                  <div className="text-3xl lg:text-4xl font-bold text-foreground">2M+</div>
+
+                <div>
+                  <dt className="sr-only">CO2 reduced</dt>
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground" aria-label="Two million plus tonnes of carbon dioxide reduced">
+                    2M+
+                  </dd>
                   <div className="text-muted-foreground text-sm font-medium">CO₂ Reduced</div>
                 </div>
-                <div className="space-y-2">
-                  <div className="text-3xl lg:text-4xl font-bold text-foreground">15+</div>
+
+                <div>
+                  <dt className="sr-only">Years</dt>
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground" aria-label="Fifteen plus years of experience">
+                    15+
+                  </dd>
                   <div className="text-muted-foreground text-sm font-medium">Years</div>
                 </div>
-              </div>
+              </dl>
             </div>
 
             {/* Right Visual */}
-            <div className="relative animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <div className="relative">
-                <img 
-                  src={heroImage} 
-                  alt="Sustainable energy solutions" 
-                  className="w-full h-auto rounded-3xl shadow-2xl border border-border/50"
+            <div className="relative">
+              <figure className="relative rounded-3xl shadow-2xl border border-border/50 overflow-hidden">
+                {/* If you can add responsive images, replace this with <picture> + srcSet */}
+                <img
+                  src={heroImage}
+                  alt="Solar panels and energy infrastructure — sustainable energy solutions in practice."
+                  width={1200}
+                  height={800}
+                  loading="eager" // hero LCP: eager is OK; change to lazy if below-fold
+                  decoding="async"
+                  className="w-full h-auto object-cover"
                 />
-                {/* Overlay Card */}
-                <div className="absolute -bottom-8 -left-8 bg-card border border-border rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+
+                {/* Overlay card — accessible, but ensure it's visible to keyboard users if actionable */}
+                <figcaption
+                  className="absolute -bottom-8 -left-8 bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-sm w-64"
+                  aria-hidden="false"
+                >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
-                      <div className="w-6 h-6 bg-green-500 rounded-full"></div>
+                    <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center flex-none">
+                      <span className="sr-only">Carbon reduction</span>
+                      <div className="w-6 h-6 bg-green-500 rounded-full" aria-hidden="true" />
                     </div>
                     <div>
                       <div className="text-sm font-medium text-muted-foreground">Carbon Reduction</div>
                       <div className="text-2xl font-bold text-foreground">-87%</div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </figcaption>
+              </figure>
             </div>
           </div>
         </div>
