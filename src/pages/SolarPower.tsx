@@ -1,6 +1,7 @@
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Navigation from "@/components/Navigation";
 import { 
   Sun, 
   DollarSign, 
@@ -365,6 +366,8 @@ const SolarPower = () => {
           </Button>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import FocusAreas from "./pages/FocusAreas";
 import EmissionReduction from "./pages/EmissionReduction";
 import SolarPower from "./pages/SolarPower";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/focus-areas" element={<FocusAreas />} />
           <Route path="/emission-reduction" element={<EmissionReduction />} />
           <Route path="/solar-power" element={<SolarPower />} />
+          <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

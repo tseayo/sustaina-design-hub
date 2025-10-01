@@ -86,33 +86,39 @@ const Hero = () => {
               </div>
 
               {/* Action Buttons: clear primary vs secondary */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                <Button
-                  variant="hero"
-                  size="xl"
-                  className="shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
-                  aria-label="Start your net zero transition — get a free consultation"
-                  onClick={() => {
-                    // replace with navigation/modal logic
-                    console.log("Primary CTA: Start Transition");
-                  }}
-                >
-                  Get a free consultation
-                </Button>
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <Button
+                    variant="hero"
+                    size="xl"
+                    className="shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                    aria-label="Start your net zero transition — get a free consultation"
+                    onClick={() => {
+                      window.location.href = "/contact";
+                    }}
+                  >
+                    Get a Free Consultation
+                    <ChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                  </Button>
 
-                <Button
-                  variant="outline"
-                  size="xl"
-                  className="hover:shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 flex items-center gap-2"
-                  aria-label="Watch our story — opens video"
-                  onClick={() => {
-                    // open video modal or navigate to /about#video
-                    console.log("Open video story");
-                  }}
-                >
-                  <Play className="w-4 h-4" aria-hidden="true" />
-                  <span>Watch Our Story</span>
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="xl"
+                    className="border-2 hover:bg-accent/10 hover:border-primary hover:shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50"
+                    aria-label="Explore our solutions"
+                    onClick={() => {
+                      window.location.href = "/#services";
+                    }}
+                  >
+                    Explore Solutions
+                  </Button>
+                </div>
+                
+                {/* Microcopy under CTA */}
+                <p className="text-sm text-muted-foreground flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                  Free 30-minute consultation • No obligation • Expert guidance
+                </p>
               </div>
 
               {/* Stats — semantic definition list */}

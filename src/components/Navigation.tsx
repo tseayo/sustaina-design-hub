@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, X, Leaf, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, Leaf, ChevronDown, Facebook, Instagram, Twitter } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 interface NavigationProps {
@@ -15,6 +14,15 @@ interface NavigationProps {
 
 const Navigation = ({ className = "" }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -31,14 +39,18 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   ];
 
   const solutionItems = [
-    "Energy Credits",
+    "Energy Audits",
     "Renewable Energy Solutions",
     "GHG Accounting and Carbon Credit Certification",
     "Training and Workshops"
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-elegant ${className}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled 
+        ? "bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-elegant" 
+        : "bg-background/80 backdrop-blur-md border-b border-transparent"
+    } ${className}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-18">
           {/* Logo */}
@@ -65,7 +77,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
             
             {/* Expertise Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium">
+              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 Expertise
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
@@ -82,7 +94,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
             {/* Solutions Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium">
+              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 Solutions
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
@@ -98,24 +110,54 @@ const Navigation = ({ className = "" }: NavigationProps) => {
             </DropdownMenu>
 
             <a
-              href="#case-studies"
+              href="/#projects"
               className="text-muted-foreground hover:text-primary transition-smooth font-medium"
             >
-              Case Studies
+              Projects
             </a>
             <a
-              href="#contact"
+              href="/#faq"
+              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+            >
+              FAQ
+            </a>
+            <Link
+              to="/contact"
               className="text-muted-foreground hover:text-primary transition-smooth font-medium"
             >
               Contact
-            </a>
+            </Link>
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Button variant="hero" size="lg">
-              Get Started
-            </Button>
+          {/* Social Links */}
+          <div className="hidden md:flex items-center space-x-3">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+              aria-label="Follow us on Facebook"
+            >
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+              aria-label="Follow us on Instagram"
+            >
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+              aria-label="Follow us on Twitter"
+            >
+              <Twitter className="w-5 h-5" />
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -166,25 +208,57 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               </a>
               
               <a
-                href="#case-studies"
+                href="/#projects"
                 className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
-                Case Studies
+                Projects
               </a>
               
               <a
-                href="#contact"
+                href="/#faq"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                FAQ
+              </a>
+              
+              <Link
+                to="/contact"
                 className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Contact
-              </a>
+              </Link>
               
-              <div className="pt-4">
-                <Button variant="hero" size="lg" className="w-full">
-                  Get Started
-                </Button>
+              <div className="pt-4 flex space-x-4 justify-center border-t border-border">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+                  aria-label="Twitter"
+                >
+                  <Twitter className="w-5 h-5" />
+                </a>
               </div>
             </div>
           </div>

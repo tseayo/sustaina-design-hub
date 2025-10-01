@@ -49,14 +49,14 @@ const CaseStudies = () => {
   ];
 
   return (
-    <section id="case-studies" className="py-24 bg-muted/30">
+    <section id="projects" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <Badge variant="secondary" className="mb-4">
             Success Stories
           </Badge>
           <h2 className="font-heading text-display-md text-foreground mb-6">
-            Proven Results Across Industries
+            Our Project Success Stories
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Explore our case studies to see how we've helped clients achieve their net-zero goals. 

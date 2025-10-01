@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
@@ -97,8 +98,10 @@ const EmissionReduction = () => {
   ];
 
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen">
       <Navigation />
+      
+      <main className="bg-background">
       
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background/95 to-muted/30 pt-24">
@@ -289,7 +292,10 @@ const EmissionReduction = () => {
           </Card>
         </div>
       </section>
-    </main>
+      </main>
+      
+      <Footer />
+    </div>
   );
 };
 
