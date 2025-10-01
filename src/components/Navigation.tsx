@@ -4,9 +4,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, X, Leaf, ChevronDown, Facebook, Instagram, Twitter } from "lucide-react";
+import { Menu, X, ChevronDown, Facebook, Instagram, Twitter } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import neclLogo from "@/assets/necl-logo.png";
 
 interface NavigationProps {
   className?: string;
@@ -54,14 +55,13 @@ const Navigation = ({ className = "" }: NavigationProps) => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-18">
           {/* Logo */}
-          <div className="flex items-center space-x-3 group cursor-pointer">
-            <div className="w-11 h-11 gradient-hero rounded-xl flex items-center justify-center shadow-soft group-hover:shadow-medium transition-all duration-300 group-hover:scale-105">
-              <Leaf className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-xl font-heading font-bold text-foreground group-hover:text-primary transition-smooth">
-              NECL
-            </span>
-          </div>
+          <Link to="/" className="flex items-center space-x-3 group cursor-pointer">
+            <img 
+              src={neclLogo} 
+              alt="NetZero Energy Consultant Limited" 
+              className="h-14 w-auto transition-all duration-300 group-hover:scale-105"
+            />
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">

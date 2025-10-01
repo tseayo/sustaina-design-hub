@@ -1,5 +1,6 @@
-import { Leaf, Mail, Phone, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
 import { Link } from "react-router-dom";
+import neclLogo from "@/assets/necl-logo.png";
 
 const Footer = () => {
   return (
@@ -8,14 +9,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
           <div className="space-y-6">
-            <div className="flex items-center space-x-3 group">
-              <div className="w-11 h-11 gradient-hero rounded-xl flex items-center justify-center shadow-soft">
-                <Leaf className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-heading font-bold text-foreground">
-                NECL
-              </span>
-            </div>
+            <Link to="/" className="flex items-center group">
+              <img 
+                src={neclLogo} 
+                alt="NetZero Energy Consultant Limited" 
+                className="h-14 w-auto transition-all duration-300 group-hover:scale-105"
+              />
+            </Link>
             <p className="text-muted-foreground leading-relaxed">
               Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission and transition to sustainable energy solutions.
             </p>
