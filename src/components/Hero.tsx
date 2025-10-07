@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Play } from "lucide-react";
 import heroImage from "@/assets/hero-energy.jpg";
-import neclLogo from "@/assets/necl-logo.png";
 
 /**
  * Revised Hero component:
@@ -71,24 +70,15 @@ const Hero = () => {
 
               {/* Headline + Subhead */}
               <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                  <img 
-                    src={neclLogo} 
-                    alt="NECL Logo" 
-                    className="h-16 sm:h-20 w-auto"
-                    width={80}
-                    height={80}
-                  />
-                  <h1
-                    id="hero-heading"
-                    className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight tracking-tight"
-                  >
-                    Driving your journey to{" "}
-                    <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
-                      Net Zero Energy
-                    </span>
-                  </h1>
-                </div>
+                <h1
+                  id="hero-heading"
+                  className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight tracking-tight"
+                >
+                  Driving your journey to{" "}
+                  <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
+                    Net Zero Energy
+                  </span>
+                </h1>
 
                 <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl font-light">
                   Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission, optimize efficiency, and transition to sustainable energy solutions.

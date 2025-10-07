@@ -16,7 +16,6 @@ interface NavigationProps {
 const Navigation = ({ className = "" }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -175,81 +174,34 @@ const Navigation = ({ className = "" }: NavigationProps) => {
           </button>
         </div>
 
-        {/* Mobile Navigation Backdrop */}
+        {/* Mobile Navigation */}
         {isOpen && (
-          <div 
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden animate-fade-in"
-            onClick={() => setIsOpen(false)}
-            aria-hidden="true"
-          />
-        )}
-
-        {/* Mobile Navigation Drawer */}
-        {isOpen && (
-          <div className="fixed top-0 left-0 h-full w-80 bg-background border-r border-border shadow-2xl z-50 md:hidden animate-slide-in-left overflow-y-auto">
-            <div className="p-6">
-              {/* Close button */}
-              <button
-                onClick={() => setIsOpen(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-muted rounded-lg transition-smooth"
-                aria-label="Close menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Logo in drawer */}
-              <Link to="/" className="flex items-center mb-8" onClick={() => setIsOpen(false)}>
-                <img 
-                  src={neclLogo} 
-                  alt="NetZero Energy Consultant Limited" 
-                  className="h-12 w-auto"
-                />
-              </Link>
-
-              <div className="flex flex-col space-y-2">
+          <div className="md:hidden py-4 border-t border-border">
+            <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-muted-foreground hover:text-primary hover:bg-muted transition-smooth font-medium px-4 py-3 rounded-lg block"
+                  className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
                 </a>
               ))}
               
-              {/* Expertise accordion */}
-              <div className="border-b border-border pb-2">
-                <button
-                  onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
-                  className="w-full flex items-center justify-between text-muted-foreground hover:text-primary hover:bg-muted transition-smooth font-medium px-4 py-3 rounded-lg"
+              <div className="px-2 py-1">
+                <Link 
+                  to="/focus-areas" 
+                  className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+                  onClick={() => setIsOpen(false)}
                 >
-                  <span>Expertise</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isExpertiseOpen ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {isExpertiseOpen && (
-                  <div className="ml-4 mt-2 space-y-1 animate-accordion-down">
-                    {expertiseAreas.map((area) => (
-                      <Link
-                        key={area.name}
-                        to={area.path}
-                        className="block text-sm text-muted-foreground hover:text-primary hover:bg-muted transition-smooth px-4 py-2 rounded-lg"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsExpertiseOpen(false);
-                        }}
-                      >
-                        {area.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                  Expertise
+                </Link>
               </div>
               
               <a
                 href="#services"
-                className="text-muted-foreground hover:text-primary hover:bg-muted transition-smooth font-medium px-4 py-3 rounded-lg block"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Solutions
@@ -257,7 +209,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               
               <a
                 href="/#projects"
-                className="text-muted-foreground hover:text-primary hover:bg-muted transition-smooth font-medium px-4 py-3 rounded-lg block"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Projects
@@ -265,7 +217,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               
               <a
                 href="/#faq"
-                className="text-muted-foreground hover:text-primary hover:bg-muted transition-smooth font-medium px-4 py-3 rounded-lg block"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 FAQ
@@ -273,18 +225,18 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               
               <Link
                 to="/contact"
-                className="text-muted-foreground hover:text-primary hover:bg-muted transition-smooth font-medium px-4 py-3 rounded-lg block"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Contact
               </Link>
               
-              <div className="pt-6 flex space-x-4 justify-center border-t border-border mt-4">
+              <div className="pt-4 flex space-x-4 justify-center border-t border-border">
                 <a
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center bg-muted hover:bg-primary hover:text-white rounded-lg transition-smooth"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -293,7 +245,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center bg-muted hover:bg-primary hover:text-white rounded-lg transition-smooth"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -302,12 +254,11 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center bg-muted hover:bg-primary hover:text-white rounded-lg transition-smooth"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
                   aria-label="Twitter"
                 >
                   <Twitter className="w-5 h-5" />
                 </a>
-              </div>
               </div>
             </div>
           </div>

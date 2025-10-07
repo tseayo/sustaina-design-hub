@@ -14,8 +14,6 @@ interface Message {
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [hasBeenClosed, setHasBeenClosed] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -35,24 +33,6 @@ const Chatbot = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  // Delay chatbot appearance after page load
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!hasBeenClosed) {
-        setIsVisible(true);
-      }
-    }, 3000); // 3 second delay
-
-    return () => clearTimeout(timer);
-  }, [hasBeenClosed]);
-
-  const handleToggle = () => {
-    if (isOpen) {
-      setHasBeenClosed(true);
-    }
-    setIsOpen(!isOpen);
-  };
 
   const getAutomatedResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
@@ -134,9 +114,8 @@ const Chatbot = () => {
   return (
     <>
       {/* Chat Toggle Button */}
-      {isVisible && (
-        <Button
-          onClick={handleToggle}
+      <Button
+        onClick={() => setIsOpen(!isOpen)}
         className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl transition-all duration-300 ${
           isOpen ? 'bg-destructive hover:bg-destructive/90' : 'bg-primary hover:bg-primary-dark'
         }`}
@@ -147,8 +126,7 @@ const Chatbot = () => {
         ) : (
           <MessageCircle className="w-6 h-6 text-white" />
         )}
-        </Button>
-      )}
+      </Button>
 
       {/* Chat Window */}
       {isOpen && (
