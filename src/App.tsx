@@ -10,6 +10,7 @@ import SolarPower from "./pages/SolarPower";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Chatbot from "./components/Chatbot";
+import BackToTop from "./components/BackToTop";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Chatbot />
+        <BackToTop />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

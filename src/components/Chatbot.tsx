@@ -14,6 +14,10 @@ interface Message {
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [labelDismissed, setLabelDismissed] = useState(() => {
+    return localStorage.getItem('chatbot-label-dismissed') === 'true';
+  });
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -25,6 +29,13 @@ const Chatbot = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -111,13 +122,27 @@ const Chatbot = () => {
     setTimeout(() => handleSendMessage(), 100);
   };
 
+  const dismissLabel = () => {
+    setLabelDismissed(true);
+    localStorage.setItem('chatbot-label-dismissed', 'true');
+  };
+
+  if (!isVisible) return null;
+
   return (
     <>
       {/* Chat Toggle Button */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-2">
-        {!isOpen && (
-          <div className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-fade-in">
-            Chat with us
+        {!isOpen && !labelDismissed && (
+          <div className="bg-primary text-white px-4 py-2 pr-2 rounded-full text-sm font-medium shadow-lg animate-fade-in flex items-center gap-2">
+            <span>Chat with us</span>
+            <button
+              onClick={dismissLabel}
+              className="hover:bg-white/20 rounded-full p-1 transition-colors"
+              aria-label="Dismiss"
+            >
+              <X className="w-3 h-3" />
+            </button>
           </div>
         )}
         <Button
