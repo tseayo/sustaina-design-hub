@@ -1,0 +1,3 @@
+# Force canonical https://www domain for all routes (301 permanent)
+# Redirect any request to the canonical https://www version
+/*    https://www.netzeroenergyexperts.com/:splat    301!
