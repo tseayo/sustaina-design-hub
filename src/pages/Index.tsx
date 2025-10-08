@@ -8,7 +8,6 @@ import CaseStudies from "@/components/CaseStudies";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
-import Chatbot from "@/components/Chatbot";
 
 const Index = () => {
   return (
@@ -23,7 +22,6 @@ const Index = () => {
       <FAQ />
       <Footer />
       <BackToTop />
-      <Chatbot />
     </main>
   );
 };

@@ -114,19 +114,26 @@ const Chatbot = () => {
   return (
     <>
       {/* Chat Toggle Button */}
-      <Button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl transition-all duration-300 ${
-          isOpen ? 'bg-destructive hover:bg-destructive/90' : 'bg-primary hover:bg-primary-dark'
-        }`}
-        size="icon"
-      >
-        {isOpen ? (
-          <X className="w-6 h-6 text-white" />
-        ) : (
-          <MessageCircle className="w-6 h-6 text-white" />
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-2">
+        {!isOpen && (
+          <div className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-fade-in">
+            Chat with us
+          </div>
         )}
-      </Button>
+        <Button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-14 h-14 rounded-full shadow-2xl transition-all duration-300 ${
+            isOpen ? 'bg-destructive hover:bg-destructive/90' : 'bg-primary hover:bg-primary-dark'
+          }`}
+          size="icon"
+        >
+          {isOpen ? (
+            <X className="w-6 h-6 text-white" />
+          ) : (
+            <MessageCircle className="w-6 h-6 text-white" />
+          )}
+        </Button>
+      </div>
 
       {/* Chat Window */}
       {isOpen && (
