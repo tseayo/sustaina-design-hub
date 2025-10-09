@@ -27,7 +27,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "About", href: "#about" },
+    { name: "About", href: "/about" },
   ];
 
   const expertiseAreas = [
@@ -40,10 +40,10 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   ];
 
   const solutionItems = [
-    "Energy Audits",
-    "Renewable Energy Solutions",
-    "GHG Accounting and Carbon Credit Certification",
-    "Training and Workshops"
+    { name: "Energy Audits", path: "/services" },
+    { name: "Renewable Energy Solutions", path: "/services" },
+    { name: "GHG Accounting and Carbon Credit Certification", path: "/services" },
+    { name: "Training and Workshops", path: "/services" }
   ];
 
   return (
@@ -66,13 +66,13 @@ const Navigation = ({ className = "" }: NavigationProps) => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="text-muted-foreground hover:text-primary transition-smooth font-medium"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
             
             {/* Expertise Dropdown */}
@@ -100,27 +100,27 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-background border border-border shadow-elegant">
                 {solutionItems.map((service) => (
-                  <DropdownMenuItem key={service} asChild>
-                    <a href="#services" className="w-full cursor-pointer">
-                      {service}
-                    </a>
+                  <DropdownMenuItem key={service.name} asChild>
+                    <Link to={service.path} className="w-full cursor-pointer">
+                      {service.name}
+                    </Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <a
-              href="/#projects"
+            <Link
+              to="/projects"
               className="text-muted-foreground hover:text-primary transition-smooth font-medium"
             >
               Projects
-            </a>
-            <a
-              href="/#faq"
+            </Link>
+            <Link
+              to="/faq"
               className="text-muted-foreground hover:text-primary transition-smooth font-medium"
             >
               FAQ
-            </a>
+            </Link>
             <Link
               to="/contact"
               className="text-muted-foreground hover:text-primary transition-smooth font-medium"
@@ -179,14 +179,14 @@ const Navigation = ({ className = "" }: NavigationProps) => {
           <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
               
               <div className="px-2 py-1">
@@ -199,29 +199,29 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                 </Link>
               </div>
               
-              <a
-                href="#services"
+              <Link
+                to="/services"
                 className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Solutions
-              </a>
+              </Link>
               
-              <a
-                href="/#projects"
+              <Link
+                to="/projects"
                 className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Projects
-              </a>
+              </Link>
               
-              <a
-                href="/#faq"
+              <Link
+                to="/faq"
                 className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 FAQ
-              </a>
+              </Link>
               
               <Link
                 to="/contact"
