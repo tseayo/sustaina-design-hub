@@ -85,14 +85,14 @@ const Services = () => {
             <Search className="w-4 h-4" />
             Our Services
           </div>
-          <h2 className="text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Comprehensive Energy{' '}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Solutions
             </span>
           </h2>
-          <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            From initial assessment to full implementation, we provide end-to-end energy consulting services tailored to your unique needs.
+          <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in max-w-3xl mx-auto" style={{ animationDelay: '0.2s' }}>
+            From initial assessment to full implementation, we deliver tailored energy consulting services that drive measurable results and long-term sustainability for your organization.
           </p>
         </div>
 

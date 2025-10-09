@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Play } from "lucide-react";
 import heroImage from "@/assets/hero-energy.jpg";
+import neclLogo from "@/assets/necl-logo.png";
 
 /**
  * Revised Hero component:
@@ -52,10 +53,25 @@ const Hero = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
             <div className="space-y-8">
+              {/* Logo and Tagline */}
+              <div className="flex items-center gap-4 mb-4 animate-fade-in">
+                <img 
+                  src={neclLogo}
+                  alt="NetZero Energy Consultants Ltd Logo" 
+                  className="h-16 w-auto"
+                  loading="eager"
+                />
+                <div className="h-12 w-px bg-border"></div>
+                <span className="text-sm font-medium text-muted-foreground">
+                  Driving your journey to Net Zero Energy
+                </span>
+              </div>
+
               {/* Badge */}
               <div
                 className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 rounded-full px-6 py-3 animate-fade-in motion-reduce:animate-none"
                 aria-hidden="false"
+                style={{ animationDelay: '0.1s' }}
               >
                 <span className="sr-only">Trusted partner</span>
                 <div className="relative flex-none">
@@ -73,15 +89,16 @@ const Hero = () => {
                 <h1
                   id="hero-heading"
                   className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight tracking-tight"
+                  style={{ animationDelay: '0.2s' }}
                 >
-                  Driving your journey to{" "}
+                  Your Trusted Partner for{" "}
                   <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
-                    Net Zero Energy
+                    Sustainable Energy Transitions
                   </span>
                 </h1>
 
-                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl font-light">
-                  Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission, optimize efficiency, and transition to sustainable energy solutions.
+                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl font-light" style={{ animationDelay: '0.3s' }}>
+                  We empower businesses and communities to achieve net-zero goals through expert consulting in renewable energy, carbon reduction, and sustainable solutions. Partner with us to reduce emissions, optimize efficiency, and build a greener future.
                 </p>
               </div>
 

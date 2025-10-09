@@ -51,16 +51,20 @@ const CaseStudies = () => {
   return (
     <section id="projects" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4">
+        <div className="text-center mb-20 space-y-6">
+          <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 text-primary px-6 py-3 rounded-full text-sm font-medium animate-fade-in">
+            <TrendingUp className="w-4 h-4" />
             Success Stories
-          </Badge>
-          <h2 className="font-heading text-display-md text-foreground mb-6">
-            Our Project Success Stories
+          </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            Proven Results,{' '}
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Real Impact
+            </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Explore our case studies to see how we've helped clients achieve their net-zero goals. 
-            Each project highlights our tailored approach and measurable impact.
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            Discover how we've helped organizations across industries achieve their net-zero ambitions. 
+            Each project showcases our commitment to delivering measurable, sustainable outcomes.
           </p>
         </div>
 

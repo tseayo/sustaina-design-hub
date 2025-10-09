@@ -174,69 +174,120 @@ const Navigation = ({ className = "" }: NavigationProps) => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.name}
-                </a>
-              ))}
-              
-              <div className="px-2 py-1">
-                <Link 
-                  to="/focus-areas" 
-                  className="text-muted-foreground hover:text-primary transition-smooth font-medium"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Expertise
-                </Link>
-              </div>
-              
-              <a
-                href="#services"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                Solutions
-              </a>
-              
-              <a
-                href="/#projects"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                Projects
-              </a>
-              
-              <a
-                href="/#faq"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                FAQ
-              </a>
-              
-              <Link
-                to="/contact"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
+        {/* Mobile Navigation - Slide from Left */}
+        <div
+          className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-background/98 backdrop-blur-xl shadow-2xl z-50 transform transition-transform duration-300 ease-out md:hidden ${
+            isOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <div className="flex flex-col h-full">
+            {/* Mobile Menu Header */}
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <Link to="/" className="flex items-center" onClick={() => setIsOpen(false)}>
+                <img 
+                  src={neclLogo} 
+                  alt="NetZero Energy" 
+                  className="h-10 w-auto"
+                />
               </Link>
-              
-              <div className="pt-4 flex space-x-4 justify-center border-t border-border">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                aria-label="Close menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Mobile Menu Content */}
+            <div className="flex-1 overflow-y-auto py-6 px-6">
+              <nav className="flex flex-col space-y-1">
+                {navItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-foreground hover:text-primary hover:bg-primary/5 transition-all font-medium px-4 py-3 rounded-lg"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+                
+                {/* Expertise with Expandable Sub-items */}
+                <details className="group">
+                  <summary className="text-foreground hover:text-primary hover:bg-primary/5 transition-all font-medium px-4 py-3 rounded-lg cursor-pointer list-none flex items-center justify-between">
+                    <span>Expertise</span>
+                    <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+                  </summary>
+                  <div className="mt-2 ml-4 space-y-1 border-l-2 border-primary/20 pl-4">
+                    {expertiseAreas.map((area) => (
+                      <Link
+                        key={area.name}
+                        to={area.path}
+                        className="block text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all py-2 px-3 rounded-lg text-sm"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {area.name}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+                
+                {/* Solutions with Expandable Sub-items */}
+                <details className="group">
+                  <summary className="text-foreground hover:text-primary hover:bg-primary/5 transition-all font-medium px-4 py-3 rounded-lg cursor-pointer list-none flex items-center justify-between">
+                    <span>Solutions</span>
+                    <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+                  </summary>
+                  <div className="mt-2 ml-4 space-y-1 border-l-2 border-primary/20 pl-4">
+                    {solutionItems.map((solution) => (
+                      <a
+                        key={solution}
+                        href="#services"
+                        className="block text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all py-2 px-3 rounded-lg text-sm"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {solution}
+                      </a>
+                    ))}
+                  </div>
+                </details>
+                
+                <a
+                  href="/#projects"
+                  className="text-foreground hover:text-primary hover:bg-primary/5 transition-all font-medium px-4 py-3 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Projects
+                </a>
+                
+                <a
+                  href="/#faq"
+                  className="text-foreground hover:text-primary hover:bg-primary/5 transition-all font-medium px-4 py-3 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  FAQ
+                </a>
+                
+                <Link
+                  to="/contact"
+                  className="text-foreground hover:text-primary hover:bg-primary/5 transition-all font-medium px-4 py-3 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Contact
+                </Link>
+              </nav>
+            </div>
+
+            {/* Mobile Menu Footer */}
+            <div className="border-t border-border p-6">
+              <p className="text-sm text-muted-foreground mb-4">Connect with us</p>
+              <div className="flex space-x-4">
                 <a
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -245,7 +296,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -254,7 +305,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
                   aria-label="Twitter"
                 >
                   <Twitter className="w-5 h-5" />
@@ -262,6 +313,15 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Overlay for Mobile Menu */}
+        {isOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
         )}
       </div>
     </nav>
