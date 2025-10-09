@@ -16,7 +16,13 @@ const Hero = () => {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background/95 to-muted/30"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${heroImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
     >
       {/* Skip link for keyboard users */}
       <a
@@ -48,13 +54,13 @@ const Hero = () => {
       </div>
 
       <div id="main-content" className="container mx-auto px-6 lg:px-8 z-10 relative">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
-            <div className="space-y-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-center">
+            {/* Main Content */}
+            <div className="space-y-8 text-center">
               {/* Badge */}
               <div
-                className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 rounded-full px-6 py-3 animate-fade-in motion-reduce:animate-none"
+                className="inline-flex items-center gap-3 bg-white/10 border border-white/20 rounded-full px-6 py-3 animate-fade-in motion-reduce:animate-none backdrop-blur-sm"
                 aria-hidden="false"
               >
                 <span className="sr-only">Trusted partner</span>
@@ -65,14 +71,14 @@ const Hero = () => {
                     aria-hidden="true"
                   />
                 </div>
-                <span className="text-sm font-medium text-foreground/80">Leading Energy Consultants</span>
+                <span className="text-sm font-medium text-white">Leading Energy Consultants</span>
               </div>
 
               {/* Headline + Subhead */}
               <div className="space-y-6">
                 <h1
                   id="hero-heading"
-                  className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight tracking-tight"
+                  className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight tracking-tight"
                 >
                   Driving your journey to{" "}
                   <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
@@ -80,14 +86,14 @@ const Hero = () => {
                   </span>
                 </h1>
 
-                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl font-light">
+                <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed max-w-3xl mx-auto font-light">
                   Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission, optimize efficiency, and transition to sustainable energy solutions.
                 </p>
               </div>
 
               {/* Action Buttons: clear primary vs secondary */}
               <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <Button
                     variant="hero"
                     size="xl"
@@ -115,71 +121,38 @@ const Hero = () => {
                 </div>
                 
                 {/* Microcopy under CTA */}
-                <p className="text-sm text-muted-foreground flex items-center gap-2">
+                <p className="text-sm text-white/80 flex items-center justify-center gap-2">
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                   Free 30-minute consultation • No obligation • Expert guidance
                 </p>
               </div>
 
               {/* Stats — semantic definition list */}
-              <dl className="grid grid-cols-3 gap-8 pt-8" aria-label="Company statistics">
+              <dl className="grid grid-cols-3 gap-8 pt-8 max-w-2xl mx-auto" aria-label="Company statistics">
                 <div>
                   <dt className="sr-only">Projects</dt>
-                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground" aria-label="Five hundred plus projects">
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" aria-label="Five hundred plus projects">
                     500+
                   </dd>
-                  <div className="text-muted-foreground text-sm font-medium">Projects</div>
+                  <div className="text-white/80 text-sm font-medium">Projects</div>
                 </div>
 
                 <div>
                   <dt className="sr-only">CO2 reduced</dt>
-                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground" aria-label="Two million plus tonnes of carbon dioxide reduced">
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" aria-label="Two million plus tonnes of carbon dioxide reduced">
                     2M+
                   </dd>
-                  <div className="text-muted-foreground text-sm font-medium">CO₂ Reduced</div>
+                  <div className="text-white/80 text-sm font-medium">CO₂ Reduced</div>
                 </div>
 
                 <div>
                   <dt className="sr-only">Years</dt>
-                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground" aria-label="Fifteen plus years of experience">
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" aria-label="Fifteen plus years of experience">
                     15+
                   </dd>
-                  <div className="text-muted-foreground text-sm font-medium">Years</div>
+                  <div className="text-white/80 text-sm font-medium">Years</div>
                 </div>
               </dl>
-            </div>
-
-            {/* Right Visual */}
-            <div className="relative">
-              <figure className="relative rounded-3xl shadow-2xl border border-border/50 overflow-hidden">
-                {/* If you can add responsive images, replace this with <picture> + srcSet */}
-                <img
-                  src={heroImage}
-                  alt="Solar panels and energy infrastructure — sustainable energy solutions in practice."
-                  width={1200}
-                  height={800}
-                  loading="eager" // hero LCP: eager is OK; change to lazy if below-fold
-                  decoding="async"
-                  className="w-full h-auto object-cover"
-                />
-
-                {/* Overlay card — accessible, but ensure it's visible to keyboard users if actionable */}
-                <figcaption
-                  className="absolute -bottom-8 -left-8 bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-sm w-64"
-                  aria-hidden="false"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center flex-none">
-                      <span className="sr-only">Carbon reduction</span>
-                      <div className="w-6 h-6 bg-green-500 rounded-full" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-muted-foreground">Carbon Reduction</div>
-                      <div className="text-2xl font-bold text-foreground">-87%</div>
-                    </div>
-                  </div>
-                </figcaption>
-              </figure>
             </div>
           </div>
         </div>
