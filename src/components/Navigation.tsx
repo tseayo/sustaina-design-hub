@@ -49,8 +49,8 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? "bg-background backdrop-blur-xl border-b border-border shadow-elegant" 
-        : "bg-background/98 backdrop-blur-lg border-b border-border/30"
+        ? "bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-elegant" 
+        : "bg-background/80 backdrop-blur-md border-b border-transparent"
     } ${className}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-18">
@@ -69,7 +69,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:underline focus-visible:decoration-2"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium"
               >
                 {item.name}
               </Link>
@@ -77,14 +77,14 @@ const Navigation = ({ className = "" }: NavigationProps) => {
             
             {/* Expertise Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:underline focus-visible:decoration-2">
+              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 Expertise
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background border-2 border-border shadow-elegant z-50">
+              <DropdownMenuContent className="bg-background border border-border shadow-elegant">
                 {expertiseAreas.map((area) => (
                   <DropdownMenuItem key={area.name} asChild>
-                    <Link to={area.path} className="w-full cursor-pointer focus-visible:bg-accent focus-visible:text-accent-foreground">
+                    <Link to={area.path} className="w-full cursor-pointer">
                       {area.name}
                     </Link>
                   </DropdownMenuItem>
@@ -94,14 +94,14 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
             {/* Solutions Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:underline focus-visible:decoration-2">
+              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 Solutions
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background border-2 border-border shadow-elegant z-50">
+              <DropdownMenuContent className="bg-background border border-border shadow-elegant">
                 {solutionItems.map((service) => (
                   <DropdownMenuItem key={service.name} asChild>
-                    <Link to={service.path} className="w-full cursor-pointer focus-visible:bg-accent focus-visible:text-accent-foreground">
+                    <Link to={service.path} className="w-full cursor-pointer">
                       {service.name}
                     </Link>
                   </DropdownMenuItem>
@@ -111,19 +111,19 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
             <Link
               to="/projects"
-              className="text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:underline focus-visible:decoration-2"
+              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
             >
               Projects
             </Link>
             <Link
               to="/faq"
-              className="text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:underline focus-visible:decoration-2"
+              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
             >
               FAQ
             </Link>
             <Link
               to="/contact"
-              className="text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:underline focus-visible:decoration-2"
+              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
             >
               Contact
             </Link>
@@ -135,7 +135,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center text-foreground hover:text-primary transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
               aria-label="Follow us on Facebook"
             >
               <Facebook className="w-5 h-5" />
@@ -144,7 +144,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center text-foreground hover:text-primary transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
               aria-label="Follow us on Instagram"
             >
               <Instagram className="w-5 h-5" />
@@ -153,7 +153,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center text-foreground hover:text-primary transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
               aria-label="Follow us on Twitter"
             >
               <Twitter className="w-5 h-5" />
@@ -176,30 +176,32 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border bg-background">
+          <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="text-foreground hover:text-primary hover:bg-accent/10 transition-smooth font-semibold px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
               
-              <Link 
-                to="/focus-areas" 
-                className="text-foreground hover:text-primary hover:bg-accent/10 transition-smooth font-semibold px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                Expertise
-              </Link>
+              <div className="px-2 py-1">
+                <Link 
+                  to="/focus-areas" 
+                  className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Expertise
+                </Link>
+              </div>
               
               <Link
                 to="/services"
-                className="text-foreground hover:text-primary hover:bg-accent/10 transition-smooth font-semibold px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Solutions
@@ -207,7 +209,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               
               <Link
                 to="/projects"
-                className="text-foreground hover:text-primary hover:bg-accent/10 transition-smooth font-semibold px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Projects
@@ -215,7 +217,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               
               <Link
                 to="/faq"
-                className="text-foreground hover:text-primary hover:bg-accent/10 transition-smooth font-semibold px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 FAQ
@@ -223,7 +225,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               
               <Link
                 to="/contact"
-                className="text-foreground hover:text-primary hover:bg-accent/10 transition-smooth font-semibold px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
                 onClick={() => setIsOpen(false)}
               >
                 Contact
@@ -234,7 +236,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-foreground hover:text-primary transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
@@ -243,7 +245,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-foreground hover:text-primary transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -252,7 +254,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-foreground hover:text-primary transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
                   aria-label="Twitter"
                 >
                   <Twitter className="w-5 h-5" />

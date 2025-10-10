@@ -18,7 +18,7 @@ const Hero = () => {
       aria-labelledby="hero-heading"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(${heroImage})`,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${heroImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed'
@@ -79,21 +79,14 @@ const Hero = () => {
                 <h1
                   id="hero-heading"
                   className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight tracking-tight"
-                  style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.6)' }}
                 >
                   Driving your journey to{" "}
-                  <span 
-                    className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent"
-                    style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)' }}
-                  >
+                  <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
                     Net Zero Energy
                   </span>
                 </h1>
 
-                <p 
-                  className="text-base sm:text-lg lg:text-xl text-white leading-relaxed max-w-3xl mx-auto font-medium"
-                  style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.5)' }}
-                >
+                <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed max-w-3xl mx-auto font-light">
                   Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission, optimize efficiency, and transition to sustainable energy solutions.
                 </p>
               </div>
@@ -128,10 +121,7 @@ const Hero = () => {
                 </div>
                 
                 {/* Microcopy under CTA */}
-                <p 
-                  className="text-sm text-white flex items-center justify-center gap-2 font-medium"
-                  style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.7)' }}
-                >
+                <p className="text-sm text-white/80 flex items-center justify-center gap-2">
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                   Free 30-minute consultation • No obligation • Expert guidance
                 </p>
@@ -141,53 +131,26 @@ const Hero = () => {
               <dl className="grid grid-cols-3 gap-8 pt-8 max-w-2xl mx-auto" aria-label="Company statistics">
                 <div>
                   <dt className="sr-only">Projects</dt>
-                  <dd 
-                    className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" 
-                    aria-label="Five hundred plus projects"
-                    style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)' }}
-                  >
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" aria-label="Five hundred plus projects">
                     500+
                   </dd>
-                  <div 
-                    className="text-white text-sm font-semibold"
-                    style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.7)' }}
-                  >
-                    Projects
-                  </div>
+                  <div className="text-white/80 text-sm font-medium">Projects</div>
                 </div>
 
                 <div>
                   <dt className="sr-only">CO2 reduced</dt>
-                  <dd 
-                    className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" 
-                    aria-label="Two million plus tonnes of carbon dioxide reduced"
-                    style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)' }}
-                  >
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" aria-label="Two million plus tonnes of carbon dioxide reduced">
                     2M+
                   </dd>
-                  <div 
-                    className="text-white text-sm font-semibold"
-                    style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.7)' }}
-                  >
-                    CO₂ Reduced
-                  </div>
+                  <div className="text-white/80 text-sm font-medium">CO₂ Reduced</div>
                 </div>
 
                 <div>
                   <dt className="sr-only">Years</dt>
-                  <dd 
-                    className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" 
-                    aria-label="Fifteen plus years of experience"
-                    style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)' }}
-                  >
+                  <dd className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white" aria-label="Fifteen plus years of experience">
                     15+
                   </dd>
-                  <div 
-                    className="text-white text-sm font-semibold"
-                    style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.7)' }}
-                  >
-                    Years
-                  </div>
+                  <div className="text-white/80 text-sm font-medium">Years</div>
                 </div>
               </dl>
             </div>
