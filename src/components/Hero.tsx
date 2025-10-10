@@ -80,10 +80,7 @@ const Hero = () => {
                   id="hero-heading"
                   className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight tracking-tight"
                 >
-                  Driving your journey to{" "}
-                  <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
-                    Net Zero Energy
-                  </span>
+                  Driving your journey to Net Zero Energy
                 </h1>
 
                 <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed max-w-3xl mx-auto font-light">

@@ -49,8 +49,8 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? "bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-elegant" 
-        : "bg-background/80 backdrop-blur-md border-b border-transparent"
+        ? "bg-background/98 backdrop-blur-xl border-b border-border shadow-elegant" 
+        : "bg-background/95 backdrop-blur-xl border-b border-border/40"
     } ${className}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-18">
@@ -69,7 +69,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+                className="text-foreground hover:text-primary transition-smooth font-semibold"
               >
                 {item.name}
               </Link>
@@ -77,7 +77,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
             
             {/* Expertise Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <DropdownMenuTrigger className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 Expertise
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
@@ -94,7 +94,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
             {/* Solutions Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-primary transition-smooth font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <DropdownMenuTrigger className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 Solutions
                 <ChevronDown className="ml-1 w-4 h-4" />
               </DropdownMenuTrigger>
@@ -111,19 +111,19 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
             <Link
               to="/projects"
-              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+              className="text-foreground hover:text-primary transition-smooth font-semibold"
             >
               Projects
             </Link>
             <Link
               to="/faq"
-              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+              className="text-foreground hover:text-primary transition-smooth font-semibold"
             >
               FAQ
             </Link>
             <Link
               to="/contact"
-              className="text-muted-foreground hover:text-primary transition-smooth font-medium"
+              className="text-foreground hover:text-primary transition-smooth font-semibold"
             >
               Contact
             </Link>
