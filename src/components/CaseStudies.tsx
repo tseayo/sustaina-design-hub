@@ -49,16 +49,23 @@ const CaseStudies = () => {
   ];
 
   return (
-    <section id="projects" className="py-24 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4">
+    <section id="projects" className="pt-32 pb-24 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-background"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,hsl(var(--accent)/0.1)_0%,transparent_50%)]"></div>
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 text-primary px-6 py-3 rounded-full text-sm font-medium mb-8 animate-fade-in">
+            <Building className="w-4 h-4" />
             Success Stories
-          </Badge>
-          <h2 className="font-heading text-display-md text-foreground mb-6">
+          </div>
+          
+          <h2 className="text-5xl lg:text-6xl font-heading font-bold text-foreground mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Our Project Success Stories
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          
+          <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
             Explore our case studies to see how we've helped clients achieve their net-zero goals. 
             Each project highlights our tailored approach and measurable impact.
           </p>

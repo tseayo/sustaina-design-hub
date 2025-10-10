@@ -46,18 +46,28 @@ const FocusAreas = () => {
     <div className="min-h-screen">
       <Navigation />
       
-      <section className="pt-32 pb-24 bg-gradient-to-br from-primary/10 via-background to-background">
-        <div className="container mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h1 className="font-heading text-4xl lg:text-6xl text-foreground mb-6 font-bold">
+      <section className="pt-32 pb-24 relative overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-background"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,hsl(var(--accent)/0.1)_0%,transparent_50%)]"></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 text-primary px-6 py-3 rounded-full text-sm font-medium mb-8 animate-fade-in">
+              <Zap className="w-4 h-4" />
+              Business Focus Areas
+            </div>
+            
+            <h1 className="text-5xl lg:text-6xl font-heading font-bold text-foreground mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
               NECL Business Focus Areas
             </h1>
-            <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            
+            <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
               NetZero Energy Consultant Limited is driven by 5 "A"s: Energy Availability, Accessibility, Affordability, Acceptability and Assurance
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mt-12">
             {focusAreas.map((area, index) => {
               const IconComponent = area.icon;
               return (

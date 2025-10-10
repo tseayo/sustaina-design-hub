@@ -104,24 +104,23 @@ const EmissionReduction = () => {
       <main className="bg-background">
       
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background/95 to-muted/30 pt-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
+      <section className="pt-32 pb-24 relative overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-background"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,hsl(var(--accent)/0.1)_0%,transparent_50%)]"></div>
         
-        <div className="container mx-auto px-6 lg:px-8 z-10 relative">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 rounded-full px-6 py-3 animate-fade-in">
-              <TrendingDown className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-foreground/80">Decarbonization Solutions</span>
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 text-primary px-6 py-3 rounded-full text-sm font-medium mb-8 animate-fade-in">
+              <TrendingDown className="w-4 h-4" />
+              Decarbonization Solutions
             </div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight">
-              Transform Environmental Responsibility into{" "}
-              <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
-                Competitive Advantage
-              </span>
+            
+            <h1 className="text-5xl lg:text-6xl font-heading font-bold text-foreground mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              Transform Environmental Responsibility into Competitive Advantage
             </h1>
-
-            <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            
+            <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Go beyond simple compliance — turn sustainability into a driver of growth, efficiency, and long-term resilience. Our comprehensive decarbonization solutions help energy and industrial leaders successfully navigate the energy transition.
             </p>
 

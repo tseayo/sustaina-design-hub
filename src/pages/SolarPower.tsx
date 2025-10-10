@@ -25,22 +25,23 @@ const SolarPower = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-background via-background to-primary/5">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-6 mb-12">
-            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-6 py-2">
-              <Sun className="w-5 h-5 text-primary" />
-              <span className="text-sm font-medium text-primary">Solar PV Solutions</span>
+      <section className="pt-32 pb-24 px-4 relative overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-background"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,hsl(var(--accent)/0.1)_0%,transparent_50%)]"></div>
+        
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 text-primary px-6 py-3 rounded-full text-sm font-medium mb-8 animate-fade-in">
+              <Sun className="w-4 h-4" />
+              Solar PV Solutions
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight">
-              Solar PV Power Solutions for{" "}
-              <span className="bg-gradient-to-r from-primary via-primary-dark to-accent bg-clip-text text-transparent">
-                Oil & Gas Operations
-              </span>
+            <h1 className="text-5xl lg:text-6xl font-heading font-bold text-foreground mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              Solar PV Power Solutions for Oil & Gas Operations
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in max-w-3xl mx-auto" style={{ animationDelay: '0.2s' }}>
               Engineered for reliability and built for impact. Our modular solar PV solutions deliver clean, 
               cost-competitive power to metering stations, compressor stations, and remote facilities, ensuring 
               operational resilience and advancing your sustainability goals.

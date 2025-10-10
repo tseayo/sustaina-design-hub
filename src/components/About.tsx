@@ -46,8 +46,7 @@ const About = () => {
           </div>
           
           <h2 className="text-5xl lg:text-6xl font-heading font-bold text-foreground mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            Pioneering the Future of{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Sustainable Energy</span>
+            Pioneering the Future of Sustainable Energy
           </h2>
           
           <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
