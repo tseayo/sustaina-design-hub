@@ -1,374 +1,330 @@
+// components/MobileNavigation.jsx
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { 
-  Search, 
-  Zap, 
-  Target, 
-  BarChart3, 
-  GraduationCap,
-  ArrowRight,
-  ArrowLeft,
-  ChevronRight
+  ChevronDown, 
+  ChevronRight, 
+  X,
+  Menu,
+  Sun, // Solar icon
+  CloudRain, // Emission reduction icon
+  Zap, // Energy
+  BarChart3, // Consulting
+  Users, // Training
+  Target // Strategy
 } from "lucide-react";
 
-const Services = () => {
-  const [selectedService, setSelectedService] = useState(null);
-  const [currentView, setCurrentView] = useState('overview'); // 'overview' | 'sublist' | 'detail'
+const MobileNavigation = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeService, setActiveService] = useState(null);
 
-  const services = [
+  const expertiseItems = [
     {
       id: 1,
-      slug: "energy-audits",
-      title: "Energy Audits",
-      description: "In-depth assessments of your current energy consumption to identify inefficiencies and uncover opportunities for cost savings with actionable recommendations.",
-      icon: Search,
-      features: [
-        "Comprehensive energy consumption analysis",
-        "Detailed efficiency assessments", 
-        "Actionable optimization recommendations",
-        "Cost savings projections"
-      ],
-      detailedDescription: "Our comprehensive energy audits provide a thorough analysis of your energy consumption patterns, identifying inefficiencies and opportunities for significant cost savings. We deliver actionable recommendations tailored to your specific needs."
+      slug: "solar-power",
+      title: "Solar Power",
+      icon: Sun,
+      description: "Complete solar energy solutions for residential, commercial, and industrial applications",
+      content: {
+        title: "Solar Power Solutions",
+        description: "We provide comprehensive solar energy solutions tailored to your specific needs. Our services include site assessment, system design, installation, and ongoing maintenance.",
+        features: [
+          "Residential solar panel installation",
+          "Commercial solar energy systems",
+          "Solar farm development",
+          "Energy storage solutions",
+          "Maintenance and monitoring"
+        ],
+        benefits: [
+          "Reduce electricity costs by up to 80%",
+          "25-year performance warranty",
+          "Government incentives and rebates",
+          "Carbon footprint reduction",
+          "Energy independence"
+        ]
+      }
     },
     {
       id: 2,
-      slug: "renewable-energy",
-      title: "Renewable Energy Solutions",
-      description: "Tailored renewable energy systems including solar, wind, and other sustainable technologies with complete feasibility studies and implementation support.",
-      icon: Zap,
-      features: [
-        "Solar and wind system design",
-        "Feasibility studies and analysis",
-        "Installation guidance and support",
-        "Ongoing maintenance planning"
-      ],
-      detailedDescription: "Transform your energy infrastructure with our renewable energy solutions. We design and implement solar, wind, and other sustainable technologies with complete feasibility studies and ongoing support."
+      slug: "emission-reduction",
+      title: "Emission Reduction",
+      icon: CloudRain,
+      description: "Strategies and technologies to reduce your carbon footprint and environmental impact",
+      content: {
+        title: "Emission Reduction Strategies",
+        description: "Our comprehensive emission reduction solutions help organizations meet sustainability goals while improving operational efficiency.",
+        features: [
+          "Carbon footprint assessment",
+          "Emission reduction planning",
+          "Clean technology implementation",
+          "Sustainability reporting",
+          "Regulatory compliance"
+        ],
+        benefits: [
+          "Meet regulatory requirements",
+          "Enhance corporate reputation",
+          "Access green financing",
+          "Reduce operational costs",
+          "Attract environmentally conscious customers"
+        ]
+      }
     },
     {
       id: 3,
-      slug: "ghg-accounting",
-      title: "Greenhouse Gas (GHG) Accounting & Carbon Credit Certification", 
-      description: "Quantify your carbon footprint and achieve sustainability goals with verified GHG accounting and high-quality carbon credit solutions.",
-      icon: Target,
-      features: [
-        "Comprehensive GHG emissions measurement",
-        "GHG reporting and documentation",
-        "Carbon reduction strategy development",
-        "Carbon credit procurement and certification"
-      ],
-      detailedDescription: "Accurately measure and manage your carbon footprint with our verified GHG accounting services. We help you achieve sustainability goals and navigate carbon credit certification."
+      slug: "energy-efficiency",
+      title: "Energy Efficiency",
+      icon: Zap,
+      description: "Optimize energy consumption and reduce waste through advanced efficiency measures",
+      content: {
+        title: "Energy Efficiency Consulting",
+        description: "Identify and implement energy efficiency measures to reduce consumption and costs while maintaining performance.",
+        features: [
+          "Energy audits and assessments",
+          "Efficiency improvement plans",
+          "Equipment optimization",
+          "Building automation systems",
+          "Performance monitoring"
+        ]
+      }
     },
     {
       id: 4,
-      slug: "carbon-footprint",
-      title: "Carbon Footprint Analysis",
-      description: "Precise measurement and reporting of greenhouse gas emissions with targeted reduction strategies and carbon offset solutions.",
+      slug: "sustainability-consulting",
+      title: "Sustainability Consulting",
       icon: BarChart3,
-      features: [
-        "Comprehensive emissions measurement",
-        "GHG reporting and documentation",
-        "Reduction strategy development",
-        "Carbon offset solutions"
-      ],
-      detailedDescription: "Gain precise insights into your greenhouse gas emissions with our comprehensive carbon footprint analysis. We provide targeted reduction strategies and carbon offset solutions."
+      description: "Strategic guidance for sustainable business practices and environmental stewardship",
+      content: {
+        title: "Sustainability Consulting Services",
+        description: "Develop and implement sustainability strategies that align with your business objectives and environmental responsibilities.",
+        features: [
+          "Sustainability strategy development",
+          "ESG reporting framework",
+          "Stakeholder engagement",
+          "Sustainable supply chain management",
+          "Performance metrics and tracking"
+        ]
+      }
     },
     {
       id: 5,
-      slug: "training-workshops",
-      title: "Training and Workshops",
-      description: "Educational programs to build internal capacity for sustainable practices and energy management within your organization.",
-      icon: GraduationCap,
-      features: [
-        "Customized training programs",
-        "Energy management workshops",
-        "Best practices education",
-        "Ongoing capability building"
-      ],
-      detailedDescription: "Build internal capacity for sustainable practices with our educational programs and workshops. We empower your team with the knowledge and skills for effective energy management."
+      slug: "corporate-training",
+      title: "Corporate Training",
+      icon: Users,
+      description: "Educational programs to build organizational capacity for sustainable practices",
+      content: {
+        title: "Corporate Training Programs",
+        description: "Empower your team with the knowledge and skills needed to implement and maintain sustainable energy practices.",
+        features: [
+          "Customized training workshops",
+          "Energy management certification",
+          "Sustainability best practices",
+          "Technical skill development",
+          "Ongoing support and resources"
+        ]
+      }
+    },
+    {
+      id: 6,
+      slug: "green-strategy",
+      title: "Green Strategy",
+      icon: Target,
+      description: "Long-term planning for sustainable growth and environmental responsibility",
+      content: {
+        title: "Green Business Strategy",
+        description: "Develop comprehensive green strategies that integrate sustainability into your core business operations.",
+        features: [
+          "Long-term sustainability planning",
+          "Green technology integration",
+          "Carbon neutral roadmap",
+          "Sustainable investment strategies",
+          "Performance measurement framework"
+        ]
+      }
     }
   ];
 
-  // Handle service selection
+  const handleExpertiseClick = () => {
+    setActiveDropdown(activeDropdown === 'expertise' ? null : 'expertise');
+  };
+
   const handleServiceSelect = (service) => {
-    setSelectedService(service);
-    setCurrentView('detail');
+    setActiveService(service);
+    setActiveDropdown(null);
   };
 
-  // Show service sublist
-  const showSublist = () => {
-    setCurrentView('sublist');
-    setSelectedService(null);
+  const handleBackToMenu = () => {
+    setActiveService(null);
   };
 
-  // Back to overview
-  const backToOverview = () => {
-    setCurrentView('overview');
-    setSelectedService(null);
+  const closeAll = () => {
+    setIsOpen(false);
+    setActiveDropdown(null);
+    setActiveService(null);
   };
 
-  // Back to sublist from detail
-  const backToSublist = () => {
-    setCurrentView('sublist');
-  };
-
-  // Service Sublist View
-  const renderServiceSublist = () => (
-    <div className="animate-fade-in">
-      <Button 
-        variant="ghost" 
-        onClick={backToOverview}
-        className="mb-6 flex items-center gap-2 text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Overview
-      </Button>
-
-      <div className="text-center mb-12">
-        <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-4">
-          Our Expertise
-        </h2>
-        <p className="text-lg text-muted-foreground">
-          Select a service to learn more about our specialized solutions
-        </p>
-      </div>
-
-      <div className="grid gap-4 max-w-2xl mx-auto">
-        {services.map((service) => {
-          const IconComponent = service.icon;
-          return (
-            <Card 
-              key={service.id}
-              className="group cursor-pointer border hover:border-primary/20 transition-all duration-300 hover:shadow-lg"
-              onClick={() => handleServiceSelect(service)}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="text-left">
-                      <h3 className="font-heading text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {service.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                        {service.description}
-                      </p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-    </div>
-  );
-
-  // Service Detail View
+  // Render Service Detail View
   const renderServiceDetail = () => {
-    if (!selectedService) return null;
-    
-    const IconComponent = selectedService.icon;
-    
-    return (
-      <div className="animate-fade-in">
-        <Button 
-          variant="ghost" 
-          onClick={backToSublist}
-          className="mb-6 flex items-center gap-2 text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Services
-        </Button>
+    if (!activeService) return null;
 
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary-dark rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <IconComponent className="w-10 h-10 text-white" />
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              {selectedService.title}
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              {selectedService.detailedDescription}
-            </p>
+    const IconComponent = activeService.icon;
+
+    return (
+      <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
+        <div className="container mx-auto px-4 py-6">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <Button variant="ghost" onClick={handleBackToMenu} className="flex items-center gap-2">
+              <ChevronRight className="w-4 h-4 rotate-180" />
+              Back
+            </Button>
+            <Button variant="ghost" onClick={closeAll} size="icon">
+              <X className="w-5 h-5" />
+            </Button>
           </div>
 
-          <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg">
-            <CardContent className="p-8">
-              <div className="grid lg:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="font-heading text-2xl font-bold text-foreground mb-6">
-                    Service Overview
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    {selectedService.description}
-                  </p>
-                  
-                  <Button variant="gradient" size="lg" className="w-full sm:w-auto">
-                    Get Started with {selectedService.title}
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
+          {/* Service Content */}
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <IconComponent className="w-8 h-8 text-white" />
+              </div>
+              <h1 className="text-3xl font-heading font-bold text-foreground mb-4">
+                {activeService.content.title}
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                {activeService.content.description}
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {/* Features */}
+              <div className="bg-card rounded-xl p-6">
+                <h3 className="font-heading text-xl font-bold text-foreground mb-4">
+                  Key Features
+                </h3>
+                <div className="space-y-3">
+                  {activeService.content.features.map((feature, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <span className="text-muted-foreground">{feature}</span>
+                    </div>
+                  ))}
                 </div>
-                
-                <div>
-                  <h4 className="font-semibold text-foreground text-lg mb-4 flex items-center">
-                    <span className="w-2 h-2 bg-accent rounded-full mr-2"></span>
-                    Key Features
-                  </h4>
+              </div>
+
+              {/* Benefits - Show for Solar and Emission Reduction */}
+              {(activeService.slug === "solar-power" || activeService.slug === "emission-reduction") && (
+                <div className="bg-primary/5 rounded-xl p-6">
+                  <h3 className="font-heading text-xl font-bold text-foreground mb-4">
+                    Key Benefits
+                  </h3>
                   <div className="space-y-3">
-                    {selectedService.features.map((feature, index) => (
+                    {activeService.content.benefits?.map((benefit, index) => (
                       <div key={index} className="flex items-start gap-3">
-                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
-                          <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        </div>
-                        <span className="text-muted-foreground">{feature}</span>
+                        <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-muted-foreground">{benefit}</span>
                       </div>
                     ))}
                   </div>
                 </div>
+              )}
+
+              {/* CTA */}
+              <div className="text-center">
+                <Button size="lg" className="w-full">
+                  Get Started with {activeService.title}
+                </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     );
   };
 
-  // Main Overview View (Original Grid)
-  const renderOverview = () => (
-    <>
-      <div className="max-w-4xl mx-auto text-center mb-20 space-y-8">
-        <div className="inline-flex items-center gap-3 bg-primary/5 border border-primary/10 text-primary px-6 py-3 rounded-full text-sm font-medium animate-fade-in">
-          <Search className="w-4 h-4" />
-          Our Services
+  // Render Main Navigation Menu
+  const renderNavigationMenu = () => (
+    <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
+      <div className="container mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-xl font-bold text-foreground">Navigation</h2>
+          <Button variant="ghost" onClick={closeAll} size="icon">
+            <X className="w-5 h-5" />
+          </Button>
         </div>
-        <h2 className="text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
-          Comprehensive Energy Solutions
-        </h2>
-        <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          From initial assessment to full implementation, we provide end-to-end energy consulting services tailored to your unique needs.
-        </p>
-        
-        {/* Mobile Navigation Button */}
-        <div className="lg:hidden pt-4">
-          <Button 
-            variant="outline" 
-            size="lg"
-            onClick={showSublist}
-            className="animate-fade-in"
-          >
-            Expertise
-            <ChevronRight className="ml-2 w-4 h-4" />
+
+        {/* Navigation Items */}
+        <div className="space-y-2">
+          <Button variant="ghost" className="w-full justify-start h-14" onClick={closeAll}>
+            Home
+          </Button>
+          
+          <Button variant="ghost" className="w-full justify-start h-14" onClick={closeAll}>
+            About
+          </Button>
+
+          {/* Expertise Dropdown */}
+          <div className="border rounded-lg">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-between h-14"
+              onClick={handleExpertiseClick}
+            >
+              <span>Expertise</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${
+                activeDropdown === 'expertise' ? 'rotate-180' : ''
+              }`} />
+            </Button>
+
+            {/* Expertise Submenu */}
+            {activeDropdown === 'expertise' && (
+              <div className="border-t px-4 py-2 space-y-1">
+                {expertiseItems.map((item) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <Button
+                      key={item.id}
+                      variant="ghost"
+                      className="w-full justify-start h-12 text-sm"
+                      onClick={() => handleServiceSelect(item)}
+                    >
+                      <IconComponent className="w-4 h-4 mr-3" />
+                      {item.title}
+                    </Button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <Button variant="ghost" className="w-full justify-start h-14" onClick={closeAll}>
+            Services
+          </Button>
+          
+          <Button variant="ghost" className="w-full justify-start h-14" onClick={closeAll}>
+            Contact
           </Button>
         </div>
       </div>
-
-      {/* Desktop Grid - Hidden on mobile when navigation is active */}
-      <div className="hidden lg:block">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {services.map((service, index) => {
-            const IconComponent = service.icon;
-            return (
-              <Card 
-                key={service.id} 
-                className="group relative overflow-hidden border-0 bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 animate-fade-in cursor-pointer"
-                style={{ animationDelay: `${0.1 * index}s` }}
-                onClick={() => handleServiceSelect(service)}
-              >
-                {/* ... rest of your existing card code ... */}
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
-                
-                <CardHeader className="pb-6 relative z-10">
-                  <div className="relative">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                      <IconComponent className="w-8 h-8 text-white" />
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                  <CardTitle className="text-2xl font-heading font-bold group-hover:text-primary transition-colors duration-300 mb-3">
-                    {service.title}
-                  </CardTitle>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {service.description}
-                  </p>
-                </CardHeader>
-                <CardContent className="relative z-10">
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center">
-                      <span className="w-2 h-2 bg-accent rounded-full mr-2"></span>
-                      Key Features
-                    </h4>
-                    {service.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-start gap-3 text-sm">
-                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
-                          <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        </div>
-                        <span className="text-muted-foreground">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Mobile Grid - Only show in overview mode */}
-      {currentView === 'overview' && (
-        <div className="lg:hidden grid gap-6 mb-16">
-          {services.map((service, index) => {
-            const IconComponent = service.icon;
-            return (
-              <Card 
-                key={service.id}
-                className="group relative overflow-hidden border-0 bg-card/50 backdrop-blur-sm transition-all duration-300 animate-fade-in cursor-pointer"
-                style={{ animationDelay: `${0.1 * index}s` }}
-                onClick={() => handleServiceSelect(service)}
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center">
-                      <IconComponent className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="font-heading text-xl font-semibold text-foreground">
-                      {service.title}
-                    </h3>
-                  </div>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    {service.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-primary text-sm font-medium">Learn More</span>
-                    <ChevronRight className="w-4 h-4 text-primary" />
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      )}
-    </>
+    </div>
   );
 
   return (
-    <section id="services" className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {currentView === 'overview' && renderOverview()}
-        {currentView === 'sublist' && renderServiceSublist()}
-        {currentView === 'detail' && renderServiceDetail()}
+    <>
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden">
+        <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
+          <Menu className="w-6 h-6" />
+        </Button>
       </div>
-    </section>
+
+      {/* Navigation Overlays */}
+      {isOpen && activeService && renderServiceDetail()}
+      {isOpen && !activeService && renderNavigationMenu()}
+    </>
   );
 };
 
-export default Services;
+export default MobileNavigation;
