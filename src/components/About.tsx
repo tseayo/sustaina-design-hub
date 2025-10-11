@@ -60,25 +60,29 @@ const About = () => {
           <Card className="gradient-card shadow-medium border-0 hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 animate-scale-in overflow-hidden relative">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
             <CardContent className="p-8 relative z-10">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-14 h-14 gradient-hero rounded-xl flex items-center justify-center shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105">
-                <Users className="w-7 h-7 text-white" />
+              <div className="space-y-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-14 h-14 gradient-hero rounded-xl flex items-center justify-center shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105">
+                    <Users className="w-7 h-7 text-white" />
+                  </div>
+                <h3 className="font-heading text-2xl text-foreground">Who We Are</h3>
               </div>
-              <h3 className="font-heading text-2xl text-foreground">Who We Are</h3>
-            </div>
             
-            <p className="text-muted-foreground leading-relaxed text-[15px]">
+              <p className="text-muted-foreground leading-relaxed text-[15px]">
               At NetZero Energy Consultant Limited, we provide tailored solutions that empower businesses and communities to reduce their carbon footprint, optimize energy efficiency, and transition toward a cleaner, more sustainable future.
-            </p>
+              </p>
             
-            <p className="text-muted-foreground leading-relaxed text-[15px]">
+              <p className="text-muted-foreground leading-relaxed text-[15px]">
               We understand that every client has unique energy needs and goals. That's why we take a personalized approach, working closely with you to develop strategies that maximize efficiency, minimize costs, and contribute to a net-zero future.
-            </p>
+              </p>
             
-            <Button variant="hero" size="lg" className="mt-6 hover:scale-105 transition-all duration-300 shadow-soft hover:shadow-medium">
-              Learn More About Our Approach
-            </Button>
-          </div>
+              <Button variant="hero" size="lg" className="mt-6 hover:scale-105 transition-all duration-300 shadow-soft hover:shadow-medium">
+                Learn More About Our Approach
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
           {/* Our Vision */}
           <Card className="gradient-card shadow-medium border-0 hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 animate-scale-in overflow-hidden relative">
