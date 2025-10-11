@@ -57,7 +57,9 @@ const About = () => {
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-16 mb-20">
           {/* Who We Are */}
-          <div className="space-y-6 animate-fade-in">
+          <Card className="gradient-card shadow-medium border-0 hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 animate-scale-in overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+            <CardContent className="p-8 relative z-10">
             <div className="flex items-center space-x-3 mb-4">
               <div className="w-14 h-14 gradient-hero rounded-xl flex items-center justify-center shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105">
                 <Users className="w-7 h-7 text-white" />
