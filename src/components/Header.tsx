@@ -360,4 +360,4 @@ const Header: React.FC = () => {
     </>
   );
 };
-rt default Header;
+export default Header;
