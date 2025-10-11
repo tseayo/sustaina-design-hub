@@ -34,8 +34,8 @@ const About = () => {
   return (
     <section id="about" className="py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-background"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,hsl(var(--accent)/0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
       
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
         {/* Header */}
