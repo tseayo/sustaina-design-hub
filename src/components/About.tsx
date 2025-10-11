@@ -54,68 +54,67 @@ const About = () => {
           </p>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-16 mb-20">
-          {/* Who We Are */}
-          <Card className="gradient-card shadow-medium border-0 hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 animate-scale-in overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-            <CardContent className="p-8 relative z-10">
-              <div className="space-y-6">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-14 h-14 gradient-hero rounded-xl flex items-center justify-center shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105">
-                    <Users className="w-7 h-7 text-white" />
-                  </div>
-                <h3 className="font-heading text-2xl text-foreground">Who We Are</h3>
-              </div>
-            
-              <p className="text-muted-foreground leading-relaxed text-[15px]">
-              At NetZero Energy Consultant Limited, we provide tailored solutions that empower businesses and communities to reduce their carbon footprint, optimize energy efficiency, and transition toward a cleaner, more sustainable future.
-              </p>
-            
-              <p className="text-muted-foreground leading-relaxed text-[15px]">
-              We understand that every client has unique energy needs and goals. That's why we take a personalized approach, working closely with you to develop strategies that maximize efficiency, minimize costs, and contribute to a net-zero future.
-              </p>
-            
-              <Button variant="hero" size="lg" className="mt-6 hover:scale-105 transition-all duration-300 shadow-soft hover:shadow-medium">
-                Learn More About Our Approach
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-          {/* Our Vision */}
-          <Card className="gradient-card shadow-medium border-0 hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 animate-scale-in overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-            <CardContent className="p-8 relative z-10">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center hover:bg-primary/15 transition-all duration-300 hover:scale-110 shadow-soft">
-                  <Award className="w-7 h-7 text-primary" />
-                </div>
-                <h3 className="font-heading text-2xl text-foreground">Our Vision</h3>
-              </div>
-              
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                To be a global leader in driving the transition to a net-zero energy future, helping businesses and communities create a more sustainable and resilient world.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3 group">
-                  <div className="w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform duration-300"></div>
-                  <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">Global sustainability leadership</span>
-                </div>
-                <div className="flex items-center space-x-3 group">
-                  <div className="w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform duration-300"></div>
-                  <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">Community-focused solutions</span>
-                </div>
-                <div className="flex items-center space-x-3 group">
-                  <div className="w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform duration-300"></div>
-                  <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">Resilient energy systems</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+       {/* Main Content Grid */}
+<div className="grid lg:grid-cols-2 gap-16 mb-20">
+  {/* Who We Are */}
+  <Card className="gradient-card shadow-medium border-0 hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 animate-scale-in overflow-hidden relative">
+    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+    <CardContent className="p-8 relative z-10">
+      <div className="space-y-6">
+        <div className="flex items-center space-x-3 mb-4">
+          <div className="w-14 h-14 gradient-hero rounded-xl flex items-center justify-center shadow-soft hover:shadow-medium transition-all duration-300 hover:scale-105">
+            <Users className="w-7 h-7 text-white" />
+          </div>
+          <h3 className="font-heading text-2xl text-foreground">Who We Are</h3>
         </div>
+        
+        <p className="text-muted-foreground leading-relaxed text-[15px]">
+          At NetZero Energy Consultant Limited, we provide tailored solutions that empower businesses and communities to reduce their carbon footprint, optimize energy efficiency, and transition toward a cleaner, more sustainable future.
+        </p>
+        
+        <p className="text-muted-foreground leading-relaxed text-[15px]">
+          We understand that every client has unique energy needs and goals. That's why we take a personalized approach, working closely with you to develop strategies that maximize efficiency, minimize costs, and contribute to a net-zero future.
+        </p>
+        
+        <Button variant="hero" size="lg" className="mt-6 hover:scale-105 transition-all duration-300 shadow-soft hover:shadow-medium">
+          Learn More About Our Approach
+        </Button>
+      </div>
+    </CardContent> 
+  </Card>
+
+  {/* Our Vision */}
+  <Card className="gradient-card shadow-medium border-0 hover:shadow-elegant hover:scale-[1.02] transition-all duration-300 animate-scale-in overflow-hidden relative">
+    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+    <CardContent className="p-8 relative z-10">
+      <div className="flex items-center space-x-3 mb-6">
+        <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center hover:bg-primary/15 transition-all duration-300 hover:scale-110 shadow-soft">
+          <Award className="w-7 h-7 text-primary" />
+        </div>
+        <h3 className="font-heading text-2xl text-foreground">Our Vision</h3>
+      </div>
+      
+      <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+        To be a global leader in driving the transition to a net-zero energy future, helping businesses and communities create a more sustainable and resilient world.
+      </p>
+      
+      <div className="space-y-4">
+        <div className="flex items-center space-x-3 group">
+          <div className="w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform duration-300"></div>
+          <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">Global sustainability leadership</span>
+        </div>
+        <div className="flex items-center space-x-3 group">
+          <div className="w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform duration-300"></div>
+          <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">Community-focused solutions</span>
+        </div>
+        <div className="flex items-center space-x-3 group">
+          <div className="w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform duration-300"></div>
+          <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">Resilient energy systems</span>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
 
         {/* Values Section */}
         <div className="text-center mb-12">
