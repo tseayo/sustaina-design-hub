@@ -12,7 +12,6 @@ import {
   BarChart3,
   Users,
   Target,
-  ArrowLeft,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -28,122 +27,42 @@ const Header: React.FC = () => {
       slug: "solar-power", 
       title: "Solar Power", 
       icon: Sun, 
-      description: "Complete solar energy solutions for residential, commercial, and industrial applications",
-      content: {
-        title: "Solar Power Solutions",
-        description: "We provide comprehensive solar energy solutions tailored to your specific needs. Our services include site assessment, system design, installation, and ongoing maintenance.",
-        features: [
-          "Residential solar panel installation",
-          "Commercial solar energy systems",
-          "Solar farm development",
-          "Energy storage solutions",
-          "Maintenance and monitoring"
-        ],
-        benefits: [
-          "Reduce electricity costs by up to 80%",
-          "25-year performance warranty",
-          "Government incentives and rebates",
-          "Carbon footprint reduction",
-          "Energy independence"
-        ]
-      }
+      description: "Complete solar energy solutions for residential, commercial, and industrial applications"
     },
     { 
       id: 2, 
       slug: "emission-reduction", 
       title: "Emission Reduction", 
       icon: CloudRain, 
-      description: "Strategies and technologies to reduce your carbon footprint and environmental impact",
-      content: {
-        title: "Emission Reduction Strategies",
-        description: "Our comprehensive emission reduction solutions help organizations meet sustainability goals while improving operational efficiency.",
-        features: [
-          "Carbon footprint assessment",
-          "Emission reduction planning",
-          "Clean technology implementation",
-          "Sustainability reporting",
-          "Regulatory compliance"
-        ],
-        benefits: [
-          "Meet regulatory requirements",
-          "Enhance corporate reputation",
-          "Access green financing",
-          "Reduce operational costs",
-          "Attract environmentally conscious customers"
-        ]
-      }
+      description: "Strategies and technologies to reduce your carbon footprint and environmental impact"
     },
     { 
       id: 3, 
       slug: "energy-efficiency", 
       title: "Energy Efficiency", 
       icon: Zap, 
-      description: "Optimize energy consumption and reduce waste through advanced efficiency measures",
-      content: {
-        title: "Energy Efficiency Consulting",
-        description: "Identify and implement energy efficiency measures to reduce consumption and costs while maintaining performance.",
-        features: [
-          "Energy audits and assessments",
-          "Efficiency improvement plans",
-          "Equipment optimization",
-          "Building automation systems",
-          "Performance monitoring"
-        ]
-      }
+      description: "Optimize energy consumption and reduce waste through advanced efficiency measures"
     },
     { 
       id: 4, 
       slug: "sustainability-consulting", 
       title: "Sustainability Consulting", 
       icon: BarChart3, 
-      description: "Strategic guidance for sustainable business practices and environmental stewardship",
-      content: {
-        title: "Sustainability Consulting Services",
-        description: "Develop and implement sustainability strategies that align with your business objectives and environmental responsibilities.",
-        features: [
-          "Sustainability strategy development",
-          "ESG reporting framework",
-          "Stakeholder engagement",
-          "Sustainable supply chain management",
-          "Performance metrics and tracking"
-        ]
-      }
+      description: "Strategic guidance for sustainable business practices and environmental stewardship"
     },
     { 
       id: 5, 
       slug: "corporate-training", 
       title: "Corporate Training", 
       icon: Users, 
-      description: "Educational programs to build organizational capacity for sustainable practices",
-      content: {
-        title: "Corporate Training Programs",
-        description: "Empower your team with the knowledge and skills needed to implement and maintain sustainable energy practices.",
-        features: [
-          "Customized training workshops",
-          "Energy management certification",
-          "Sustainability best practices",
-          "Technical skill development",
-          "Ongoing support and resources"
-        ]
-      }
+      description: "Educational programs to build organizational capacity for sustainable practices"
     },
     { 
       id: 6, 
       slug: "green-strategy", 
       title: "Green Strategy", 
       icon: Target, 
-      description: "Long-term planning for sustainable growth and environmental responsibility",
-      content: {
-        title: "Green Business Strategy",
-        description: "Develop comprehensive green strategies that integrate sustainability into your core business operations.",
-        features: [
-          "Long-term sustainability planning",
-          "Green technology integration",
-          "Carbon neutral roadmap",
-          "Sustainable investment strategies",
-          "Performance measurement framework"
-        ]
-      }
+      description: "Long-term planning for sustainable growth and environmental responsibility"
     },
   ];
 
@@ -360,4 +279,5 @@ const Header: React.FC = () => {
     </>
   );
 };
+
 export default Header;
