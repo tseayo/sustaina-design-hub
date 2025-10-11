@@ -85,7 +85,7 @@ const Services = () => {
             <Search className="w-4 h-4" />
             Our Services
           </div>
-          <h2 className="text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <h2 className="text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-foreground leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Comprehensive Energy Solutions
           </h2>
           <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light animate-fade-in" style={{ animationDelay: '0.2s' }}>
