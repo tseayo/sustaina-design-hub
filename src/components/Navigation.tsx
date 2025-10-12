@@ -163,7 +163,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => set(!)}
+            onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2"
             aria-label="Toggle menu"
           >
