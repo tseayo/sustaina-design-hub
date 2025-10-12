@@ -1,4 +1,5 @@
-import { 
+// src/components/Navigation.tsx
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -37,29 +38,31 @@ const Navigation = ({ className = "" }: NavigationProps) => {
     { name: "Hydrogen", path: "/focus-areas" },
     { name: "E-mobility Charging", path: "/focus-areas" },
     { name: "Hydropower", path: "/focus-areas" },
-    { name: "Bioenergy", path: "/focus-areas" }
+    { name: "Bioenergy", path: "/focus-areas" },
   ];
 
   const solutionItems = [
     { name: "Energy Audits", path: "/services" },
     { name: "Renewable Energy Solutions", path: "/services" },
     { name: "GHG Accounting and Carbon Credit Certification", path: "/services" },
-    { name: "Training and Workshops", path: "/services" }
+    { name: "Training and Workshops", path: "/services" },
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? "bg-background/98 backdrop-blur-xl border-b border-border shadow-elegant" 
-        : "bg-background/95 backdrop-blur-xl border-b border-border/40"
-    } ${className}`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-background/98 backdrop-blur-xl border-b border-border shadow-elegant"
+          : "bg-background/95 backdrop-blur-xl border-b border-border/40"
+      } ${className}`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-18">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group cursor-pointer">
-            <img 
-              src={neclLogo} 
-              alt="NetZero Energy Consultant Limited" 
+            <img
+              src={neclLogo}
+              alt="NetZero Energy Consultant Limited"
               className="h-14 w-auto transition-all duration-300 group-hover:scale-105"
             />
           </Link>
@@ -75,7 +78,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                 {item.name}
               </Link>
             ))}
-            
+
             {/* Expertise Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
@@ -110,22 +113,13 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link
-              to="/projects"
-              className="text-foreground hover:text-primary transition-smooth font-semibold"
-            >
+            <Link to="/projects" className="text-foreground hover:text-primary transition-smooth font-semibold">
               Projects
             </Link>
-            <Link
-              to="/faq"
-              className="text-foreground hover:text-primary transition-smooth font-semibold"
-            >
+            <Link to="/faq" className="text-foreground hover:text-primary transition-smooth font-semibold">
               FAQ
             </Link>
-            <Link
-              to="/contact"
-              className="text-foreground hover:text-primary transition-smooth font-semibold"
-            >
+            <Link to="/contact" className="text-foreground hover:text-primary transition-smooth font-semibold">
               Contact
             </Link>
           </div>
@@ -162,111 +156,102 @@ const Navigation = ({ className = "" }: NavigationProps) => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2"
-            aria-label="Toggle menu"
-          >
-            { ? (
-              <X className="w-6 h-6 text-foreground" />
-            ) : (
-              <Menu className="w-6 h-6 text-foreground" />
-            )}
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2" aria-label="Toggle menu">
+            {isOpen ? <X className="w-6 h-6 text-foreground" /> : <Menu className="w-6 h-6 text-foreground" />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isOpen && (
-  <div className="md:hidden py-4 border-t border-border">
-    <div className="flex flex-col space-y-4 px-2">
-      {navItems.map((item) => (
-        <Link
-          key={item.name}
-          to={item.href}
-          className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-          onClick={() => { setIsOpen(false); setIsExpertiseOpen(false); }}
-        >
-          {item.name}
-        </Link>
-      ))}
-
-      {/* Expertise accordion on mobile */}
-      <div className="w-full">
-        <button
-          onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
-          aria-expanded={isExpertiseOpen}
-          aria-controls="mobile-expertise-list"
-          className="w-full flex items-center justify-between text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-2"
-        >
-          <span>Expertise</span>
-          <ChevronDown className={`ml-2 w-5 h-5 transition-transform ${isExpertiseOpen ? "rotate-180" : "rotate-0"}`} />
-        </button>
-
-        <div
-          id="mobile-expertise-list"
-          className={`overflow-hidden transition-all duration-300 ${isExpertiseOpen ? "max-h-[1200px] opacity-100 mt-2" : "max-h-0 opacity-0"}`}
-        >
-          <ul className="flex flex-col space-y-1 px-2">
-            {expertiseAreas.map((area) => (
-              <li key={area.name}>
+          <div className="md:hidden py-4 border-t border-border">
+            <div className="flex flex-col space-y-4 px-2">
+              {navItems.map((item) => (
                 <Link
-                  to={area.path}
-                  className="block text-muted-foreground hover:text-primary px-3 py-2 rounded-md transition-colors"
-                  onClick={() => { setIsOpen(false); setIsExpertiseOpen(false); }}
+                  key={item.name}
+                  to={item.href}
+                  className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+                  onClick={() => {
+                    setIsOpen(false);
+                    setIsExpertiseOpen(false);
+                  }}
                 >
-                  {area.name}
+                  {item.name}
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+              ))}
+
+              {/* Expertise accordion on mobile */}
+              <div className="w-full">
+                <button
+                  onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
+                  aria-expanded={isExpertiseOpen}
+                  aria-controls="mobile-expertise-list"
+                  className="w-full flex items-center justify-between text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-2"
+                >
+                  <span>Expertise</span>
+                  <ChevronDown className={`ml-2 w-5 h-5 transition-transform ${isExpertiseOpen ? "rotate-180" : "rotate-0"}`} />
+                </button>
+
+                <div
+                  id="mobile-expertise-list"
+                  className={`overflow-hidden transition-all duration-300 ${isExpertiseOpen ? "max-h-[1200px] opacity-100 mt-2" : "max-h-0 opacity-0"}`}
+                >
+                  <ul className="flex flex-col space-y-1 px-2">
+                    {expertiseAreas.map((area) => (
+                      <li key={area.name}>
+                        <Link
+                          to={area.path}
+                          className="block text-muted-foreground hover:text-primary px-3 py-2 rounded-md transition-colors"
+                          onClick={() => {
+                            setIsOpen(false);
+                            setIsExpertiseOpen(false);
+                          }}
+                        >
+                          {area.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Solutions (unchanged) */}
+              <Link
+                to="/services"
+                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Solutions
+              </Link>
+
+              <Link to="/projects" className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1" onClick={() => setIsOpen(false)}>
+                Projects
+              </Link>
+
+              <Link to="/faq" className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1" onClick={() => setIsOpen(false)}>
+                FAQ
+              </Link>
+
+              <Link to="/contact" className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1" onClick={() => setIsOpen(false)}>
+                Contact
+              </Link>
+
+              <div className="pt-4 flex space-x-4 justify-center border-t border-border">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Facebook">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Instagram">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Twitter">
+                  <Twitter className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+    </nav>
+  );
+};
 
-      {/* Solutions (unchanged) */}
-      <Link
-        to="/services"
-        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-        onClick={() => setIsOpen(false)}
-      >
-        Solutions
-      </Link>
-
-      <Link
-        to="/projects"
-        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-        onClick={() => setIsOpen(false)}
-      >
-        Projects
-      </Link>
-
-      <Link
-        to="/faq"
-        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-        onClick={() => setIsOpen(false)}
-      >
-        FAQ
-      </Link>
-
-      <Link
-        to="/contact"
-        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-        onClick={() => setIsOpen(false)}
-      >
-        Contact
-      </Link>
-
-      <div className="pt-4 flex space-x-4 justify-center border-t border-border">
-        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Facebook">
-          <Facebook className="w-5 h-5" />
-        </a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Instagram">
-          <Instagram className="w-5 h-5" />
-        </a>
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Twitter">
-          <Twitter className="w-5 h-5" />
-        </a>
-      </div>
-    </div>
-  </div>
-)}
 export default Navigation;
