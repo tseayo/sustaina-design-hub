@@ -16,6 +16,7 @@ interface NavigationProps {
 const Navigation = ({ className = "" }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -162,11 +163,11 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => set(!)}
             className="md:hidden p-2"
             aria-label="Toggle menu"
           >
-            {isOpen ? (
+            { ? (
               <X className="w-6 h-6 text-foreground" />
             ) : (
               <Menu className="w-6 h-6 text-foreground" />
@@ -176,96 +177,96 @@ const Navigation = ({ className = "" }: NavigationProps) => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              
-              <div className="px-2 py-1">
-                <Link 
-                  to="/focus-areas" 
-                  className="text-muted-foreground hover:text-primary transition-smooth font-medium"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Expertise
-                </Link>
-              </div>
-              
-              <Link
-                to="/services"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                Solutions
-              </Link>
-              
-              <Link
-                to="/projects"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                Projects
-              </Link>
-              
-              <Link
-                to="/faq"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                FAQ
-              </Link>
-              
-              <Link
-                to="/contact"
-                className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
-              </Link>
-              
-              <div className="pt-4 flex space-x-4 justify-center border-t border-border">
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
-  );
-};
+  <div className="md:hidden py-4 border-t border-border">
+    <div className="flex flex-col space-y-4 px-2">
+      {navItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+          onClick={() => { setIsOpen(false); setIsExpertiseOpen(false); }}
+        >
+          {item.name}
+        </Link>
+      ))}
 
+      {/* Expertise accordion on mobile */}
+      <div className="w-full">
+        <button
+          onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
+          aria-expanded={isExpertiseOpen}
+          aria-controls="mobile-expertise-list"
+          className="w-full flex items-center justify-between text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-2"
+        >
+          <span>Expertise</span>
+          <ChevronDown className={`ml-2 w-5 h-5 transition-transform ${isExpertiseOpen ? "rotate-180" : "rotate-0"}`} />
+        </button>
+
+        <div
+          id="mobile-expertise-list"
+          className={`overflow-hidden transition-all duration-300 ${isExpertiseOpen ? "max-h-[1200px] opacity-100 mt-2" : "max-h-0 opacity-0"}`}
+        >
+          <ul className="flex flex-col space-y-1 px-2">
+            {expertiseAreas.map((area) => (
+              <li key={area.name}>
+                <Link
+                  to={area.path}
+                  className="block text-muted-foreground hover:text-primary px-3 py-2 rounded-md transition-colors"
+                  onClick={() => { setIsOpen(false); setIsExpertiseOpen(false); }}
+                >
+                  {area.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Solutions (unchanged) */}
+      <Link
+        to="/services"
+        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+        onClick={() => setIsOpen(false)}
+      >
+        Solutions
+      </Link>
+
+      <Link
+        to="/projects"
+        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+        onClick={() => setIsOpen(false)}
+      >
+        Projects
+      </Link>
+
+      <Link
+        to="/faq"
+        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+        onClick={() => setIsOpen(false)}
+      >
+        FAQ
+      </Link>
+
+      <Link
+        to="/contact"
+        className="text-muted-foreground hover:text-primary transition-smooth font-medium px-2 py-1"
+        onClick={() => setIsOpen(false)}
+      >
+        Contact
+      </Link>
+
+      <div className="pt-4 flex space-x-4 justify-center border-t border-border">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Facebook">
+          <Facebook className="w-5 h-5" />
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Instagram">
+          <Instagram className="w-5 h-5" />
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-primary transition-smooth" aria-label="Twitter">
+          <Twitter className="w-5 h-5" />
+        </a>
+      </div>
+    </div>
+  </div>
+)}
 export default Navigation;
