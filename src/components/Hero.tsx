@@ -1,11 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import heroImage from "@/assets/hero-energy.jpg";
-import { useNavigate } from "react-router-dom"; // 👈 NEW import
+import Link from "next/link"; // 👈 REPLACE react-router with Next.js Link
 
 const Hero = () => {
-  const navigate = useNavigate(); // 👈 initialize navigate function
-
   return (
     <section
       aria-labelledby="hero-heading"
@@ -66,27 +64,29 @@ const Hero = () => {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               {/* Contact Button */}
-              <Button
-                variant="hero"
-                size="xl"
-                className="shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
-                aria-label="Start your net zero transition — get a free consultation"
-                onClick={() => navigate("/contact")}
-              >
-                Get a Free Consultation
-                <ChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
-              </Button>
+              <Link href="/contact">
+                <Button
+                  variant="hero"
+                  size="xl"
+                  className="shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                  aria-label="Start your net zero transition — get a free consultation"
+                >
+                  Get a Free Consultation
+                  <ChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                </Button>
+              </Link>
 
               {/* 🌿 Carbon Calculator Button (replaces Explore Solutions) */}
-              <Button
-                variant="outline"
-                size="xl"
-                className="border-2 hover:bg-accent/10 hover:border-primary hover:shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50"
-                aria-label="Open Carbon Calculator"
-                onClick={() => navigate("/carbon-calculator")} // 👈 internal navigation
-              >
-                Open Carbon Calculator
-              </Button>
+              <Link href="/carbon-calculator">
+                <Button
+                  variant="outline"
+                  size="xl"
+                  className="border-2 hover:bg-accent/10 hover:border-primary hover:shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50"
+                  aria-label="Open Carbon Calculator"
+                >
+                  Open Carbon Calculator
+                </Button>
+              </Link>
             </div>
 
             <p className="text-sm text-white/80 flex items-center justify-center gap-2">
