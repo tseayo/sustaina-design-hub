@@ -1,7 +1,8 @@
 // src/pages/CarbonCalculator.tsx
-import CarbonCalculator from '@/components/CarbonCalculator';
+import React from 'react';
+import CarbonCalculator from '../components/CarbonCalculator';
 
-export default function CarbonCalculatorPage() {
+const CarbonCalculatorPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4">
@@ -17,4 +18,6 @@ export default function CarbonCalculatorPage() {
       </div>
     </div>
   );
-}
+};
+
+export default CarbonCalculatorPage;
