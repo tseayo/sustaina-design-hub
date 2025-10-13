@@ -1,3 +1,4 @@
+// src/pages/CarbonCalculator.tsx
 import React from 'react';
 import CarbonCalculator from '../components/CarbonCalculator';
 
