@@ -21,7 +21,7 @@ import Chatbot from "./components/Chatbot";
 import BackToTop from "./components/BackToTop";
 
 /* --- CARBON CALCULATOR IMPORT --- */
-import CarbonCalculator from "./pages/CarbonCalculator";
+import CarbonCalculatorPage from "./pages/CarbonCalculator";
 
 const queryClient = new QueryClient();
 
@@ -45,7 +45,7 @@ const App: React.FC = () => {
               <Route path="/contact" element={<Contact />} />
 
               {/* --- CARBON CALCULATOR ROUTE --- */}
-              <Route path="/carbon-calculator" element={<CarbonCalculator />} />
+               <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
