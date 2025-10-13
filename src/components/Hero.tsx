@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import heroImage from "@/assets/hero-energy.jpg";
-import Link from "next/link"; // 👈 REPLACE react-router with Next.js Link
+import { Link } from "react-router-dom"; // ✅ Use React Router Link
 
 const Hero = () => {
   return (
