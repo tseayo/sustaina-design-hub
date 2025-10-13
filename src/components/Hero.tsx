@@ -64,7 +64,7 @@ const Hero = () => {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               {/* Contact Button */}
-              <Link href="/contact">
+              <Link to="/contact"> {/* ✅ FIXED: href → to */}
                 <Button
                   variant="hero"
                   size="xl"
@@ -77,7 +77,7 @@ const Hero = () => {
               </Link>
 
               {/* 🌿 Carbon Calculator Button (replaces Explore Solutions) */}
-              <Link href="/carbon-calculator">
+              <Link to="/carbon-calculator"> {/* ✅ FIXED: href → to */}
                 <Button
                   variant="outline"
                   size="xl"
