@@ -1,0 +1,339 @@
+// src/pages/CarbonCalculator.tsx
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Doughnut } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartOptions,
+} from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+type Factors = {
+  electricity_kg_per_kwh: number;
+  gas_kg_per_kwh: number;
+  diesel_kg_per_l: number;
+  petrol_kg_per_l: number;
+  car_kg_per_km: number;
+  flight_kg_per_km: number;
+  waste_kg_per_tonne: number;
+};
+
+/* ---------- PLACEHOLDER FACTORS: replace with BEIS authoritative values ---------- */
+const EMISSION_FACTORS: Factors = {
+  electricity_kg_per_kwh: 0.22535,
+  gas_kg_per_kwh: 0.183,
+  diesel_kg_per_l: 2.68,
+  petrol_kg_per_l: 2.31,
+  car_kg_per_km: 0.192,
+  flight_kg_per_km: 0.158,
+  waste_kg_per_tonne: 1120,
+};
+/* -------------------------------------------------------------------------------- */
+
+const defaultForm = {
+  employees: 10,
+  operatingDays: 260,
+  electricity_kwh: 50000,
+  gas_kwh: 20000,
+  diesel_l: 0,
+  petrol_l: 0,
+  cars_km: 20000,
+  flights_km: 10000,
+  waste_t: 5,
+};
+
+export default function CarbonCalculator(): JSX.Element {
+  const navigate = useNavigate();
+  const [form, setForm] = useState(() => ({ ...defaultForm }));
+  const [showResults, setShowResults] = useState(false);
+  const [breakdown, setBreakdown] = useState<Record<string, number>>({});
+  const chartRef = useRef<any>(null);
+
+  useEffect(() => {
+    // accessible document title
+    const prev = document.title;
+    document.title = "Carbon Calculator — NetZero Energy Experts";
+    return () => {
+      document.title = prev;
+    };
+  }, []);
+
+  function handleChange<K extends keyof typeof form>(
+    key: K,
+    value: number | string
+  ) {
+    setForm((s) => ({ ...s, [key]: Number(value) }));
+  }
+
+  function calculate() {
+    const employees = Math.max(1, Number(form.employees));
+
+    const elec_co2 = form.electricity_kwh * EMISSION_FACTORS.electricity_kg_per_kwh;
+    const gas_co2 = form.gas_kwh * EMISSION_FACTORS.gas_kg_per_kwh;
+    const diesel_co2 = form.diesel_l * EMISSION_FACTORS.diesel_kg_per_l;
+    const petrol_co2 = form.petrol_l * EMISSION_FACTORS.petrol_kg_per_l;
+    const cars_co2 = form.cars_km * EMISSION_FACTORS.car_kg_per_km;
+    const flights_co2 = form.flights_km * EMISSION_FACTORS.flight_kg_per_km;
+    const waste_co2 = form.waste_t * EMISSION_FACTORS.waste_kg_per_tonne;
+
+    const newBreakdown: Record<string, number> = {
+      Electricity: elec_co2,
+      Gas: gas_co2,
+      Diesel: diesel_co2,
+      Petrol: petrol_co2,
+      "Car travel": cars_co2,
+      Flights: flights_co2,
+      Waste: waste_co2,
+    };
+
+    setBreakdown(newBreakdown);
+    setShowResults(true);
+
+    // optional: track event with analytics if available
+    // window.dataLayer?.push({ event: 'carbon_calculator_submit', value: newBreakdown });
+  }
+
+  function reset() {
+    setForm({ ...defaultForm });
+    setShowResults(false);
+    setBreakdown({});
+    if (chartRef.current?.chartInstance) {
+      // no-op but kept for future
+    }
+  }
+
+  const total = Object.values(breakdown).reduce((s, v) => s + v, 0);
+  const perEmployee = total && form.employees ? total / Math.max(1, form.employees) : 0;
+
+  const labels = Object.keys(breakdown);
+  const values = Object.values(breakdown);
+
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        data: values,
+        // let Chart.js pick default colors; you can supply colors array if desired
+        // backgroundColor: [...]
+      },
+    ],
+  };
+
+  const chartOptions: ChartOptions<"doughnut"> = {
+    plugins: {
+      legend: { position: "bottom" },
+      tooltip: { enabled: true },
+    },
+    maintainAspectRatio: false,
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 py-8">
+      <div className="max-w-5xl mx-auto px-4">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-semibold">Carbon Calculator</h1>
+            <p className="text-sm text-slate-600">
+              Estimate your organisation's annual CO₂e. Based on configurable
+              emission factors (update with BEIS values).
+            </p>
+          </div>
+
+          <div>
+            <button
+              className="text-sm px-3 py-2 rounded-md bg-white border hover:shadow"
+              onClick={() => navigate("/")}
+            >
+              ← Back to home
+            </button>
+          </div>
+        </div>
+
+        <section className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-medium mb-3">Profile & activity (annual)</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label className="block">
+              <div className="text-sm text-slate-600">Number of employees</div>
+              <input
+                type="number"
+                min={0}
+                value={form.employees}
+                onChange={(e) => handleChange("employees", e.target.value)}
+                className="mt-1 w-full border rounded px-3 py-2"
+              />
+            </label>
+
+            <label className="block">
+              <div className="text-sm text-slate-600">Operating days per year</div>
+              <input
+                type="number"
+                min={1}
+                value={form.operatingDays}
+                onChange={(e) => handleChange("operatingDays", e.target.value)}
+                className="mt-1 w-full border rounded px-3 py-2"
+              />
+            </label>
+
+            <div className="col-span-1 md:col-span-2">
+              <h3 className="text-sm font-semibold mt-4 mb-2">Energy</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <label>
+                  <div className="text-sm text-slate-600">Electricity (kWh / year)</div>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.electricity_kwh}
+                    onChange={(e) => handleChange("electricity_kwh", e.target.value)}
+                    className="mt-1 w-full border rounded px-3 py-2"
+                  />
+                </label>
+
+                <label>
+                  <div className="text-sm text-slate-600">Natural gas (kWh / year)</div>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.gas_kwh}
+                    onChange={(e) => handleChange("gas_kwh", e.target.value)}
+                    className="mt-1 w-full border rounded px-3 py-2"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="col-span-1 md:col-span-2">
+              <h3 className="text-sm font-semibold mt-4 mb-2">Fuel & fleet</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <label>
+                  <div className="text-sm text-slate-600">Diesel (litres / year)</div>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.diesel_l}
+                    onChange={(e) => handleChange("diesel_l", e.target.value)}
+                    className="mt-1 w-full border rounded px-3 py-2"
+                  />
+                </label>
+
+                <label>
+                  <div className="text-sm text-slate-600">Petrol (litres / year)</div>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.petrol_l}
+                    onChange={(e) => handleChange("petrol_l", e.target.value)}
+                    className="mt-1 w-full border rounded px-3 py-2"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="col-span-1 md:col-span-2">
+              <h3 className="text-sm font-semibold mt-4 mb-2">Travel</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <label>
+                  <div className="text-sm text-slate-600">Car travel (km / year)</div>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.cars_km}
+                    onChange={(e) => handleChange("cars_km", e.target.value)}
+                    className="mt-1 w-full border rounded px-3 py-2"
+                  />
+                </label>
+
+                <label>
+                  <div className="text-sm text-slate-600">Flights (km / year)</div>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.flights_km}
+                    onChange={(e) => handleChange("flights_km", e.target.value)}
+                    className="mt-1 w-full border rounded px-3 py-2"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="col-span-1 md:col-span-2">
+              <h3 className="text-sm font-semibold mt-4 mb-2">Waste</h3>
+              <label>
+                <div className="text-sm text-slate-600">Waste (tonnes / year)</div>
+                <input
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  value={form.waste_t}
+                  onChange={(e) => handleChange("waste_t", e.target.value)}
+                  className="mt-1 w-full border rounded px-3 py-2"
+                />
+              </label>
+            </div>
+          </div>
+
+          <div className="mt-6 flex gap-3">
+            <button
+              onClick={calculate}
+              className="px-4 py-2 bg-emerald-600 text-white rounded shadow hover:bg-emerald-700"
+            >
+              Calculate emissions
+            </button>
+            <button onClick={reset} className="px-4 py-2 border rounded">
+              Reset
+            </button>
+            <button
+              onClick={() => {
+                // quick save / print hook placeholder
+                window.print();
+              }}
+              className="ml-auto px-3 py-2 border rounded text-sm"
+            >
+              Print / Save
+            </button>
+          </div>
+        </section>
+
+        {/* Results */}
+        {showResults && (
+          <section className="mt-6 bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-medium">Results</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <div className="p-4 bg-white border rounded">
+                <div className="text-sm text-slate-600">Total annual emissions</div>
+                <div className="text-2xl font-semibold mt-2">
+                  {total.toLocaleString(undefined, { maximumFractionDigits: 0 })} kg CO₂e
+                </div>
+                <div className="text-sm text-slate-500 mt-1">
+                  {perEmployee.toLocaleString(undefined, { maximumFractionDigits: 0 })} kg CO₂e per employee / year
+                </div>
+              </div>
+
+              <div className="md:col-span-2 bg-white border rounded p-4">
+                <div className="h-64">
+                  <Doughnut data={chartData} options={chartOptions} ref={chartRef} />
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {Object.entries(breakdown).map(([k, v]) => (
+                    <div key={k} className="text-sm">
+                      <strong>{k}:</strong> {v.toLocaleString(undefined, { maximumFractionDigits: 0 })} kg CO₂e
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 text-xs text-slate-500">
+              Factors used: BEIS (placeholder). Replace factors in the code with latest BEIS numbers for auditability.
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+  );
+}
