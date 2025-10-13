@@ -84,7 +84,7 @@ const Hero = () => {
                   className="border-2 hover:bg-accent/10 hover:border-primary hover:shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50"
                   aria-label="Carbon Emission Calculator"
                 >
-                  Open Carbon Calculator
+                  Carbon Emission Calculator
                 </Button>
               </Link>
             </div>
