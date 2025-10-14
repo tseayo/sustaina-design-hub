@@ -14,7 +14,7 @@ import {
   Target,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "@/assets/logo.png"; // Import your logo image
+import logo from "@/assets/necl-logo.png"; // Import your logo image
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
