@@ -29,43 +29,37 @@ const Header: React.FC = () => {
       id: 1, 
       slug: "solar-power", 
       title: "Solar Power", 
-      icon: Sun, 
-      description: "Complete solar energy solutions for residential, commercial, and industrial applications"
+      icon: Sun
     },
     { 
       id: 2, 
       slug: "emission-reduction", 
       title: "Emission Reduction", 
-      icon: CloudRain, 
-      description: "Strategies and technologies to reduce your carbon footprint and environmental impact"
+      icon: CloudRain
     },
     { 
       id: 3, 
       slug: "energy-efficiency", 
       title: "Energy Efficiency", 
-      icon: Zap, 
-      description: "Optimize energy consumption and reduce waste through advanced efficiency measures"
+      icon: Zap
     },
     { 
       id: 4, 
       slug: "sustainability-consulting", 
       title: "Sustainability Consulting", 
-      icon: BarChart3, 
-      description: "Strategic guidance for sustainable business practices and environmental stewardship"
+      icon: BarChart3
     },
     { 
       id: 5, 
       slug: "corporate-training", 
       title: "Corporate Training", 
-      icon: Users, 
-      description: "Educational programs to build organizational capacity for sustainable practices"
+      icon: Users
     },
     { 
       id: 6, 
       slug: "green-strategy", 
       title: "Green Strategy", 
-      icon: Target, 
-      description: "Long-term planning for sustainable growth and environmental responsibility"
+      icon: Target
     },
   ];
 
