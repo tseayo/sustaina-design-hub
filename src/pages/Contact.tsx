@@ -177,10 +177,10 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Phone</h3>
                     <a
-                      href="tel:+442039379903"
+                      href="tel:+44 203 937 9903"
                       className="text-muted-foreground hover:text-primary transition-smooth"
                     >
-                      +123 456 7890
+                      +44 203 937 9903
                     </a>
                   </div>
                 </div>
