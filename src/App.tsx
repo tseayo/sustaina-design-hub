@@ -46,6 +46,14 @@ const App: React.FC = () => {
 
               {/* --- CARBON CALCULATOR ROUTE --- */}
                <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
+              <BrowserRouter>
+                <Layout>  {/* This wrapper provides the header with logo */}
+                  <Routes>
+                    <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
+                    {/* Other routes */}
+                  </Routes>
+                </Layout>
+              </BrowserRouter>
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
