@@ -1,4 +1,4 @@
-// src/App.tsx
+// src/App.tsx - CORRECTED VERSION
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -44,16 +44,8 @@ const App: React.FC = () => {
               <Route path="/solar-power" element={<SolarPower />} />
               <Route path="/contact" element={<Contact />} />
 
-              {/* --- CARBON CALCULATOR ROUTE --- */}
-               <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
-              <BrowserRouter>
-                <Layout>  {/* This wrapper provides the header with logo */}
-                  <Routes>
-                    <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
-                    {/* Other routes */}
-                  </Routes>
-                </Layout>
-              </BrowserRouter>
+              {/* --- CORRECTED CARBON CALCULATOR ROUTE --- */}
+              <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
