@@ -1,5 +1,5 @@
 // src/components/Header.tsx
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ChevronDown,
@@ -14,12 +14,15 @@ import {
   Target,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "@/assets/logo.png"; // Import your logo image
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
+  const [isDesktopExpertiseOpen, setIsDesktopExpertiseOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const expertiseRef = useRef<HTMLDivElement>(null);
 
   const expertiseItems = [
     { 
@@ -66,6 +69,20 @@ const Header: React.FC = () => {
     },
   ];
 
+  // Close dropdown when clicking outside :cite[10]
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (expertiseRef.current && !expertiseRef.current.contains(event.target as Node)) {
+        setIsDesktopExpertiseOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
     setIsExpertiseOpen(false);
@@ -74,6 +91,11 @@ const Header: React.FC = () => {
   const handleServiceSelect = (item: any) => {
     navigate(`/${item.slug}`);
     closeMobileMenu();
+    setIsDesktopExpertiseOpen(false);
+  };
+
+  const toggleDesktopExpertise = () => {
+    setIsDesktopExpertiseOpen(!isDesktopExpertiseOpen);
   };
 
   // Mobile menu with proper accordion for Expertise
@@ -184,9 +206,13 @@ const Header: React.FC = () => {
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo with imported image :cite[5] */}
           <Link to="/" className="flex items-center">
-            <span className="font-bold text-xl">NetZero Energy</span>
+            <img 
+              src={logo} 
+              alt="NetZero Energy Experts" 
+              className="h-8 w-auto" // Adjust height as needed
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -205,37 +231,44 @@ const Header: React.FC = () => {
               About
             </Link>
 
-            {/* Desktop Expertise Dropdown */}
-            <div className="relative group">
-              <button className="flex items-center text-foreground/60 hover:text-foreground transition-colors">
+            {/* Enhanced Desktop Expertise Dropdown with click functionality :cite[6] */}
+            <div className="relative" ref={expertiseRef}>
+              <button 
+                onClick={toggleDesktopExpertise}
+                className="flex items-center text-foreground/60 hover:text-foreground transition-colors"
+              >
                 Expertise
-                <ChevronDown className="w-4 h-4 ml-1" />
+                <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${isDesktopExpertiseOpen ? 'rotate-180' : ''}`} />
               </button>
               
-              <div className="absolute top-full left-0 mt-2 w-80 bg-card border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                <div className="p-2">
-                  {expertiseItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.id}
-                        to={`/${item.slug}`}
-                        className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-accent hover:text-accent-foreground transition-colors rounded-md"
-                      >
-                        <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0">
-                          <Icon className="w-5 h-5 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-foreground">{item.title}</div>
-                          <div className="text-muted-foreground text-xs mt-1 truncate">
-                            {item.description}
+              {/* Dropdown Menu */}
+              {isDesktopExpertiseOpen && (
+                <div className="absolute top-full left-0 mt-2 w-80 bg-card border rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95">
+                  <div className="p-2">
+                    {expertiseItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.id}
+                          to={`/${item.slug}`}
+                          onClick={() => setIsDesktopExpertiseOpen(false)}
+                          className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-accent hover:text-accent-foreground transition-colors rounded-md group"
+                        >
+                          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <Icon className="w-5 h-5 text-white" />
                           </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold text-foreground">{item.title}</div>
+                            <div className="text-muted-foreground text-xs mt-1 truncate">
+                              {item.description}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <Link 
