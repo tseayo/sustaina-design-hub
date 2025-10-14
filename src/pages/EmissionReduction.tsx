@@ -116,7 +116,7 @@ const EmissionReduction = () => {
               Decarbonization Solutions
             </div>
             
-            <h1 className="text-5xl lg:text-6xl font-heading font-bold text-foreground mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-foreground mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
               Transform Environmental Responsibility into Competitive Advantage
             </h1>
             
