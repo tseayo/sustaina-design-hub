@@ -50,10 +50,11 @@ const App: React.FC = () => {
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            
+            {/* MOVE THESE INSIDE THE LAYOUT */}
+            <Chatbot />
+            <BackToTop />
           </Layout>
-
-          <Chatbot />
-          <BackToTop />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
