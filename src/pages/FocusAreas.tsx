@@ -1,5 +1,3 @@
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import { Zap, TrendingDown, Wind, BatteryCharging, Droplets, Leaf } from "lucide-react";
 
 const FocusAreas = () => {
@@ -44,8 +42,7 @@ const FocusAreas = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
-      
+        
       <section className="pt-32 pb-24 relative overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-background"></div>
@@ -106,7 +103,6 @@ const FocusAreas = () => {
         </div>
       </section>
       
-      <Footer />
     </div>
   );
 };
