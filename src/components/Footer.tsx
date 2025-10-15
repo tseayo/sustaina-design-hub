@@ -82,32 +82,8 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Expertise Areas */}
-          <div>
-            <h3 className="font-heading font-semibold text-foreground mb-6">Expertise</h3>
-            <ul className="space-y-4">
-              <li>
-                <Link to="/solar-power" className="text-muted-foreground hover:text-primary transition-smooth">
-                  Solar Power
-                </Link>
-              </li>
-              <li>
-                <Link to="/emission-reduction" className="text-muted-foreground hover:text-primary transition-smooth">
-                  Emission Reduction
-                </Link>
-              </li>
-              <li>
-                <Link to="/focus-areas" className="text-muted-foreground hover:text-primary transition-smooth">
-                  Hydrogen
-                </Link>
-              </li>
-              <li>
-                <a href="/#faq" className="text-muted-foreground hover:text-primary transition-smooth">
-                  FAQ
-                </a>
-              </li>
-            </ul>
-          </div>
+          {/* REMOVED: Expertise Areas Section */}
+          {/* This entire section has been removed to eliminate duplicate Expertise */}
 
           {/* Contact Info */}
           <div>
