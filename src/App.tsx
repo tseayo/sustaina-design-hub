@@ -32,6 +32,7 @@ const App: React.FC = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          {/* Layout wraps only the main content */}
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -43,18 +44,14 @@ const App: React.FC = () => {
               <Route path="/emission-reduction" element={<EmissionReduction />} />
               <Route path="/solar-power" element={<SolarPower />} />
               <Route path="/contact" element={<Contact />} />
-
-              {/* --- CORRECTED CARBON CALCULATOR ROUTE --- */}
               <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
-
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-            
-            {/* MOVE THESE INSIDE THE LAYOUT */}
-            <Chatbot />
-            <BackToTop />
           </Layout>
+
+          {/* Chatbot and BackToTop outside Layout but inside BrowserRouter */}
+          <Chatbot />
+          <BackToTop />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
