@@ -1,18 +1,7 @@
 // src/components/Header.tsx
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronDown,
-  ChevronRight,
-  X,
-  Menu,
-  Sun,
-  CloudRain,
-  Zap,
-  BarChart3,
-  Users,
-  Target,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, X, Menu, Sun, CloudRain, Zap, BarChart3, Users, Target } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/necl-logo.png";
 
@@ -20,12 +9,9 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
   const [isDesktopExpertiseOpen, setIsDesktopExpertiseOpen] = useState(false);
-
   const location = useLocation();
   const navigate = useNavigate();
   const expertiseRef = useRef<HTMLDivElement>(null);
-
-  const isHome = location.pathname === "/";
 
   const expertiseItems = [
     { id: 1, slug: "solar-power", title: "Solar Power", icon: Sun },
@@ -36,12 +22,14 @@ const Header: React.FC = () => {
     { id: 6, slug: "green-strategy", title: "Green Strategy", icon: Target },
   ];
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (expertiseRef.current && !expertiseRef.current.contains(event.target as Node)) {
         setIsDesktopExpertiseOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -63,31 +51,59 @@ const Header: React.FC = () => {
     setIsDesktopExpertiseOpen(!isDesktopExpertiseOpen);
   };
 
+  // Mobile menu with proper accordion for Expertise
   const MobileMenuAccordion = () => (
     <div className="fixed inset-0 z-50 lg:hidden bg-background overflow-y-auto">
       <div className="min-h-full bg-background p-6">
+        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-foreground">Navigation</h2>
-          <Button variant="ghost" size="icon" onClick={closeMobileMenu} className="hover:bg-accent">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={closeMobileMenu} 
+            className="hover:bg-accent"
+          >
             <X className="w-6 h-6" />
           </Button>
         </div>
+
+        {/* Navigation Items */}
         <nav className="space-y-2">
+          {/* Home */}
           <Link to="/" onClick={closeMobileMenu} className="block">
-            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">Home</Button>
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Home
+            </Button>
           </Link>
+
+          {/* About */}
           <Link to="/about" onClick={closeMobileMenu} className="block">
-            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">About</Button>
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              About
+            </Button>
           </Link>
+
+          {/* Expertise Accordion */}
           <div className="border rounded-lg overflow-hidden">
-            <button
-              onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
+            <button 
+              onClick={() => setIsExpertiseOpen(!isExpertiseOpen)} 
               className="w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors"
             >
               <span className="text-base font-normal">Expertise</span>
-              <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${isExpertiseOpen ? "rotate-180" : ""}`} />
+              <ChevronDown 
+                className={`w-5 h-5 transition-transform duration-200 ${
+                  isExpertiseOpen ? "rotate-180" : "rotate-0"
+                }`} 
+              />
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ${isExpertiseOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}`}>
+
+            {/* Expertise Submenu */}
+            <div 
+              className={`overflow-hidden transition-all duration-300 ${
+                isExpertiseOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
               <div className="p-4 space-y-3 bg-muted/30 border-t">
                 {expertiseItems.map((item) => {
                   const Icon = item.icon;
@@ -101,7 +117,12 @@ const Header: React.FC = () => {
                         <Icon className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground text-sm mb-1">{item.title}</h3>
+                        <h3 className="font-semibold text-foreground text-sm mb-1">
+                          {item.title}
+                        </h3>
+                        <p className="text-muted-foreground text-xs leading-tight">
+                          {item.description}
+                        </p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                     </button>
@@ -110,14 +131,26 @@ const Header: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Services */}
           <Link to="/services" onClick={closeMobileMenu} className="block">
-            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">Services</Button>
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Services
+            </Button>
           </Link>
+
+          {/* Projects */}
           <Link to="/projects" onClick={closeMobileMenu} className="block">
-            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">Projects</Button>
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Projects
+            </Button>
           </Link>
+
+          {/* Contact */}
           <Link to="/contact" onClick={closeMobileMenu} className="block">
-            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">Contact</Button>
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Contact
+            </Button>
           </Link>
         </nav>
       </div>
@@ -127,18 +160,39 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-16 flex items-center">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Logo with imported image */}
           <Link to="/" className="flex items-center">
             <img src={logo} alt="NetZero Energy Experts" className="h-8 w-auto" />
           </Link>
-          <nav className={`hidden lg:flex items-center space-x-8 flex-1 ${isHome ? "justify-end" : "justify-between"}`}>
-            <Link to="/" className={`${location.pathname === "/" ? "text-foreground" : "text-foreground/60"} hover:text-foreground transition-colors`}>Home</Link>
-            <Link to="/about" className={`${location.pathname === "/about" ? "text-foreground" : "text-foreground/60"} hover:text-foreground transition-colors`}>About</Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-8">
+            <Link 
+              to="/" 
+              className={`${location.pathname === '/' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
+            >
+              Home
+            </Link>
+            
+            <Link 
+              to="/about" 
+              className={`${location.pathname === '/about' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
+            >
+              About
+            </Link>
+
+            {/* Enhanced Desktop Expertise Dropdown with click functionality */}
             <div className="relative" ref={expertiseRef}>
-              <button onClick={toggleDesktopExpertise} className="flex items-center text-foreground/60 hover:text-foreground transition-colors">
+              <button 
+                onClick={toggleDesktopExpertise}
+                className="flex items-center text-foreground/60 hover:text-foreground transition-colors"
+              >
                 Expertise
-                <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${isDesktopExpertiseOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${isDesktopExpertiseOpen ? 'rotate-180' : ''}`} />
               </button>
+
+              {/* Dropdown Menu */}
               {isDesktopExpertiseOpen && (
                 <div className="absolute top-full left-0 mt-2 w-80 bg-card border rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95">
                   <div className="p-2">
@@ -156,6 +210,9 @@ const Header: React.FC = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="font-semibold text-foreground">{item.title}</div>
+                            <div className="text-muted-foreground text-xs mt-1 truncate">
+                              {item.description}
+                            </div>
                           </div>
                         </Link>
                       );
@@ -164,17 +221,44 @@ const Header: React.FC = () => {
                 </div>
               )}
             </div>
-            <Link to="/services" className={`${location.pathname === "/services" ? "text-foreground" : "text-foreground/60"} hover:text-foreground transition-colors`}>Services</Link>
-            <Link to="/projects" className={`${location.pathname === "/projects" ? "text-foreground" : "text-foreground/60"} hover:text-foreground transition-colors`}>Projects</Link>
-            <Link to="/contact" className={`${location.pathname === "/contact" ? "text-foreground" : "text-foreground/60"} hover:text-foreground transition-colors`}>Contact</Link>
+
+            <Link 
+              to="/services" 
+              className={`${location.pathname === '/services' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
+            >
+              Services
+            </Link>
+            
+            <Link 
+              to="/projects" 
+              className={`${location.pathname === '/projects' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
+            >
+              Projects
+            </Link>
+            
+            <Link 
+              to="/contact" 
+              className={`${location.pathname === '/contact' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
+            >
+              Contact
+            </Link>
           </nav>
+
+          {/* Mobile Menu Button */}
           <div className="lg:hidden">
-            <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(true)} className="hover:bg-accent">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setIsMobileMenuOpen(true)} 
+              className="hover:bg-accent"
+            >
               <Menu className="w-6 h-6" />
             </Button>
           </div>
         </div>
       </header>
+
+      {/* Mobile Navigation Overlay */}
       {isMobileMenuOpen && <MobileMenuAccordion />}
     </>
   );
