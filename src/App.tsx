@@ -22,8 +22,11 @@ import BackToTop from "./components/BackToTop";
 
 /* --- CARBON CALCULATOR IMPORT --- */
 import CarbonCalculatorPage from "./pages/CarbonCalculator";
-/* --- PRIVACY POLICY IMPORT --- */
+/* -- PRIVACY POLICY IMPORT -- */
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+
+/* -- ScrollToTop import -- */
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +37,9 @@ const App: React.FC = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          {/* Scroll to top on route change */}
+          <ScrollToTop />
+
           {/* Layout wraps only the main content */}
           <Layout>
             <Routes>
