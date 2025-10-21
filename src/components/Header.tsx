@@ -160,14 +160,14 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="container mx-auto px-4 h-16 flex items-center">
           {/* Logo with imported image */}
           <Link to="/" className="flex items-center">
             <img src={logo} alt="NetZero Energy Experts" className="h-8 w-auto" />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          {/* Desktop Navigation - Aligned to right */}
+          <nav className="hidden lg:flex items-center space-x-8 ml-auto">
             <Link 
               to="/" 
               className={`${location.pathname === '/' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
@@ -245,7 +245,7 @@ const Header: React.FC = () => {
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden">
+          <div className="lg:hidden ml-auto">
             <Button 
               variant="ghost" 
               size="icon" 
