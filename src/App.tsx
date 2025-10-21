@@ -22,6 +22,8 @@ import BackToTop from "./components/BackToTop";
 
 /* --- CARBON CALCULATOR IMPORT --- */
 import CarbonCalculatorPage from "./pages/CarbonCalculator";
+/* --- PRIVACY POLICY IMPORT --- */
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +47,7 @@ const App: React.FC = () => {
               <Route path="/solar-power" element={<SolarPower />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/carbon-calculator" element={<CarbonCalculatorPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
