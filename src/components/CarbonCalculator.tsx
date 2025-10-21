@@ -160,45 +160,33 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-16 flex items-center">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           {/* Logo with imported image */}
           <Link to="/" className="flex items-center">
             <img src={logo} alt="NetZero Energy Experts" className="h-8 w-auto" />
           </Link>
 
-          {/* Desktop Navigation - Aligned to right with black and green styling */}
-          <nav className="hidden lg:flex items-center space-x-1 ml-auto">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-8">
             <Link 
               to="/" 
-              className={`px-4 py-2 rounded-md transition-colors font-medium ${
-                location.pathname === '/' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
-              }`}
+              className={`${location.pathname === '/' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
             >
               Home
             </Link>
             
             <Link 
               to="/about" 
-              className={`px-4 py-2 rounded-md transition-colors font-medium ${
-                location.pathname === '/about' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
-              }`}
+              className={`${location.pathname === '/about' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
             >
               About
             </Link>
 
-            {/* Enhanced Desktop Expertise Dropdown with black and green styling */}
+            {/* Enhanced Desktop Expertise Dropdown with click functionality */}
             <div className="relative" ref={expertiseRef}>
               <button 
                 onClick={toggleDesktopExpertise}
-                className={`flex items-center px-4 py-2 rounded-md transition-colors font-medium ${
-                  isDesktopExpertiseOpen || location.pathname.includes('/expertise') || expertiseItems.some(item => location.pathname.includes(item.slug))
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
-                }`}
+                className="flex items-center text-foreground/60 hover:text-foreground transition-colors"
               >
                 Expertise
                 <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${isDesktopExpertiseOpen ? 'rotate-180' : ''}`} />
@@ -206,7 +194,7 @@ const Header: React.FC = () => {
 
               {/* Dropdown Menu */}
               {isDesktopExpertiseOpen && (
-                <div className="absolute top-full left-0 mt-2 w-80 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95">
+                <div className="absolute top-full left-0 mt-2 w-80 bg-card border rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95">
                   <div className="p-2">
                     {expertiseItems.map((item) => {
                       const Icon = item.icon;
@@ -215,14 +203,14 @@ const Header: React.FC = () => {
                           key={item.id}
                           to={`/${item.slug}`}
                           onClick={() => setIsDesktopExpertiseOpen(false)}
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-white hover:bg-primary hover:text-primary-foreground transition-colors rounded-md group"
+                          className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-accent hover:text-accent-foreground transition-colors rounded-md group"
                         >
                           <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                             <Icon className="w-5 h-5 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-semibold">{item.title}</div>
-                            <div className="text-gray-300 text-xs mt-1 truncate group-hover:text-primary-foreground">
+                            <div className="font-semibold text-foreground">{item.title}</div>
+                            <div className="text-muted-foreground text-xs mt-1 truncate">
                               {item.description}
                             </div>
                           </div>
@@ -236,40 +224,28 @@ const Header: React.FC = () => {
 
             <Link 
               to="/services" 
-              className={`px-4 py-2 rounded-md transition-colors font-medium ${
-                location.pathname === '/services' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
-              }`}
+              className={`${location.pathname === '/services' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
             >
               Services
             </Link>
             
             <Link 
               to="/projects" 
-              className={`px-4 py-2 rounded-md transition-colors font-medium ${
-                location.pathname === '/projects' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
-              }`}
+              className={`${location.pathname === '/projects' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
             >
               Projects
             </Link>
             
             <Link 
               to="/contact" 
-              className={`px-4 py-2 rounded-md transition-colors font-medium ${
-                location.pathname === '/contact' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
-              }`}
+              className={`${location.pathname === '/contact' ? 'text-foreground' : 'text-foreground/60'} hover:text-foreground transition-colors`}
             >
               Contact
             </Link>
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden ml-auto">
+          <div className="lg:hidden">
             <Button 
               variant="ghost" 
               size="icon" 
