@@ -1,301 +1,291 @@
-// src/components/CarbonCalculator.tsx
-import { useState } from 'react';
+// src/components/Header.tsx
+import React, { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronRight, X, Menu, Sun, CloudRain, Zap, BarChart3, Users, Target } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "@/assets/necl-logo.png";
 
-interface CalculatorData {
-  electricity: {
-    usage: number;
-    unit: 'kWh' | 'mwh';
-  };
-  transportation: {
-    carMileage: number;
-    fuelType: 'petrol' | 'diesel' | 'electric';
-    publicTransport: number;
-    flights: number;
-  };
-  housing: {
-    heating: number;
-    heatingType: 'natural_gas' | 'electric' | 'oil';
-    householdSize: number;
-  };
-}
+const Header: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
+  const [isDesktopExpertiseOpen, setIsDesktopExpertiseOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const expertiseRef = useRef<HTMLDivElement>(null);
 
-export default function CarbonCalculator() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [calculatorData, setCalculatorData] = useState<CalculatorData>({
-    electricity: { usage: 0, unit: 'kWh' },
-    transportation: { carMileage: 0, fuelType: 'petrol', publicTransport: 0, flights: 0 },
-    housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 }
-  });
+  const expertiseItems = [
+    { id: 1, slug: "solar-power", title: "Solar Power", icon: Sun },
+    { id: 2, slug: "emission-reduction", title: "Emission Reduction", icon: CloudRain },
+    { id: 3, slug: "energy-efficiency", title: "Energy Efficiency", icon: Zap },
+    { id: 4, slug: "sustainability-consulting", title: "Sustainability Consulting", icon: BarChart3 },
+    { id: 5, slug: "corporate-training", title: "Corporate Training", icon: Users },
+    { id: 6, slug: "green-strategy", title: "Green Strategy", icon: Target },
+  ];
 
-  const [results, setResults] = useState<{
-    totalEmissions: number;
-    breakdown: { category: string; emissions: number }[];
-  } | null>(null);
-
-  const calculateEmissions = () => {
-    // Emission factors (kg CO2 per unit)
-    const factors = {
-      electricity: 0.233, // kg CO2 per kWh (UK average)
-      petrol: 2.31, // kg CO2 per liter
-      diesel: 2.68, // kg CO2 per liter
-      natural_gas: 0.185, // kg CO2 per kWh
-      heating_oil: 2.68, // kg CO2 per liter
-      flight: 0.115, // kg CO2 per km
-      public_transport: 0.05 // kg CO2 per km
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (expertiseRef.current && !expertiseRef.current.contains(event.target as Node)) {
+        setIsDesktopExpertiseOpen(false);
+      }
     };
 
-    const electricityEmissions = calculatorData.electricity.usage * factors.electricity;
-    
-    const carEmissions = calculatorData.transportation.carMileage * 
-      (calculatorData.transportation.fuelType === 'petrol' ? factors.petrol : 
-       calculatorData.transportation.fuelType === 'diesel' ? factors.diesel : 0);
-    
-    const heatingEmissions = calculatorData.housing.heating * 
-      (calculatorData.housing.heatingType === 'natural_gas' ? factors.natural_gas : 
-       calculatorData.housing.heatingType === 'electric' ? factors.electricity : factors.heating_oil);
-    
-    const flightEmissions = calculatorData.transportation.flights * factors.flight;
-    const transportEmissions = calculatorData.transportation.publicTransport * factors.public_transport;
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-    const total = electricityEmissions + carEmissions + heatingEmissions + flightEmissions + transportEmissions;
-
-    setResults({
-      totalEmissions: total,
-      breakdown: [
-        { category: 'Electricity', emissions: electricityEmissions },
-        { category: 'Transportation', emissions: carEmissions + transportEmissions + flightEmissions },
-        { category: 'Heating', emissions: heatingEmissions }
-      ]
-    });
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    setIsExpertiseOpen(false);
   };
 
-  const handleNext = () => {
-    if (currentStep < 3) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      calculateEmissions();
-    }
+  const handleServiceSelect = (item: any) => {
+    navigate(`/${item.slug}`);
+    closeMobileMenu();
+    setIsDesktopExpertiseOpen(false);
   };
 
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+  const toggleDesktopExpertise = () => {
+    setIsDesktopExpertiseOpen(!isDesktopExpertiseOpen);
   };
 
-  const updateData = (section: keyof CalculatorData, field: string, value: any) => {
-    setCalculatorData(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value
-      }
-    }));
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between mb-2">
-          <span className="text-sm font-medium">Electricity</span>
-          <span className="text-sm font-medium">Transportation</span>
-          <span className="text-sm font-medium">Housing</span>
-          <span className="text-sm font-medium">Results</span>
+  // Mobile menu with proper accordion for Expertise
+  const MobileMenuAccordion = () => (
+    <div className="fixed inset-0 z-50 lg:hidden bg-background overflow-y-auto">
+      <div className="min-h-full bg-background p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold text-foreground">Navigation</h2>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={closeMobileMenu} 
+            className="hover:bg-accent"
+          >
+            <X className="w-6 h-6" />
+          </Button>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-green-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(currentStep / 3) * 100}%` }}
-          ></div>
-        </div>
-      </div>
 
-      {/* Step 1: Electricity */}
-      {currentStep === 1 && (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold mb-4">Electricity Usage</h2>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Monthly Electricity Usage
-            </label>
-            <input
-              type="number"
-              value={calculatorData.electricity.usage}
-              onChange={(e) => updateData('electricity', 'usage', parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Enter your monthly electricity usage"
-            />
-            <select
-              value={calculatorData.electricity.unit}
-              onChange={(e) => updateData('electricity', 'unit', e.target.value)}
-              className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        {/* Navigation Items */}
+        <nav className="space-y-2">
+          {/* Home */}
+          <Link to="/" onClick={closeMobileMenu} className="block">
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Home
+            </Button>
+          </Link>
+
+          {/* About */}
+          <Link to="/about" onClick={closeMobileMenu} className="block">
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              About
+            </Button>
+          </Link>
+
+          {/* Expertise Accordion */}
+          <div className="border rounded-lg overflow-hidden">
+            <button 
+              onClick={() => setIsExpertiseOpen(!isExpertiseOpen)} 
+              className="w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors"
             >
-              <option value="kWh">kWh</option>
-              <option value="mwh">MWh</option>
-            </select>
-          </div>
-        </div>
-      )}
+              <span className="text-base font-normal">Expertise</span>
+              <ChevronDown 
+                className={`w-5 h-5 transition-transform duration-200 ${
+                  isExpertiseOpen ? "rotate-180" : "rotate-0"
+                }`} 
+              />
+            </button>
 
-      {/* Step 2: Transportation */}
-      {currentStep === 2 && (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold mb-4">Transportation</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Monthly Car Mileage (km)
-              </label>
-              <input
-                type="number"
-                value={calculatorData.transportation.carMileage}
-                onChange={(e) => updateData('transportation', 'carMileage', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Fuel Type
-              </label>
-              <select
-                value={calculatorData.transportation.fuelType}
-                onChange={(e) => updateData('transportation', 'fuelType', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                <option value="petrol">Petrol</option>
-                <option value="diesel">Diesel</option>
-                <option value="electric">Electric</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Monthly Public Transport (km)
-              </label>
-              <input
-                type="number"
-                value={calculatorData.transportation.publicTransport}
-                onChange={(e) => updateData('transportation', 'publicTransport', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Monthly Flight Distance (km)
-              </label>
-              <input
-                type="number"
-                value={calculatorData.transportation.flights}
-                onChange={(e) => updateData('transportation', 'flights', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Housing */}
-      {currentStep === 3 && (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold mb-4">Housing</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Monthly Heating Usage (kWh)
-              </label>
-              <input
-                type="number"
-                value={calculatorData.housing.heating}
-                onChange={(e) => updateData('housing', 'heating', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Heating Type
-              </label>
-              <select
-                value={calculatorData.housing.heatingType}
-                onChange={(e) => updateData('housing', 'heatingType', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                <option value="natural_gas">Natural Gas</option>
-                <option value="electric">Electric</option>
-                <option value="oil">Oil</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Household Size
-              </label>
-              <input
-                type="number"
-                value={calculatorData.housing.householdSize}
-                onChange={(e) => updateData('housing', 'householdSize', parseInt(e.target.value) || 1)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                min="1"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Results */}
-      {results && (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold mb-4">Your Carbon Footprint</h2>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-            <div className="text-center mb-6">
-              <div className="text-4xl font-bold text-green-700 mb-2">
-                {results.totalEmissions.toFixed(2)} kg CO₂
+            {/* Expertise Submenu */}
+            <div 
+              className={`overflow-hidden transition-all duration-300 ${
+                isExpertiseOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="p-4 space-y-3 bg-muted/30 border-t">
+                {expertiseItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleServiceSelect(item)}
+                      className="w-full flex items-center gap-4 p-3 rounded-lg hover:bg-accent/50 transition-colors text-left group"
+                    >
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground text-sm mb-1">
+                          {item.title}
+                        </h3>
+                        <p className="text-muted-foreground text-xs leading-tight">
+                          {item.description}
+                        </p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    </button>
+                  );
+                })}
               </div>
-              <p className="text-green-600">Monthly Carbon Emissions</p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="font-semibold text-lg">Breakdown</h3>
-              {results.breakdown.map((item, index) => (
-                <div key={index} className="flex justify-between items-center">
-                  <span>{item.category}</span>
-                  <span className="font-semibold">{item.emissions.toFixed(2)} kg CO₂</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <h4 className="font-semibold text-yellow-800 mb-2">Recommendations</h4>
-              <ul className="text-yellow-700 text-sm space-y-1">
-                <li>• Switch to renewable energy sources</li>
-                <li>• Use public transportation when possible</li>
-                <li>• Improve home insulation</li>
-                <li>• Consider energy-efficient appliances</li>
-              </ul>
             </div>
           </div>
-        </div>
-      )}
 
-      {/* Navigation Buttons */}
-      <div className="flex justify-between mt-8">
-        <button
-          onClick={handleBack}
-          disabled={currentStep === 1}
-          className={`px-6 py-2 rounded-lg font-medium ${
-            currentStep === 1 
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-              : 'bg-gray-500 text-white hover:bg-gray-600'
-          }`}
-        >
-          Back
-        </button>
-        
-        <button
-          onClick={handleNext}
-          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium"
-        >
-          {currentStep === 3 ? 'Calculate' : 'Next'}
-        </button>
+          {/* Services */}
+          <Link to="/services" onClick={closeMobileMenu} className="block">
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Services
+            </Button>
+          </Link>
+
+          {/* Projects */}
+          <Link to="/projects" onClick={closeMobileMenu} className="block">
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Projects
+            </Button>
+          </Link>
+
+          {/* Contact */}
+          <Link to="/contact" onClick={closeMobileMenu} className="block">
+            <Button variant="ghost" className="w-full justify-start h-14 text-base font-normal">
+              Contact
+            </Button>
+          </Link>
+        </nav>
       </div>
     </div>
   );
-}
+
+  return (
+    <>
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 h-16 flex items-center">
+          {/* Logo with imported image */}
+          <Link to="/" className="flex items-center">
+            <img src={logo} alt="NetZero Energy Experts" className="h-8 w-auto" />
+          </Link>
+
+          {/* Desktop Navigation - Aligned to right with black and green styling */}
+          <nav className="hidden lg:flex items-center space-x-1 ml-auto">
+            <Link 
+              to="/" 
+              className={`px-4 py-2 rounded-md transition-colors font-medium ${
+                location.pathname === '/' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
+              }`}
+            >
+              Home
+            </Link>
+            
+            <Link 
+              to="/about" 
+              className={`px-4 py-2 rounded-md transition-colors font-medium ${
+                location.pathname === '/about' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
+              }`}
+            >
+              About
+            </Link>
+
+            {/* Enhanced Desktop Expertise Dropdown with black and green styling */}
+            <div className="relative" ref={expertiseRef}>
+              <button 
+                onClick={toggleDesktopExpertise}
+                className={`flex items-center px-4 py-2 rounded-md transition-colors font-medium ${
+                  isDesktopExpertiseOpen || location.pathname.includes('/expertise') || expertiseItems.some(item => location.pathname.includes(item.slug))
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
+                }`}
+              >
+                Expertise
+                <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${isDesktopExpertiseOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isDesktopExpertiseOpen && (
+                <div className="absolute top-full left-0 mt-2 w-80 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95">
+                  <div className="p-2">
+                    {expertiseItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.id}
+                          to={`/${item.slug}`}
+                          onClick={() => setIsDesktopExpertiseOpen(false)}
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-white hover:bg-primary hover:text-primary-foreground transition-colors rounded-md group"
+                        >
+                          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <Icon className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold">{item.title}</div>
+                            <div className="text-gray-300 text-xs mt-1 truncate group-hover:text-primary-foreground">
+                              {item.description}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link 
+              to="/services" 
+              className={`px-4 py-2 rounded-md transition-colors font-medium ${
+                location.pathname === '/services' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
+              }`}
+            >
+              Services
+            </Link>
+            
+            <Link 
+              to="/projects" 
+              className={`px-4 py-2 rounded-md transition-colors font-medium ${
+                location.pathname === '/projects' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
+              }`}
+            >
+              Projects
+            </Link>
+            
+            <Link 
+              to="/contact" 
+              className={`px-4 py-2 rounded-md transition-colors font-medium ${
+                location.pathname === '/contact' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-gray-900 text-white hover:bg-primary hover:text-primary-foreground'
+              }`}
+            >
+              Contact
+            </Link>
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="lg:hidden ml-auto">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setIsMobileMenuOpen(true)} 
+              className="hover:bg-accent"
+            >
+              <Menu className="w-6 h-6" />
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Navigation Overlay */}
+      {isMobileMenuOpen && <MobileMenuAccordion />}
+    </>
+  );
+};
+
+export default Header;
