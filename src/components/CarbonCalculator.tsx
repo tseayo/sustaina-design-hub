@@ -6,7 +6,16 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
-// Remove static imports for html2canvas and jspdf
+interface EmissionResults {
+  total: number;
+  breakdown: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  monthly: number;
+  equivalent: string;
+}
 
 const CarbonCalculator = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +25,7 @@ const CarbonCalculator = () => {
     flights: '',
     diet: 'average'
   });
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<EmissionResults | null>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const pdfRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +63,7 @@ const CarbonCalculator = () => {
       total: Math.round(totalEmissions),
       breakdown,
       monthly: Math.round(totalEmissions / 12),
-      equivalent: (totalEmissions / 2000).toFixed(1), // Cars driven for a year
+      equivalent: (totalEmissions / 2000).toFixed(1),
     });
   };
 
@@ -64,7 +73,7 @@ const CarbonCalculator = () => {
     setIsGeneratingPDF(true);
     
     try {
-      // Use dynamic imports to avoid build-time issues
+      // Dynamic imports to avoid build issues
       const html2canvas = (await import('html2canvas')).default;
       const { jsPDF } = await import('jspdf');
       
@@ -90,6 +99,8 @@ const CarbonCalculator = () => {
   };
 
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088fe'];
+
+  const hasFormData = formData.electricity || formData.gas || formData.vehicle || formData.flights;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-24 pb-12">
@@ -175,7 +186,7 @@ const CarbonCalculator = () => {
               <Button 
                 onClick={calculateEmissions} 
                 className="w-full bg-green-600 hover:bg-green-700"
-                disabled={!formData.electricity && !formData.gas && !formData.vehicle && !formData.flights}
+                disabled={!hasFormData}
               >
                 Calculate Carbon Footprint
               </Button>
@@ -219,7 +230,7 @@ const CarbonCalculator = () => {
                           />
                           <Legend />
                           <Bar dataKey="value" name="Emissions (kg CO₂)">
-                            {results.breakdown.map((entry: any, index: number) => (
+                            {results.breakdown.map((entry, index) => (
                               <Cell key={`cell-${index}`} fill={entry.color} />
                             ))}
                           </Bar>
@@ -242,7 +253,7 @@ const CarbonCalculator = () => {
                             fill="#8884d8"
                             dataKey="value"
                           >
-                            {results.breakdown.map((entry: any, index: number) => (
+                            {results.breakdown.map((entry, index) => (
                               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                           </Pie>
@@ -257,7 +268,7 @@ const CarbonCalculator = () => {
                   {/* Detailed Breakdown */}
                   <div className="space-y-3">
                     <h4 className="font-semibold text-lg">Detailed Breakdown</h4>
-                    {results.breakdown.map((item: any, index: number) => (
+                    {results.breakdown.map((item, index) => (
                       <div key={item.name} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <div 
