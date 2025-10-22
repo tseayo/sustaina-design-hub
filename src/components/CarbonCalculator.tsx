@@ -5,27 +5,39 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Mail, Download, Send } from 'lucide-react';
+import { Download, Mail, Check, ArrowLeft, ArrowRight } from 'lucide-react';
+
+interface CalculatorData {
+  electricity: {
+    usage: number;
+    unit: 'kWh' | 'mwh';
+  };
+  transportation: {
+    carMileage: number;
+    fuelType: 'petrol' | 'diesel' | 'electric';
+    publicTransport: number;
+    flights: number;
+  };
+  housing: {
+    heating: number;
+    heatingType: 'natural_gas' | 'electric' | 'oil';
+    householdSize: number;
+  };
+}
 
 interface EmissionResults {
-  total: number;
-  breakdown: Array<{
-    name: string;
-    value: number;
-    color: string;
-  }>;
-  monthly: number;
-  equivalent: string;
+  totalEmissions: number;
+  breakdown: { category: string; emissions: number }[];
 }
 
 const CarbonCalculator = () => {
-  const [formData, setFormData] = useState({
-    electricity: '',
-    gas: '',
-    vehicle: '',
-    flights: '',
-    diet: 'average'
+  const [currentStep, setCurrentStep] = useState(1);
+  const [calculatorData, setCalculatorData] = useState<CalculatorData>({
+    electricity: { usage: 0, unit: 'kWh' },
+    transportation: { carMileage: 0, fuelType: 'petrol', publicTransport: 0, flights: 0 },
+    housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 }
   });
+
   const [results, setResults] = useState<EmissionResults | null>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
@@ -34,42 +46,69 @@ const CarbonCalculator = () => {
   const [emailError, setEmailError] = useState('');
   const pdfRef = useRef<HTMLDivElement>(null);
 
-  const emissionFactors = {
-    electricity: 0.5, // kg CO2 per kWh
-    gas: 2.2, // kg CO2 per therm
-    vehicle: 2.3, // kg CO2 per liter
-    flights: 90, // kg CO2 per hour
-  };
-
-  const dietFactors: Record<string, number> = {
-    vegetarian: 1200,
-    average: 1600,
-    meatHeavy: 2200,
-  };
+  const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 
   const calculateEmissions = () => {
-    const electricityEmissions = parseFloat(formData.electricity || '0') * emissionFactors.electricity;
-    const gasEmissions = parseFloat(formData.gas || '0') * emissionFactors.gas;
-    const vehicleEmissions = parseFloat(formData.vehicle || '0') * emissionFactors.vehicle;
-    const flightEmissions = parseFloat(formData.flights || '0') * emissionFactors.flights;
-    const dietEmissions = dietFactors[formData.diet] || 0;
+    const factors = {
+      electricity: 0.233,
+      petrol: 2.31,
+      diesel: 2.68,
+      natural_gas: 0.185,
+      heating_oil: 2.68,
+      flight: 0.115,
+      public_transport: 0.05
+    };
 
-    const totalEmissions = electricityEmissions + gasEmissions + vehicleEmissions + flightEmissions + dietEmissions;
+    const electricityEmissions = calculatorData.electricity.usage * factors.electricity;
+    
+    const carEmissions = calculatorData.transportation.carMileage * 
+      (calculatorData.transportation.fuelType === 'petrol' ? factors.petrol : 
+       calculatorData.transportation.fuelType === 'diesel' ? factors.diesel : 0);
+    
+    const heatingEmissions = calculatorData.housing.heating * 
+      (calculatorData.housing.heatingType === 'natural_gas' ? factors.natural_gas : 
+       calculatorData.housing.heatingType === 'electric' ? factors.electricity : factors.heating_oil);
+    
+    const flightEmissions = calculatorData.transportation.flights * factors.flight;
+    const transportEmissions = calculatorData.transportation.publicTransport * factors.public_transport;
 
-    const breakdown = [
-      { name: 'Electricity', value: Math.round(electricityEmissions), color: '#8884d8' },
-      { name: 'Natural Gas', value: Math.round(gasEmissions), color: '#82ca9d' },
-      { name: 'Vehicle', value: Math.round(vehicleEmissions), color: '#ffc658' },
-      { name: 'Flights', value: Math.round(flightEmissions), color: '#ff8042' },
-      { name: 'Diet', value: Math.round(dietEmissions), color: '#0088fe' },
-    ];
+    const total = electricityEmissions + carEmissions + heatingEmissions + flightEmissions + transportEmissions;
 
     setResults({
-      total: Math.round(totalEmissions),
-      breakdown,
-      monthly: Math.round(totalEmissions / 12),
-      equivalent: (totalEmissions / 2000).toFixed(1),
+      totalEmissions: total,
+      breakdown: [
+        { category: 'Electricity', emissions: electricityEmissions },
+        { category: 'Car Travel', emissions: carEmissions },
+        { category: 'Public Transport', emissions: transportEmissions },
+        { category: 'Flights', emissions: flightEmissions },
+        { category: 'Heating', emissions: heatingEmissions }
+      ].filter(item => item.emissions > 0)
     });
+  };
+
+  const handleNext = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      calculateEmissions();
+      setCurrentStep(4);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const updateData = (section: keyof CalculatorData, field: string, value: any) => {
+    setCalculatorData(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: value
+      }
+    }));
   };
 
   const generatePDF = async (forEmail = false): Promise<Blob | null> => {
@@ -96,7 +135,7 @@ const CarbonCalculator = () => {
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
       if (!forEmail) {
-        pdf.save('carbon-emission-report.pdf');
+        pdf.save('carbon-footprint-report.pdf');
         return null;
       } else {
         // Return PDF as Blob for email attachment
@@ -137,9 +176,9 @@ const CarbonCalculator = () => {
       // Create FormData to send to your backend API
       const formData = new FormData();
       formData.append('email', email);
-      formData.append('pdf', pdfBlob, 'carbon-emission-report.pdf');
-      formData.append('totalEmissions', results?.total.toString() || '0');
-      formData.append('subject', 'Your Carbon Emission Report from NetZero Energy Experts');
+      formData.append('pdf', pdfBlob, 'carbon-footprint-report.pdf');
+      formData.append('totalEmissions', results?.totalEmissions.toString() || '0');
+      formData.append('subject', 'Your Carbon Footprint Report from NetZero Energy Experts');
 
       // Send to your backend API endpoint
       const response = await fetch('/api/send-report', {
@@ -167,296 +206,385 @@ const CarbonCalculator = () => {
     return re.test(email);
   };
 
-  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088fe'];
-
-  const hasFormData = formData.electricity || formData.gas || formData.vehicle || formData.flights;
+  const resetCalculator = () => {
+    setCurrentStep(1);
+    setResults(null);
+    setCalculatorData({
+      electricity: { usage: 0, unit: 'kWh' },
+      transportation: { carMileage: 0, fuelType: 'petrol', publicTransport: 0, flights: 0 },
+      housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 }
+    });
+    setEmail('');
+    setEmailSent(false);
+    setEmailError('');
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-24 pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Carbon Emission Calculator
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Calculate your carbon footprint and discover ways to reduce your environmental impact
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Input Form */}
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-2xl">Your Energy Usage</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="electricity">Monthly Electricity (kWh)</Label>
-                <Input
-                  id="electricity"
-                  type="number"
-                  value={formData.electricity}
-                  onChange={(e) => setFormData({ ...formData, electricity: e.target.value })}
-                  placeholder="e.g., 300"
-                  min="0"
-                />
+        <Card className="shadow-lg max-w-5xl mx-auto">
+          <CardContent className="p-6">
+            {/* Progress Bar */}
+            <div className="mb-8">
+              <div className="flex justify-between mb-2">
+                <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-green-600' : 'text-gray-400'}`}>Electricity</span>
+                <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-green-600' : 'text-gray-400'}`}>Transportation</span>
+                <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-green-600' : 'text-gray-400'}`}>Housing</span>
+                <span className={`text-sm font-medium ${currentStep >= 4 ? 'text-green-600' : 'text-gray-400'}`}>Results</span>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="gas">Monthly Natural Gas (therms)</Label>
-                <Input
-                  id="gas"
-                  type="number"
-                  value={formData.gas}
-                  onChange={(e) => setFormData({ ...formData, gas: e.target.value })}
-                  placeholder="e.g., 50"
-                  min="0"
-                />
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${(Math.min(currentStep, 4) / 4) * 100}%` }}
+                ></div>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="vehicle">Monthly Vehicle Fuel (liters)</Label>
-                <Input
-                  id="vehicle"
-                  type="number"
-                  value={formData.vehicle}
-                  onChange={(e) => setFormData({ ...formData, vehicle: e.target.value })}
-                  placeholder="e.g., 100"
-                  min="0"
-                />
+            {/* Step 1: Electricity */}
+            {currentStep === 1 && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Electricity Usage</h2>
+                <div>
+                  <Label className="block text-sm font-medium text-gray-700 mb-2">
+                    Monthly Electricity Usage
+                  </Label>
+                  <Input
+                    type="number"
+                    value={calculatorData.electricity.usage || ''}
+                    onChange={(e) => updateData('electricity', 'usage', parseFloat(e.target.value) || 0)}
+                    className="w-full"
+                    placeholder="Enter your monthly electricity usage"
+                  />
+                  <Select
+                    value={calculatorData.electricity.unit}
+                    onValueChange={(value: 'kWh' | 'mwh') => updateData('electricity', 'unit', value)}
+                    className="mt-3 w-full"
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="kWh">kWh (Kilowatt-hours)</SelectItem>
+                      <SelectItem value="mwh">MWh (Megawatt-hours)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
+            )}
 
-              <div className="space-y-2">
-                <Label htmlFor="flights">Annual Flight Hours</Label>
-                <Input
-                  id="flights"
-                  type="number"
-                  value={formData.flights}
-                  onChange={(e) => setFormData({ ...formData, flights: e.target.value })}
-                  placeholder="e.g., 10"
-                  min="0"
-                />
+            {/* Step 2: Transportation */}
+            {currentStep === 2 && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Transportation</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Monthly Car Mileage (km)
+                    </Label>
+                    <Input
+                      type="number"
+                      value={calculatorData.transportation.carMileage || ''}
+                      onChange={(e) => updateData('transportation', 'carMileage', parseFloat(e.target.value) || 0)}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Fuel Type
+                    </Label>
+                    <Select
+                      value={calculatorData.transportation.fuelType}
+                      onValueChange={(value: 'petrol' | 'diesel' | 'electric') => updateData('transportation', 'fuelType', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="petrol">Petrol</SelectItem>
+                        <SelectItem value="diesel">Diesel</SelectItem>
+                        <SelectItem value="electric">Electric</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Monthly Public Transport (km)
+                    </Label>
+                    <Input
+                      type="number"
+                      value={calculatorData.transportation.publicTransport || ''}
+                      onChange={(e) => updateData('transportation', 'publicTransport', parseFloat(e.target.value) || 0)}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Monthly Flight Distance (km)
+                    </Label>
+                    <Input
+                      type="number"
+                      value={calculatorData.transportation.flights || ''}
+                      onChange={(e) => updateData('transportation', 'flights', parseFloat(e.target.value) || 0)}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
               </div>
+            )}
 
-              <div className="space-y-2">
-                <Label htmlFor="diet">Diet Type</Label>
-                <Select value={formData.diet} onValueChange={(value) => setFormData({ ...formData, diet: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="vegetarian">Vegetarian</SelectItem>
-                    <SelectItem value="average">Average</SelectItem>
-                    <SelectItem value="meatHeavy">Meat-Heavy</SelectItem>
-                  </SelectContent>
-                </Select>
+            {/* Step 3: Housing */}
+            {currentStep === 3 && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Housing</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Monthly Heating Usage (kWh)
+                    </Label>
+                    <Input
+                      type="number"
+                      value={calculatorData.housing.heating || ''}
+                      onChange={(e) => updateData('housing', 'heating', parseFloat(e.target.value) || 0)}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Heating Type
+                    </Label>
+                    <Select
+                      value={calculatorData.housing.heatingType}
+                      onValueChange={(value: 'natural_gas' | 'electric' | 'oil') => updateData('housing', 'heatingType', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="natural_gas">Natural Gas</SelectItem>
+                        <SelectItem value="electric">Electric</SelectItem>
+                        <SelectItem value="oil">Oil</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Household Size
+                    </Label>
+                    <Input
+                      type="number"
+                      value={calculatorData.housing.householdSize}
+                      onChange={(e) => updateData('housing', 'householdSize', parseInt(e.target.value) || 1)}
+                      min="1"
+                    />
+                  </div>
+                </div>
               </div>
+            )}
 
-              <Button 
-                onClick={calculateEmissions} 
-                className="w-full bg-green-600 hover:bg-green-700"
-                disabled={!hasFormData}
-              >
-                Calculate Carbon Footprint
-              </Button>
-            </CardContent>
-          </Card>
+            {/* Results */}
+            {currentStep === 4 && results && (
+              <div ref={pdfRef} className="space-y-8">
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold mb-2 text-gray-800">Your Carbon Footprint</h2>
+                  <p className="text-gray-600">Complete analysis of your monthly emissions</p>
+                </div>
 
-          {/* Results Section */}
-          {results && (
-            <div className="space-y-6">
-              <Card className="shadow-lg" ref={pdfRef}>
-                <CardHeader className="bg-gradient-to-r from-green-500 to-blue-500 text-white">
-                  <CardTitle className="text-2xl">Your Carbon Emission Report</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  {/* Total Emissions */}
-                  <div className="text-center mb-8">
-                    <h3 className="text-lg text-gray-600 mb-2">Total Annual Carbon Emissions</h3>
-                    <div className="text-4xl font-bold text-green-600">
-                      {results.total.toLocaleString()} kg CO₂
+                {/* Summary Card */}
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-8">
+                  <div className="text-center mb-6">
+                    <div className="text-5xl font-bold text-green-700 mb-2">
+                      {results.totalEmissions.toFixed(2)} kg CO₂
                     </div>
-                    <p className="text-sm text-gray-500 mt-2">
-                      Equivalent to driving {results.equivalent} cars for a year
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Monthly average: {results.monthly.toLocaleString()} kg CO₂
+                    <p className="text-green-600 text-lg">Monthly Carbon Emissions</p>
+                    <p className="text-gray-600 mt-2">
+                      Annual Projection: <span className="font-semibold">{(results.totalEmissions * 12).toFixed(2)} kg CO₂</span>
                     </p>
                   </div>
+                </div>
 
-                  {/* Charts Section */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    {/* Bar Chart */}
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-lg">Emissions by Category</h4>
-                      <ResponsiveContainer width="100%" height={200}>
-                        <BarChart data={results.breakdown}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="name" />
-                          <YAxis />
-                          <Tooltip 
-                            formatter={(value: number) => [`${value.toLocaleString()} kg CO₂`, 'Emissions']}
-                          />
-                          <Legend />
-                          <Bar dataKey="value" name="Emissions (kg CO₂)">
-                            {results.breakdown.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                          </Bar>
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-
-                    {/* Pie Chart */}
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-lg">Emissions Distribution</h4>
-                      <ResponsiveContainer width="100%" height={200}>
-                        <PieChart>
-                          <Pie
-                            data={results.breakdown}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="value"
-                          >
-                            {results.breakdown.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                          </Pie>
-                          <Tooltip 
-                            formatter={(value: number) => [`${value.toLocaleString()} kg CO₂`, 'Emissions']}
-                          />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
+                {/* Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Pie Chart */}
+                  <div className="bg-gray-50 rounded-xl p-6">
+                    <h3 className="font-semibold text-lg mb-4 text-gray-800">Emissions Distribution</h3>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={results.breakdown}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ category, percent }) => `${category} ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="emissions"
+                        >
+                          {results.breakdown.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value: number) => [`${value.toFixed(2)} kg CO₂`, 'Emissions']} />
+                      </PieChart>
+                    </ResponsiveContainer>
                   </div>
 
-                  {/* Detailed Breakdown */}
+                  {/* Bar Chart */}
+                  <div className="bg-gray-50 rounded-xl p-6">
+                    <h3 className="font-semibold text-lg mb-4 text-gray-800">Emissions by Category</h3>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={results.breakdown}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="category" angle={-45} textAnchor="end" height={80} />
+                        <YAxis />
+                        <Tooltip formatter={(value: number) => [`${value.toFixed(2)} kg CO₂`, 'Emissions']} />
+                        <Bar dataKey="emissions" fill="#10b981" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Breakdown Table */}
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="font-semibold text-lg mb-4 text-gray-800">Detailed Breakdown</h3>
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-lg">Detailed Breakdown</h4>
                     {results.breakdown.map((item, index) => (
-                      <div key={item.name} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          <div 
-                            className="w-4 h-4 rounded" 
-                            style={{ backgroundColor: item.color }}
-                          ></div>
-                          <span className="font-medium">{item.name}</span>
-                        </div>
-                        <span className="font-semibold">{item.value.toLocaleString()} kg CO₂</span>
+                      <div key={index} className="flex justify-between items-center p-3 bg-white rounded-lg">
+                        <span className="font-medium text-gray-700">{item.category}</span>
+                        <span className="font-semibold text-green-700">{item.emissions.toFixed(2)} kg CO₂</span>
                       </div>
                     ))}
                   </div>
+                </div>
 
-                  {/* Recommendations */}
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h4 className="font-semibold text-lg text-blue-900 mb-2">Reduction Recommendations</h4>
-                    <ul className="list-disc list-inside space-y-1 text-blue-800">
-                      <li>Switch to renewable energy sources</li>
-                      <li>Use public transportation or electric vehicles</li>
-                      <li>Reduce air travel when possible</li>
-                      <li>Adopt a plant-based diet</li>
-                      <li>Improve home insulation</li>
-                    </ul>
-                  </div>
+                {/* Recommendations */}
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                  <h4 className="font-semibold text-amber-900 text-lg mb-3">💡 Recommendations to Reduce Your Footprint</h4>
+                  <ul className="text-amber-800 space-y-2">
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Switch to renewable energy sources to reduce electricity emissions</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Use public transportation or carpool when possible</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Improve home insulation to reduce heating needs</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Consider energy-efficient appliances and LED lighting</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Reduce air travel and consider video conferencing alternatives</span>
+                    </li>
+                  </ul>
+                </div>
 
-                  {/* Email Section */}
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                    <h4 className="font-semibold text-lg text-green-900 mb-3">Get Your Report by Email</h4>
-                    {emailSent ? (
-                      <div className="text-center p-4 bg-green-100 rounded-lg">
-                        <p className="text-green-700 font-medium">
-                          ✅ Report sent successfully! Check your email.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        <div className="flex gap-2">
-                          <Input
-                            type="email"
-                            placeholder="Enter your email address"
-                            value={email}
-                            onChange={(e) => {
-                              setEmail(e.target.value);
-                              setEmailError('');
-                            }}
-                            className="flex-1"
-                          />
-                          <Button 
-                            onClick={sendEmailWithPDF}
-                            disabled={isSendingEmail || !email}
-                            className="bg-green-600 hover:bg-green-700"
-                          >
-                            {isSendingEmail ? (
-                              <>Sending...</>
-                            ) : (
-                              <>
-                                <Send className="w-4 h-4 mr-2" />
-                                Send
-                              </>
-                            )}
-                          </Button>
+                {/* Download and Email Section */}
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                  <h4 className="font-semibold text-blue-900 text-lg mb-4">📊 Save Your Results</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Download Button */}
+                    <Button
+                      onClick={() => generatePDF(false)}
+                      disabled={isGeneratingPDF}
+                      className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      {isGeneratingPDF ? (
+                        'Generating PDF...'
+                      ) : (
+                        <>
+                          <Download className="w-5 h-5" />
+                          Download Report (PDF)
+                        </>
+                      )}
+                    </Button>
+
+                    {/* Email Section */}
+                    <div className="space-y-3">
+                      {emailSent ? (
+                        <div className="text-center p-4 bg-green-100 rounded-lg">
+                          <p className="text-green-700 font-medium">
+                            ✅ Report sent successfully! Check your email.
+                          </p>
                         </div>
-                        {emailError && (
-                          <p className="text-red-600 text-sm">{emailError}</p>
-                        )}
-                        <p className="text-sm text-green-700">
-                          We'll send your detailed carbon emission report directly to your inbox.
-                        </p>
-                      </div>
-                    )}
+                      ) : (
+                        <>
+                          <div className="flex gap-2">
+                            <Input
+                              type="email"
+                              value={email}
+                              onChange={(e) => {
+                                setEmail(e.target.value);
+                                setEmailError('');
+                              }}
+                              placeholder="your@email.com"
+                              className="flex-1"
+                            />
+                            <Button
+                              onClick={sendEmailWithPDF}
+                              disabled={isSendingEmail || !email}
+                              className="bg-green-600 hover:bg-green-700"
+                            >
+                              {isSendingEmail ? (
+                                'Sending...'
+                              ) : (
+                                <>
+                                  <Mail className="w-4 h-4 mr-2" />
+                                  Email
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                          {emailError && (
+                            <p className="text-red-600 text-sm">{emailError}</p>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  onClick={() => generatePDF(false)} 
-                  disabled={isGeneratingPDF}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
+                {/* Reset Button */}
+                <div className="text-center">
+                  <Button
+                    onClick={resetCalculator}
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
+                  >
+                    Calculate Again
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
+            {currentStep < 4 && (
+              <div className="flex justify-between mt-8">
+                <Button
+                  onClick={handleBack}
+                  disabled={currentStep === 1}
+                  variant="outline"
+                  className="flex items-center gap-2"
                 >
-                  {isGeneratingPDF ? (
-                    'Generating PDF...'
-                  ) : (
-                    <>
-                      <Download className="w-4 h-4 mr-2" />
-                      Download PDF Report
-                    </>
-                  )}
+                  <ArrowLeft className="w-4 h-4" />
+                  Back
                 </Button>
-                <Button variant="outline" className="flex-1">
-                  <Mail className="w-4 h-4 mr-2" />
-                  Contact Our Experts
+                
+                <Button
+                  onClick={handleNext}
+                  className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+                >
+                  {currentStep === 3 ? 'Calculate Results' : 'Next Step'}
+                  <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
-            </div>
-          )}
-        </div>
-
-        {/* Information Section */}
-        {!results && (
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <Card className="text-center p-6">
-              <div className="text-3xl mb-4">🌱</div>
-              <h3 className="font-semibold text-lg mb-2">Calculate Impact</h3>
-              <p className="text-gray-600">Understand your carbon footprint across different activities</p>
-            </Card>
-            <Card className="text-center p-6">
-              <div className="text-3xl mb-4">📊</div>
-              <h3 className="font-semibold text-lg mb-2">Visualize Data</h3>
-              <p className="text-gray-600">See detailed breakdowns with interactive charts and graphs</p>
-            </Card>
-            <Card className="text-center p-6">
-              <div className="text-3xl mb-4">📧</div>
-              <h3 className="font-semibold text-lg mb-2">Email Reports</h3>
-              <p className="text-gray-600">Get your comprehensive report delivered to your inbox</p>
-            </Card>
-          </div>
-        )}
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
