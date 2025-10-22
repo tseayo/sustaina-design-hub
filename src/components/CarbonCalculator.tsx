@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Mail, Download, Send } from 'lucide-react';
 
 interface EmissionResults {
   total: number;
@@ -27,6 +28,10 @@ const CarbonCalculator = () => {
   });
   const [results, setResults] = useState<EmissionResults | null>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [email, setEmail] = useState('');
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const pdfRef = useRef<HTMLDivElement>(null);
 
   const emissionFactors = {
@@ -67,8 +72,8 @@ const CarbonCalculator = () => {
     });
   };
 
-  const generatePDF = async () => {
-    if (!pdfRef.current) return;
+  const generatePDF = async (forEmail = false): Promise<Blob | null> => {
+    if (!pdfRef.current) return null;
     
     setIsGeneratingPDF(true);
     
@@ -89,13 +94,77 @@ const CarbonCalculator = () => {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('carbon-emission-report.pdf');
+
+      if (!forEmail) {
+        pdf.save('carbon-emission-report.pdf');
+        return null;
+      } else {
+        // Return PDF as Blob for email attachment
+        const pdfBlob = pdf.output('blob');
+        return pdfBlob;
+      }
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again.');
+      return null;
     } finally {
       setIsGeneratingPDF(false);
     }
+  };
+
+  const sendEmailWithPDF = async () => {
+    if (!email) {
+      setEmailError('Please enter your email address');
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+
+    setIsSendingEmail(true);
+    setEmailError('');
+
+    try {
+      // Generate PDF as blob
+      const pdfBlob = await generatePDF(true);
+      
+      if (!pdfBlob) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      // Create FormData to send to your backend API
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('pdf', pdfBlob, 'carbon-emission-report.pdf');
+      formData.append('totalEmissions', results?.total.toString() || '0');
+      formData.append('subject', 'Your Carbon Emission Report from NetZero Energy Experts');
+
+      // Send to your backend API endpoint
+      const response = await fetch('/api/send-report', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        setEmailSent(true);
+        setEmail('');
+        setTimeout(() => setEmailSent(false), 5000);
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setEmailError('Failed to send email. Please try again or download the report directly.');
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
   };
 
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088fe'];
@@ -293,19 +362,74 @@ const CarbonCalculator = () => {
                       <li>Improve home insulation</li>
                     </ul>
                   </div>
+
+                  {/* Email Section */}
+                  <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <h4 className="font-semibold text-lg text-green-900 mb-3">Get Your Report by Email</h4>
+                    {emailSent ? (
+                      <div className="text-center p-4 bg-green-100 rounded-lg">
+                        <p className="text-green-700 font-medium">
+                          ✅ Report sent successfully! Check your email.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="flex gap-2">
+                          <Input
+                            type="email"
+                            placeholder="Enter your email address"
+                            value={email}
+                            onChange={(e) => {
+                              setEmail(e.target.value);
+                              setEmailError('');
+                            }}
+                            className="flex-1"
+                          />
+                          <Button 
+                            onClick={sendEmailWithPDF}
+                            disabled={isSendingEmail || !email}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            {isSendingEmail ? (
+                              <>Sending...</>
+                            ) : (
+                              <>
+                                <Send className="w-4 h-4 mr-2" />
+                                Send
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                        {emailError && (
+                          <p className="text-red-600 text-sm">{emailError}</p>
+                        )}
+                        <p className="text-sm text-green-700">
+                          We'll send your detailed carbon emission report directly to your inbox.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
-                  onClick={generatePDF} 
+                  onClick={() => generatePDF(false)} 
                   disabled={isGeneratingPDF}
                   className="flex-1 bg-green-600 hover:bg-green-700"
                 >
-                  {isGeneratingPDF ? 'Generating PDF...' : 'Download Full Report (PDF)'}
+                  {isGeneratingPDF ? (
+                    'Generating PDF...'
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4 mr-2" />
+                      Download PDF Report
+                    </>
+                  )}
                 </Button>
                 <Button variant="outline" className="flex-1">
+                  <Mail className="w-4 h-4 mr-2" />
                   Contact Our Experts
                 </Button>
               </div>
@@ -327,9 +451,9 @@ const CarbonCalculator = () => {
               <p className="text-gray-600">See detailed breakdowns with interactive charts and graphs</p>
             </Card>
             <Card className="text-center p-6">
-              <div className="text-3xl mb-4">📄</div>
-              <h3 className="font-semibold text-lg mb-2">Export Reports</h3>
-              <p className="text-gray-600">Generate comprehensive PDF reports with charts included</p>
+              <div className="text-3xl mb-4">📧</div>
+              <h3 className="font-semibold text-lg mb-2">Email Reports</h3>
+              <p className="text-gray-600">Get your comprehensive report delivered to your inbox</p>
             </Card>
           </div>
         )}
