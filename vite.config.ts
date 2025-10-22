@@ -10,12 +10,22 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    // Remove the lovable-tagger plugin entirely
-    // mode === "development" && componentTagger()].filter(Boolean),
   ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    rollupOptions: {
+      external: [],
+    },
+    commonjsOptions: {
+      include: [/html2canvas/, /jspdf/, /node_modules/],
+      transformMixedEsModules: true,
+    },
+  },
+  optimizeDeps: {
+    include: ['html2canvas', 'jspdf'],
   },
 }));
