@@ -7,12 +7,9 @@ import neclLogo from "@/assets/necl-logo.png";
 const Footer: React.FC = () => {
   const navigate = useNavigate();
 
-  // Handler for links that should scroll to a section on the Home page
   const handleScrollSection = (sectionId: string) => {
-    // If not already on Home ("/"), navigate to Home then scroll once mounted
     if (window.location.pathname !== "/") {
       navigate("/", { replace: false });
-      // Wait a tick for route to change
       setTimeout(() => {
         const el = document.getElementById(sectionId);
         if (el) {
@@ -84,14 +81,10 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleScrollSection("about")}
-                  className="text-muted-foreground hover:text-primary transition-smooth"
-                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-                >
+                {/* Navigate to About page (or scroll to section if on home) */}
+                <Link to="/about" className="text-muted-foreground hover:text-primary transition-smooth">
                   About
-                </button>
+                </Link>
               </li>
               <li>
                 <Link to="/focus-areas" className="text-muted-foreground hover:text-primary transition-smooth">
@@ -99,24 +92,14 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleScrollSection("services")}
-                  className="text-muted-foreground hover:text-primary transition-smooth"
-                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-                >
+                <Link to="/services" className="text-muted-foreground hover:text-primary transition-smooth">
                   Solutions
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleScrollSection("projects")}
-                  className="text-muted-foreground hover:text-primary transition-smooth"
-                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-                >
+                <Link to="/projects" className="text-muted-foreground hover:text-primary transition-smooth">
                   Projects
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -127,13 +110,19 @@ const Footer: React.FC = () => {
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <a href="mailto:info@netzeroenergyconsultantltd.com" className="text-muted-foreground hover:text-primary transition-smooth">
+                <a
+                  href="mailto:info@netzeroenergyconsultantltd.com"
+                  className="text-muted-foreground hover:text-primary transition-smooth"
+                >
                   info@netzeroenergyconsultantltd.com
                 </a>
               </li>
               <li className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <a href="tel:+442039379903" className="text-muted-foreground hover:text-primary transition-smooth">
+                <a
+                  href="tel:+442039379903"
+                  className="text-muted-foreground hover:text-primary transition-smooth"
+                >
                   +44 203 937 9903
                 </a>
               </li>
@@ -154,10 +143,16 @@ const Footer: React.FC = () => {
               © {new Date().getFullYear()} NetZero Energy Consultant Limited. All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary transition-smooth text-sm">
+              <Link
+                to="/privacy-policy"
+                className="text-muted-foreground hover:text-primary transition-smooth text-sm"
+              >
                 Privacy Policy
               </Link>
-              <Link to="/terms-of-service" className="text-muted-foreground hover:text-primary transition-smooth text-sm">
+              <Link
+                to="/terms-of-service"
+                className="text-muted-foreground hover:text-primary transition-smooth text-sm"
+              >
                 Terms of Service
               </Link>
             </div>
