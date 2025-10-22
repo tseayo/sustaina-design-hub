@@ -51,10 +51,10 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   const expertiseAreas = [
     { name: "Solar Power", path: "/solar-power", icon: Sun },
     { name: "Emission Reduction", path: "/emission-reduction", icon: CloudRain },
-    { name: "Energy Efficiency", path: "/energy-efficiency", icon: Zap },
-    { name: "Sustainability Consulting", path: "/sustainability-consulting", icon: BarChart3 },
-    { name: "Corporate Training", path: "/corporate-training", icon: Users },
-    { name: "Green Strategy", path: "/green-strategy", icon: Target },
+    { name: "Energy Efficiency", path: "/focus-areas", icon: Zap },
+    { name: "Sustainability Consulting", path: "/focus-areas", icon: BarChart3 },
+    { name: "Corporate Training", path: "/focus-areas", icon: Users },
+    { name: "Green Strategy", path: "/focus-areas", icon: Target },
   ];
 
   const solutionItems = [
