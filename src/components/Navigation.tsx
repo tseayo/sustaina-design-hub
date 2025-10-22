@@ -1,12 +1,6 @@
 // src/components/Navigation.tsx
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Menu, X, ChevronDown, Facebook, Instagram, Twitter } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Menu, X, ChevronDown, Facebook, Instagram, Twitter, Sun, CloudRain, Zap, BarChart3, Users, Target } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import neclLogo from "@/assets/necl-logo.png";
 
@@ -18,6 +12,11 @@ const Navigation = ({ className = "" }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
+  const [isDesktopExpertiseOpen, setIsDesktopExpertiseOpen] = useState(false);
+  const [isDesktopSolutionsOpen, setIsDesktopSolutionsOpen] = useState(false);
+  
+  const expertiseRef = useRef<HTMLDivElement>(null);
+  const solutionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,18 +26,35 @@ const Navigation = ({ className = "" }: NavigationProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (expertiseRef.current && !expertiseRef.current.contains(event.target as Node)) {
+        setIsDesktopExpertiseOpen(false);
+      }
+      if (solutionsRef.current && !solutionsRef.current.contains(event.target as Node)) {
+        setIsDesktopSolutionsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const navItems = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
   ];
 
   const expertiseAreas = [
-    { name: "Solar Power", path: "/solar-power" },
-    { name: "Emission Reduction", path: "/emission-reduction" },
-    { name: "Hydrogen", path: "/focus-areas" },
-    { name: "E-mobility Charging", path: "/focus-areas" },
-    { name: "Hydropower", path: "/focus-areas" },
-    { name: "Bioenergy", path: "/focus-areas" },
+    { name: "Solar Power", path: "/solar-power", icon: Sun },
+    { name: "Emission Reduction", path: "/emission-reduction", icon: CloudRain },
+    { name: "Energy Efficiency", path: "/energy-efficiency", icon: Zap },
+    { name: "Sustainability Consulting", path: "/sustainability-consulting", icon: BarChart3 },
+    { name: "Corporate Training", path: "/corporate-training", icon: Users },
+    { name: "Green Strategy", path: "/green-strategy", icon: Target },
   ];
 
   const solutionItems = [
@@ -79,39 +95,69 @@ const Navigation = ({ className = "" }: NavigationProps) => {
               </Link>
             ))}
 
-            {/* Expertise Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+            {/* Custom Expertise Dropdown with Icons */}
+            <div className="relative" ref={expertiseRef}>
+              <button
+                onClick={() => setIsDesktopExpertiseOpen(!isDesktopExpertiseOpen)}
+                className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold"
+              >
                 Expertise
-                <ChevronDown className="ml-1 w-4 h-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background border border-border shadow-elegant">
-                {expertiseAreas.map((area) => (
-                  <DropdownMenuItem key={area.name} asChild>
-                    <Link to={area.path} className="w-full cursor-pointer">
-                      {area.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isDesktopExpertiseOpen ? 'rotate-180' : ''}`} />
+              </button>
 
-            {/* Solutions Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              {isDesktopExpertiseOpen && (
+                <div className="absolute top-full left-0 mt-2 w-80 bg-background border border-border shadow-elegant rounded-lg z-50 animate-in fade-in-0 zoom-in-95">
+                  <div className="p-2">
+                    {expertiseAreas.map((area) => {
+                      const Icon = area.icon;
+                      return (
+                        <Link
+                          key={area.name}
+                          to={area.path}
+                          onClick={() => setIsDesktopExpertiseOpen(false)}
+                          className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-accent rounded-md transition-colors group"
+                        >
+                          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <Icon className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-semibold text-foreground">{area.name}</div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Custom Solutions Dropdown */}
+            <div className="relative" ref={solutionsRef}>
+              <button
+                onClick={() => setIsDesktopSolutionsOpen(!isDesktopSolutionsOpen)}
+                className="flex items-center text-foreground hover:text-primary transition-smooth font-semibold"
+              >
                 Solutions
-                <ChevronDown className="ml-1 w-4 h-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background border border-border shadow-elegant">
-                {solutionItems.map((service) => (
-                  <DropdownMenuItem key={service.name} asChild>
-                    <Link to={service.path} className="w-full cursor-pointer">
-                      {service.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isDesktopSolutionsOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isDesktopSolutionsOpen && (
+                <div className="absolute top-full left-0 mt-2 w-80 bg-background border border-border shadow-elegant rounded-lg z-50 animate-in fade-in-0 zoom-in-95">
+                  <div className="p-2">
+                    {solutionItems.map((service) => (
+                      <Link
+                        key={service.name}
+                        to={service.path}
+                        onClick={() => setIsDesktopSolutionsOpen(false)}
+                        className="block px-4 py-3 text-sm hover:bg-accent rounded-md transition-colors"
+                      >
+                        {service.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <Link to="/projects" className="text-foreground hover:text-primary transition-smooth font-semibold">
               Projects
@@ -179,7 +225,7 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                 </Link>
               ))}
 
-              {/* Expertise accordion on mobile */}
+              {/* Expertise accordion on mobile with icons */}
               <div className="w-full">
                 <button
                   onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
@@ -196,20 +242,26 @@ const Navigation = ({ className = "" }: NavigationProps) => {
                   className={`overflow-hidden transition-all duration-300 ${isExpertiseOpen ? "max-h-[1200px] opacity-100 mt-2" : "max-h-0 opacity-0"}`}
                 >
                   <ul className="flex flex-col space-y-1 px-2">
-                    {expertiseAreas.map((area) => (
-                      <li key={area.name}>
-                        <Link
-                          to={area.path}
-                          className="block text-muted-foreground hover:text-primary px-3 py-2 rounded-md transition-colors"
-                          onClick={() => {
-                            setIsOpen(false);
-                            setIsExpertiseOpen(false);
-                          }}
-                        >
-                          {area.name}
-                        </Link>
-                      </li>
-                    ))}
+                    {expertiseAreas.map((area) => {
+                      const Icon = area.icon;
+                      return (
+                        <li key={area.name}>
+                          <Link
+                            to={area.path}
+                            className="flex items-center gap-3 text-muted-foreground hover:text-primary px-3 py-2 rounded-md transition-colors group"
+                            onClick={() => {
+                              setIsOpen(false);
+                              setIsExpertiseOpen(false);
+                            }}
+                          >
+                            <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                              <Icon className="w-4 h-4 text-white" />
+                            </div>
+                            <span>{area.name}</span>
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
