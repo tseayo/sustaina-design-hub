@@ -223,18 +223,33 @@ const CarbonCalculator = () => {
     return re.test(email);
   };
 
-  const resetCalculator = () => {
-    setCurrentStep(1);
-    setResults(null);
-    setCalculatorData({
-      electricity: { usage: 0, unit: 'kWh' },
-      transportation: { carMileage: 0, fuelType: 'petrol', publicTransport: 0, flights: 0 },
-      housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 }
-    });
-    setEmail('');
-    setEmailSent(false);
-    setEmailError('');
-  };
+// In your CarbonCalculator.tsx, update the resetCalculator function:
+const resetCalculator = () => {
+  setCurrentStep(1);
+  setResults(null);
+  setCalculatorData({
+    electricity: { usage: 0, unit: 'kWh' },
+    transportation: { carMileage: 0, fuelType: 'petrol', publicTransport: 0, flights: 0 },
+    housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 }
+  });
+  setEmail('');
+  setEmailSent(false);
+  setEmailError('');
+
+  // Scroll to the calculator container
+  const calculatorElement = document.getElementById('carbon-calculator');
+  if (calculatorElement) {
+    calculatorElement.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+  
+  // Alternative: Scroll to the top of the calculator component
+  // if you want to be more specific
+  const calculatorElement = document.getElementById('carbon-calculator');
+  if (calculatorElement) {
+    calculatorElement.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
   // Custom label renderer for pie chart to prevent overlapping
   const renderCustomizedLabel = ({
@@ -261,7 +276,7 @@ const CarbonCalculator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
+    <div id="carbon-calculator" className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
       <div className="container mx-auto px-4">
         <Card className="shadow-lg max-w-5xl mx-auto">
           <CardContent className="p-6">
