@@ -1,8 +1,32 @@
+// src/components/Footer.tsx
+import React from "react";
 import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import neclLogo from "@/assets/necl-logo.png";
 
-const Footer = () => {
+const Footer: React.FC = () => {
+  const navigate = useNavigate();
+
+  // Handler for links that should scroll to a section on the Home page
+  const handleScrollSection = (sectionId: string) => {
+    // If not already on Home ("/"), navigate to Home then scroll once mounted
+    if (window.location.pathname !== "/") {
+      navigate("/", { replace: false });
+      // Wait a tick for route to change
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  };
+
   return (
     <footer className="bg-muted/30 border-t border-border py-16">
       <div className="container mx-auto px-6 lg:px-8">
@@ -10,14 +34,14 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center group">
-              <img 
-                src={neclLogo} 
-                alt="NetZero Energy Consultant Limited" 
+              <img
+                src={neclLogo}
+                alt="NetZero Energy Consultant Limited"
                 className="h-14 w-auto transition-all duration-300 group-hover:scale-105"
               />
             </Link>
             <p className="text-muted-foreground leading-relaxed">
-              Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emission and transition to sustainable energy solutions.
+              Expert energy consulting services that empower businesses and communities to reduce greenhouse gas emissions and transition to sustainable energy solutions.
             </p>
             <div className="flex space-x-4">
               <a
@@ -55,14 +79,19 @@ const Footer = () => {
             <h3 className="font-heading font-semibold text-foreground mb-6">Quick Links</h3>
             <ul className="space-y-4">
               <li>
-                <a href="/" className="text-muted-foreground hover:text-primary transition-smooth">
+                <Link to="/" className="text-muted-foreground hover:text-primary transition-smooth">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/#about" className="text-muted-foreground hover:text-primary transition-smooth">
+                <button
+                  type="button"
+                  onClick={() => handleScrollSection("about")}
+                  className="text-muted-foreground hover:text-primary transition-smooth"
+                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                >
                   About
-                </a>
+                </button>
               </li>
               <li>
                 <Link to="/focus-areas" className="text-muted-foreground hover:text-primary transition-smooth">
@@ -70,20 +99,27 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="/#services" className="text-muted-foreground hover:text-primary transition-smooth">
+                <button
+                  type="button"
+                  onClick={() => handleScrollSection("services")}
+                  className="text-muted-foreground hover:text-primary transition-smooth"
+                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                >
                   Solutions
-                </a>
+                </button>
               </li>
               <li>
-                <a href="/#projects" className="text-muted-foreground hover:text-primary transition-smooth">
+                <button
+                  type="button"
+                  onClick={() => handleScrollSection("projects")}
+                  className="text-muted-foreground hover:text-primary transition-smooth"
+                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                >
                   Projects
-                </a>
+                </button>
               </li>
             </ul>
           </div>
-
-          {/* REMOVED: Expertise Areas Section */}
-          {/* This entire section has been removed to eliminate duplicate Expertise */}
 
           {/* Contact Info */}
           <div>
@@ -97,7 +133,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <a href="tel:+44 203 937 9903" className="text-muted-foreground hover:text-primary transition-smooth">
+                <a href="tel:+442039379903" className="text-muted-foreground hover:text-primary transition-smooth">
                   +44 203 937 9903
                 </a>
               </li>
