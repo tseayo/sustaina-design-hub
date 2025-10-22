@@ -1,4 +1,3 @@
-// src/components/CarbonCalculator.tsx
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,8 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+
+// Remove static imports for html2canvas and jspdf
 
 const CarbonCalculator = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +16,7 @@ const CarbonCalculator = () => {
     flights: '',
     diet: 'average'
   });
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<any>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const pdfRef = useRef<HTMLDivElement>(null);
 
@@ -28,33 +27,33 @@ const CarbonCalculator = () => {
     flights: 90, // kg CO2 per hour
   };
 
-  const dietFactors = {
+  const dietFactors: Record<string, number> = {
     vegetarian: 1200,
     average: 1600,
     meatHeavy: 2200,
   };
 
   const calculateEmissions = () => {
-    const electricityEmissions = parseFloat(formData.electricity) * emissionFactors.electricity;
-    const gasEmissions = parseFloat(formData.gas) * emissionFactors.gas;
-    const vehicleEmissions = parseFloat(formData.vehicle) * emissionFactors.vehicle;
-    const flightEmissions = parseFloat(formData.flights) * emissionFactors.flights;
-    const dietEmissions = dietFactors[formData.diet];
+    const electricityEmissions = parseFloat(formData.electricity || '0') * emissionFactors.electricity;
+    const gasEmissions = parseFloat(formData.gas || '0') * emissionFactors.gas;
+    const vehicleEmissions = parseFloat(formData.vehicle || '0') * emissionFactors.vehicle;
+    const flightEmissions = parseFloat(formData.flights || '0') * emissionFactors.flights;
+    const dietEmissions = dietFactors[formData.diet] || 0;
 
     const totalEmissions = electricityEmissions + gasEmissions + vehicleEmissions + flightEmissions + dietEmissions;
 
     const breakdown = [
-      { name: 'Electricity', value: electricityEmissions, color: '#8884d8' },
-      { name: 'Natural Gas', value: gasEmissions, color: '#82ca9d' },
-      { name: 'Vehicle', value: vehicleEmissions, color: '#ffc658' },
-      { name: 'Flights', value: flightEmissions, color: '#ff8042' },
-      { name: 'Diet', value: dietEmissions, color: '#0088fe' },
+      { name: 'Electricity', value: Math.round(electricityEmissions), color: '#8884d8' },
+      { name: 'Natural Gas', value: Math.round(gasEmissions), color: '#82ca9d' },
+      { name: 'Vehicle', value: Math.round(vehicleEmissions), color: '#ffc658' },
+      { name: 'Flights', value: Math.round(flightEmissions), color: '#ff8042' },
+      { name: 'Diet', value: Math.round(dietEmissions), color: '#0088fe' },
     ];
 
     setResults({
-      total: totalEmissions,
+      total: Math.round(totalEmissions),
       breakdown,
-      monthly: totalEmissions / 12,
+      monthly: Math.round(totalEmissions / 12),
       equivalent: (totalEmissions / 2000).toFixed(1), // Cars driven for a year
     });
   };
@@ -65,6 +64,10 @@ const CarbonCalculator = () => {
     setIsGeneratingPDF(true);
     
     try {
+      // Use dynamic imports to avoid build-time issues
+      const html2canvas = (await import('html2canvas')).default;
+      const { jsPDF } = await import('jspdf');
+      
       const canvas = await html2canvas(pdfRef.current, {
         scale: 2,
         useCORS: true,
@@ -80,6 +83,7 @@ const CarbonCalculator = () => {
       pdf.save('carbon-emission-report.pdf');
     } catch (error) {
       console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
     } finally {
       setIsGeneratingPDF(false);
     }
@@ -114,6 +118,7 @@ const CarbonCalculator = () => {
                   value={formData.electricity}
                   onChange={(e) => setFormData({ ...formData, electricity: e.target.value })}
                   placeholder="e.g., 300"
+                  min="0"
                 />
               </div>
 
@@ -125,6 +130,7 @@ const CarbonCalculator = () => {
                   value={formData.gas}
                   onChange={(e) => setFormData({ ...formData, gas: e.target.value })}
                   placeholder="e.g., 50"
+                  min="0"
                 />
               </div>
 
@@ -136,6 +142,7 @@ const CarbonCalculator = () => {
                   value={formData.vehicle}
                   onChange={(e) => setFormData({ ...formData, vehicle: e.target.value })}
                   placeholder="e.g., 100"
+                  min="0"
                 />
               </div>
 
@@ -147,6 +154,7 @@ const CarbonCalculator = () => {
                   value={formData.flights}
                   onChange={(e) => setFormData({ ...formData, flights: e.target.value })}
                   placeholder="e.g., 10"
+                  min="0"
                 />
               </div>
 
@@ -164,7 +172,11 @@ const CarbonCalculator = () => {
                 </Select>
               </div>
 
-              <Button onClick={calculateEmissions} className="w-full bg-green-600 hover:bg-green-700">
+              <Button 
+                onClick={calculateEmissions} 
+                className="w-full bg-green-600 hover:bg-green-700"
+                disabled={!formData.electricity && !formData.gas && !formData.vehicle && !formData.flights}
+              >
                 Calculate Carbon Footprint
               </Button>
             </CardContent>
@@ -187,6 +199,9 @@ const CarbonCalculator = () => {
                     <p className="text-sm text-gray-500 mt-2">
                       Equivalent to driving {results.equivalent} cars for a year
                     </p>
+                    <p className="text-sm text-gray-500">
+                      Monthly average: {results.monthly.toLocaleString()} kg CO₂
+                    </p>
                   </div>
 
                   {/* Charts Section */}
@@ -199,9 +214,12 @@ const CarbonCalculator = () => {
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis dataKey="name" />
                           <YAxis />
-                          <Tooltip formatter={(value) => [`${value} kg CO₂`, 'Emissions']} />
-                          <Bar dataKey="value" name="Emissions">
-                            {results.breakdown.map((entry, index) => (
+                          <Tooltip 
+                            formatter={(value: number) => [`${value.toLocaleString()} kg CO₂`, 'Emissions']}
+                          />
+                          <Legend />
+                          <Bar dataKey="value" name="Emissions (kg CO₂)">
+                            {results.breakdown.map((entry: any, index: number) => (
                               <Cell key={`cell-${index}`} fill={entry.color} />
                             ))}
                           </Bar>
@@ -224,11 +242,13 @@ const CarbonCalculator = () => {
                             fill="#8884d8"
                             dataKey="value"
                           >
-                            {results.breakdown.map((entry, index) => (
+                            {results.breakdown.map((entry: any, index: number) => (
                               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                           </Pie>
-                          <Tooltip formatter={(value) => [`${value} kg CO₂`, 'Emissions']} />
+                          <Tooltip 
+                            formatter={(value: number) => [`${value.toLocaleString()} kg CO₂`, 'Emissions']}
+                          />
                         </PieChart>
                       </ResponsiveContainer>
                     </div>
@@ -237,7 +257,7 @@ const CarbonCalculator = () => {
                   {/* Detailed Breakdown */}
                   <div className="space-y-3">
                     <h4 className="font-semibold text-lg">Detailed Breakdown</h4>
-                    {results.breakdown.map((item, index) => (
+                    {results.breakdown.map((item: any, index: number) => (
                       <div key={item.name} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <div 
