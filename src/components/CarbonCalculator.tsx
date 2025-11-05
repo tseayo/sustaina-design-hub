@@ -7,6 +7,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Download, Mail, Check, ArrowLeft, ArrowRight } from 'lucide-react';
 
+interface UserDetails {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  company: string;
+  country: string;
+}
+
 interface CalculatorData {
   electricity: {
     usage: number;
@@ -23,6 +32,7 @@ interface CalculatorData {
     heatingType: 'natural_gas' | 'electric' | 'oil';
     householdSize: number;
   };
+  userDetails: UserDetails;
 }
 
 interface EmissionResults {
@@ -35,7 +45,8 @@ const CarbonCalculator = () => {
   const [calculatorData, setCalculatorData] = useState<CalculatorData>({
     electricity: { usage: 0, unit: 'kWh' },
     transportation: { carMileage: 0, fuelType: 'petrol', publicTransport: 0, flights: 0 },
-    housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 }
+    housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 },
+    userDetails: { firstName: '', lastName: '', email: '', phone: '', company: '', country: '' }
   });
 
   const [results, setResults] = useState<EmissionResults | null>(null);
@@ -87,11 +98,24 @@ const CarbonCalculator = () => {
   };
 
   const handleNext = () => {
-    if (currentStep < 3) {
+    // Validate user details on step 4
+    if (currentStep === 4) {
+      const { firstName, lastName, email } = calculatorData.userDetails;
+      if (!firstName || !lastName || !email) {
+        alert('Please fill in all required fields (First Name, Last Name, and Email)');
+        return;
+      }
+      if (!validateEmail(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+    }
+
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     } else {
       calculateEmissions();
-      setCurrentStep(4);
+      setCurrentStep(5);
     }
   };
 
@@ -126,7 +150,7 @@ const CarbonCalculator = () => {
         scale: 2,
         useCORS: true,
         logging: false,
-        scrollY: -window.scrollY, // Ensure we capture the entire content
+        scrollY: -window.scrollY,
         windowHeight: pdfRef.current.scrollHeight,
         height: pdfRef.current.scrollHeight,
       });
@@ -136,14 +160,12 @@ const CarbonCalculator = () => {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      // If the content is too tall for one page, split into multiple pages
       let heightLeft = pdfHeight;
       let position = 0;
 
       pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
       heightLeft -= pdf.internal.pageSize.getHeight();
 
-      // Add additional pages if content is too long
       while (heightLeft >= 0) {
         position = heightLeft - pdfHeight;
         pdf.addPage();
@@ -155,7 +177,6 @@ const CarbonCalculator = () => {
         pdf.save('carbon-footprint-report.pdf');
         return null;
       } else {
-        // Return PDF as Blob for email attachment
         const pdfBlob = pdf.output('blob');
         return pdfBlob;
       }
@@ -183,21 +204,18 @@ const CarbonCalculator = () => {
     setEmailError('');
 
     try {
-      // Generate PDF as blob
       const pdfBlob = await generatePDF(true);
       
       if (!pdfBlob) {
         throw new Error('Failed to generate PDF');
       }
 
-      // Create FormData to send to your backend API
       const formData = new FormData();
       formData.append('email', email);
       formData.append('pdf', pdfBlob, 'carbon-footprint-report.pdf');
       formData.append('totalEmissions', results?.totalEmissions.toString() || '0');
       formData.append('subject', 'Your Carbon Footprint Report from NetZero Energy Experts');
 
-      // Send to your backend API endpoint
       const response = await fetch('/api/send-report', {
         method: 'POST',
         body: formData,
@@ -229,20 +247,19 @@ const CarbonCalculator = () => {
     setCalculatorData({
       electricity: { usage: 0, unit: 'kWh' },
       transportation: { carMileage: 0, fuelType: 'petrol', publicTransport: 0, flights: 0 },
-      housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 }
+      housing: { heating: 0, heatingType: 'natural_gas', householdSize: 1 },
+      userDetails: { firstName: '', lastName: '', email: '', phone: '', company: '', country: '' }
     });
     setEmail('');
     setEmailSent(false);
     setEmailError('');
 
-    // Scroll to the calculator container
     const calculatorElement = document.getElementById('carbon-calculator');
     if (calculatorElement) {
       calculatorElement.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // Custom label renderer for pie chart to prevent overlapping
   const renderCustomizedLabel = ({
     cx, cy, midAngle, innerRadius, outerRadius, percent, index
   }: any) => {
@@ -274,15 +291,16 @@ const CarbonCalculator = () => {
             {/* Progress Bar */}
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-green-600' : 'text-gray-400'}`}>Electricity</span>
-                <span className={`text-sm font-medium ${currentStep >= 2 ? 'text-green-600' : 'text-gray-400'}`}>Transportation</span>
-                <span className={`text-sm font-medium ${currentStep >= 3 ? 'text-green-600' : 'text-gray-400'}`}>Housing</span>
-                <span className={`text-sm font-medium ${currentStep >= 4 ? 'text-green-600' : 'text-gray-400'}`}>Results</span>
+                <span className={`text-xs sm:text-sm font-medium ${currentStep >= 1 ? 'text-green-600' : 'text-gray-400'}`}>Electricity</span>
+                <span className={`text-xs sm:text-sm font-medium ${currentStep >= 2 ? 'text-green-600' : 'text-gray-400'}`}>Transportation</span>
+                <span className={`text-xs sm:text-sm font-medium ${currentStep >= 3 ? 'text-green-600' : 'text-gray-400'}`}>Housing</span>
+                <span className={`text-xs sm:text-sm font-medium ${currentStep >= 4 ? 'text-green-600' : 'text-gray-400'}`}>Your Details</span>
+                <span className={`text-xs sm:text-sm font-medium ${currentStep >= 5 ? 'text-green-600' : 'text-gray-400'}`}>Results</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
                   className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(Math.min(currentStep, 4) / 4) * 100}%` }}
+                  style={{ width: `${(Math.min(currentStep, 5) / 5) * 100}%` }}
                 ></div>
               </div>
             </div>
@@ -435,10 +453,95 @@ const CarbonCalculator = () => {
               </div>
             )}
 
+            {/* Step 4: User Details */}
+            {currentStep === 4 && (
+              <div className="space-y-6">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-semibold mb-2 text-gray-800">Your Details</h2>
+                  <p className="text-gray-600">Please provide your information to receive your carbon footprint report</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      First Name <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      type="text"
+                      value={calculatorData.userDetails.firstName}
+                      onChange={(e) => updateData('userDetails', 'firstName', e.target.value)}
+                      placeholder="John"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Last Name <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      type="text"
+                      value={calculatorData.userDetails.lastName}
+                      onChange={(e) => updateData('userDetails', 'lastName', e.target.value)}
+                      placeholder="Doe"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      type="email"
+                      value={calculatorData.userDetails.email}
+                      onChange={(e) => updateData('userDetails', 'email', e.target.value)}
+                      placeholder="john.doe@example.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </Label>
+                    <Input
+                      type="tel"
+                      value={calculatorData.userDetails.phone}
+                      onChange={(e) => updateData('userDetails', 'phone', e.target.value)}
+                      placeholder="+44 20 1234 5678"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Company/Organization
+                    </Label>
+                    <Input
+                      type="text"
+                      value={calculatorData.userDetails.company}
+                      onChange={(e) => updateData('userDetails', 'company', e.target.value)}
+                      placeholder="NetZero Energy Experts"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-medium text-gray-700 mb-2">
+                      Country
+                    </Label>
+                    <Input
+                      type="text"
+                      value={calculatorData.userDetails.country}
+                      onChange={(e) => updateData('userDetails', 'country', e.target.value)}
+                      placeholder="United Kingdom"
+                    />
+                  </div>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                  <p className="text-sm text-blue-800">
+                    <span className="font-semibold">Privacy Notice:</span> Your information will be used solely to provide you with your carbon footprint report. We respect your privacy and will not share your data with third parties.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Results */}
-            {currentStep === 4 && results && (
+            {currentStep === 5 && results && (
               <div className="space-y-8">
-                {/* This div captures the entire results section for PDF generation */}
                 <div ref={pdfRef} className="space-y-8">
                   <div className="text-center">
                     <h2 className="text-3xl font-bold mb-2 text-gray-800">Your Carbon Footprint</h2>
@@ -528,7 +631,7 @@ const CarbonCalculator = () => {
                     </div>
                   </div>
 
-                  {/* Recommendations - This section is now included in PDF */}
+                  {/* Recommendations */}
                   <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
                     <h4 className="font-semibold text-amber-900 text-lg mb-3">💡 Recommendations to Reduce Your Footprint</h4>
                     <ul className="text-amber-800 space-y-2">
@@ -563,7 +666,7 @@ const CarbonCalculator = () => {
                     </ul>
                   </div>
 
-                  {/* Input Data Summary for PDF */}
+                  {/* Input Data Summary */}
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
                     <h4 className="font-semibold text-blue-900 text-lg mb-3">📋 Your Input Data</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -589,111 +692,6 @@ const CarbonCalculator = () => {
                   </div>
                 </div>
 
-                {/* Download and Email Section - Not included in PDF */}
+                {/* Download and Email Section */}
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
                   <h4 className="font-semibold text-blue-900 text-lg mb-4">📊 Save Your Results</h4>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Download Button */}
-                    <Button
-                      onClick={() => generatePDF(false)}
-                      disabled={isGeneratingPDF}
-                      className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                    >
-                      {isGeneratingPDF ? (
-                        'Generating PDF...'
-                      ) : (
-                        <>
-                          <Download className="w-5 h-5" />
-                          Download Report (PDF)
-                        </>
-                      )}
-                    </Button>
-
-                    {/* Email Section */}
-                    <div className="space-y-3">
-                      {emailSent ? (
-                        <div className="text-center p-4 bg-green-100 rounded-lg">
-                          <p className="text-green-700 font-medium">
-                            ✅ Report sent successfully! Check your email.
-                          </p>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="flex gap-2">
-                            <Input
-                              type="email"
-                              value={email}
-                              onChange={(e) => {
-                                setEmail(e.target.value);
-                                setEmailError('');
-                              }}
-                              placeholder="your@email.com"
-                              className="flex-1"
-                            />
-                            <Button
-                              onClick={sendEmailWithPDF}
-                              disabled={isSendingEmail || !email}
-                              className="bg-green-600 hover:bg-green-700"
-                            >
-                              {isSendingEmail ? (
-                                'Sending...'
-                              ) : (
-                                <>
-                                  <Mail className="w-4 h-4 mr-2" />
-                                  Email
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                          {emailError && (
-                            <p className="text-red-600 text-sm">{emailError}</p>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Reset Button - Not included in PDF */}
-                <div className="text-center">
-                  <Button
-                    onClick={resetCalculator}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Calculate Again
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Navigation Buttons */}
-            {currentStep < 4 && (
-              <div className="flex justify-between mt-8">
-                <Button
-                  onClick={handleBack}
-                  disabled={currentStep === 1}
-                  variant="outline"
-                  className="flex items-center gap-2"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back
-                </Button>
-                
-                <Button
-                  onClick={handleNext}
-                  className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
-                >
-                  {currentStep === 3 ? 'Calculate Results' : 'Next Step'}
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-};
-
-export default CarbonCalculator;
