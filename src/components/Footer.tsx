@@ -111,10 +111,10 @@ const Footer: React.FC = () => {
               <li className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                 <a
-                  href="mailto:info@netzeroenergyconsultantltd.com"
+                  href="mailto:info@netzeroenergyexperts.com"
                   className="text-muted-foreground hover:text-primary transition-smooth"
                 >
-                  info@netzeroenergyconsultantltd.com
+                  info@netzeroenergyexperts.com
                 </a>
               </li>
               <li className="flex items-start space-x-3">
