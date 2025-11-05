@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Download, Mail, Check, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Download, Mail, ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface UserDetails {
   firstName: string;
@@ -98,7 +98,6 @@ const CarbonCalculator = () => {
   };
 
   const handleNext = () => {
-    // Validate user details on step 4
     if (currentStep === 4) {
       const { firstName, lastName, email } = calculatorData.userDetails;
       if (!firstName || !lastName || !email) {
@@ -141,11 +140,9 @@ const CarbonCalculator = () => {
     setIsGeneratingPDF(true);
     
     try {
-      // Dynamic imports to avoid build issues
       const html2canvas = (await import('html2canvas')).default;
       const { jsPDF } = await import('jspdf');
       
-      // Capture the entire results section including recommendations
       const canvas = await html2canvas(pdfRef.current, {
         scale: 2,
         useCORS: true,
@@ -261,7 +258,7 @@ const CarbonCalculator = () => {
   };
 
   const renderCustomizedLabel = ({
-    cx, cy, midAngle, innerRadius, outerRadius, percent, index
+    cx, cy, midAngle, innerRadius, outerRadius, percent
   }: any) => {
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -288,7 +285,6 @@ const CarbonCalculator = () => {
       <div className="container mx-auto px-4">
         <Card className="shadow-lg max-w-5xl mx-auto">
           <CardContent className="p-6">
-            {/* Progress Bar */}
             <div className="mb-8">
               <div className="flex justify-between mb-2">
                 <span className={`text-xs sm:text-sm font-medium ${currentStep >= 1 ? 'text-green-600' : 'text-gray-400'}`}>Electricity</span>
@@ -305,7 +301,6 @@ const CarbonCalculator = () => {
               </div>
             </div>
 
-            {/* Step 1: Electricity */}
             {currentStep === 1 && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800">Electricity Usage</h2>
@@ -329,7 +324,6 @@ const CarbonCalculator = () => {
                     <Select
                       value={calculatorData.electricity.unit}
                       onValueChange={(value: 'kWh' | 'mwh') => updateData('electricity', 'unit', value)}
-                      className="w-full"
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -344,7 +338,6 @@ const CarbonCalculator = () => {
               </div>
             )}
 
-            {/* Step 2: Transportation */}
             {currentStep === 2 && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800">Transportation</h2>
@@ -404,7 +397,6 @@ const CarbonCalculator = () => {
               </div>
             )}
 
-            {/* Step 3: Housing */}
             {currentStep === 3 && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800">Housing</h2>
@@ -453,7 +445,6 @@ const CarbonCalculator = () => {
               </div>
             )}
 
-            {/* Step 4: User Details */}
             {currentStep === 4 && (
               <div className="space-y-6">
                 <div className="text-center mb-6">
@@ -539,7 +530,6 @@ const CarbonCalculator = () => {
               </div>
             )}
 
-            {/* Results */}
             {currentStep === 5 && results && (
               <div className="space-y-8">
                 <div ref={pdfRef} className="space-y-8">
@@ -548,7 +538,6 @@ const CarbonCalculator = () => {
                     <p className="text-gray-600">Complete analysis of your monthly emissions</p>
                   </div>
 
-                  {/* Summary Card */}
                   <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-8">
                     <div className="text-center mb-6">
                       <div className="text-5xl font-bold text-green-700 mb-2">
@@ -561,9 +550,7 @@ const CarbonCalculator = () => {
                     </div>
                   </div>
 
-                  {/* Charts */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Pie Chart */}
                     <div className="bg-gray-50 rounded-xl p-6">
                       <h3 className="font-semibold text-lg mb-4 text-gray-800">Emissions Distribution</h3>
                       <ResponsiveContainer width="100%" height={300}>
@@ -597,7 +584,6 @@ const CarbonCalculator = () => {
                       </ResponsiveContainer>
                     </div>
 
-                    {/* Bar Chart */}
                     <div className="bg-gray-50 rounded-xl p-6">
                       <h3 className="font-semibold text-lg mb-4 text-gray-800">Emissions by Category</h3>
                       <ResponsiveContainer width="100%" height={300}>
@@ -612,7 +598,6 @@ const CarbonCalculator = () => {
                     </div>
                   </div>
 
-                  {/* Breakdown Table */}
                   <div className="bg-gray-50 rounded-xl p-6">
                     <h3 className="font-semibold text-lg mb-4 text-gray-800">Detailed Breakdown</h3>
                     <div className="space-y-3">
@@ -631,7 +616,6 @@ const CarbonCalculator = () => {
                     </div>
                   </div>
 
-                  {/* Recommendations */}
                   <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
                     <h4 className="font-semibold text-amber-900 text-lg mb-3">💡 Recommendations to Reduce Your Footprint</h4>
                     <ul className="text-amber-800 space-y-2">
@@ -666,7 +650,6 @@ const CarbonCalculator = () => {
                     </ul>
                   </div>
 
-                  {/* Input Data Summary */}
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
                     <h4 className="font-semibold text-blue-900 text-lg mb-3">📋 Your Input Data</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -692,6 +675,18 @@ const CarbonCalculator = () => {
                   </div>
                 </div>
 
-                {/* Download and Email Section */}
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
                   <h4 className="font-semibold text-blue-900 text-lg mb-4">📊 Save Your Results</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button
+                      onClick={() => generatePDF(false)}
+                      disabled={isGeneratingPDF}
+                      className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      {isGeneratingPDF ? (
+                        'Generating PDF...'
+                      ) : (
+                        <>
+                          <Download className="w-5 h-5" />
+                          Download Report (PDF)
