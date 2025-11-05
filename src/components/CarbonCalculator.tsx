@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Download, Mail, Check, ArrowLeft, ArrowRight, User, Building, Phone } from 'lucide-react';
+import { Download, Mail, Check, ArrowLeft, ArrowRight, User, Building, Phone, Edit } from 'lucide-react';
 
 interface CalculatorData {
   electricity: {
@@ -122,6 +122,11 @@ const CarbonCalculator = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleEditDetails = () => {
+    // Go back to the user details step to edit information
+    setCurrentStep(4);
   };
 
   const updateData = (section: keyof CalculatorData, field: string, value: any) => {
@@ -576,9 +581,198 @@ const CarbonCalculator = () => {
             {/* Step 5: Results */}
             {currentStep === 5 && results && (
               <div className="space-y-8">
+                {/* User Details Summary Card */}
+                <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-green-900 text-lg">Your Information</h3>
+                    <Button
+                      onClick={handleEditDetails}
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-2 text-green-700 border-green-300 hover:bg-green-100"
+                    >
+                      <Edit className="w-4 h-4" />
+                      Edit Details
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <span className="font-medium text-green-800">Name:</span>
+                      <p className="text-green-700">{userDetails.firstName} {userDetails.lastName}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-green-800">Email:</span>
+                      <p className="text-green-700">{userDetails.email}</p>
+                    </div>
+                    {userDetails.phone && (
+                      <div>
+                        <span className="font-medium text-green-800">Phone:</span>
+                        <p className="text-green-700">{userDetails.phone}</p>
+                      </div>
+                    )}
+                    {userDetails.company && (
+                      <div>
+                        <span className="font-medium text-green-800">Company:</span>
+                        <p className="text-green-700">{userDetails.company}</p>
+                      </div>
+                    )}
+                    {userDetails.jobTitle && (
+                      <div>
+                        <span className="font-medium text-green-800">Job Title:</span>
+                        <p className="text-green-700">{userDetails.jobTitle}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <div ref={pdfRef} className="space-y-8">
-                  {/* ... (keep all your existing results JSX exactly as it was) ... */}
-                  {/* This includes the summary card, charts, breakdown table, recommendations, and input data summary */}
+                  <div className="text-center">
+                    <h2 className="text-3xl font-bold mb-2 text-gray-800">Your Carbon Footprint</h2>
+                    <p className="text-gray-600">Complete analysis of your monthly emissions</p>
+                  </div>
+
+                  {/* Summary Card */}
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-8">
+                    <div className="text-center mb-6">
+                      <div className="text-5xl font-bold text-green-700 mb-2">
+                        {results.totalEmissions.toFixed(2)} kg CO₂
+                      </div>
+                      <p className="text-green-600 text-lg">Monthly Carbon Emissions</p>
+                      <p className="text-gray-600 mt-2">
+                        Annual Projection: <span className="font-semibold">{(results.totalEmissions * 12).toFixed(2)} kg CO₂</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Charts */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Pie Chart */}
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <h3 className="font-semibold text-lg mb-4 text-gray-800">Emissions Distribution</h3>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <PieChart>
+                          <Pie
+                            data={results.breakdown}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={100}
+                            fill="#8884d8"
+                            dataKey="emissions"
+                            label={renderCustomizedLabel}
+                            labelLine={false}
+                          >
+                            {results.breakdown.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip 
+                            formatter={(value: number) => [`${value.toFixed(2)} kg CO₂`, 'Emissions']}
+                          />
+                          <Legend 
+                            layout="vertical" 
+                            verticalAlign="middle" 
+                            align="right"
+                            wrapperStyle={{
+                              paddingLeft: '20px'
+                            }}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+
+                    {/* Bar Chart */}
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <h3 className="font-semibold text-lg mb-4 text-gray-800">Emissions by Category</h3>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={results.breakdown}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="category" angle={-45} textAnchor="end" height={80} />
+                          <YAxis />
+                          <Tooltip formatter={(value: number) => [`${value.toFixed(2)} kg CO₂`, 'Emissions']} />
+                          <Bar dataKey="emissions" fill="#10b981" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Breakdown Table */}
+                  <div className="bg-gray-50 rounded-xl p-6">
+                    <h3 className="font-semibold text-lg mb-4 text-gray-800">Detailed Breakdown</h3>
+                    <div className="space-y-3">
+                      {results.breakdown.map((item, index) => (
+                        <div key={index} className="flex justify-between items-center p-3 bg-white rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div 
+                              className="w-4 h-4 rounded" 
+                              style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                            ></div>
+                            <span className="font-medium text-gray-700">{item.category}</span>
+                          </div>
+                          <span className="font-semibold text-green-700">{item.emissions.toFixed(2)} kg CO₂</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Recommendations */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                    <h4 className="font-semibold text-amber-900 text-lg mb-3">💡 Recommendations to Reduce Your Footprint</h4>
+                    <ul className="text-amber-800 space-y-2">
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Switch to renewable energy sources to reduce electricity emissions</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Use public transportation or carpool when possible</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Improve home insulation to reduce heating needs</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Consider energy-efficient appliances and LED lighting</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Reduce air travel and consider video conferencing alternatives</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Adopt a plant-based diet to reduce food-related emissions</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Regular vehicle maintenance improves fuel efficiency</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Input Data Summary for PDF */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <h4 className="font-semibold text-blue-900 text-lg mb-3">📋 Your Input Data</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <strong>Electricity:</strong> {calculatorData.electricity.usage} {calculatorData.electricity.unit}
+                      </div>
+                      <div>
+                        <strong>Car Mileage:</strong> {calculatorData.transportation.carMileage} km ({calculatorData.transportation.fuelType})
+                      </div>
+                      <div>
+                        <strong>Public Transport:</strong> {calculatorData.transportation.publicTransport} km
+                      </div>
+                      <div>
+                        <strong>Flights:</strong> {calculatorData.transportation.flights} km
+                      </div>
+                      <div>
+                        <strong>Heating:</strong> {calculatorData.housing.heating} kWh ({calculatorData.housing.heatingType})
+                      </div>
+                      <div>
+                        <strong>Household Size:</strong> {calculatorData.housing.householdSize}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Download and Email Section */}
@@ -586,6 +780,7 @@ const CarbonCalculator = () => {
                   <h4 className="font-semibold text-blue-900 text-lg mb-4">📊 Save Your Results</h4>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Download Button */}
                     <Button
                       onClick={() => generatePDF(false)}
                       disabled={isGeneratingPDF}
@@ -601,6 +796,7 @@ const CarbonCalculator = () => {
                       )}
                     </Button>
 
+                    {/* Email Section */}
                     <div className="space-y-3">
                       {emailSent ? (
                         <div className="text-center p-4 bg-green-100 rounded-lg">
@@ -639,18 +835,30 @@ const CarbonCalculator = () => {
                   </div>
                 </div>
 
-                <div className="text-center">
+                {/* Action Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t border-gray-200">
                   <Button
-                    onClick={resetCalculator}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
+                    onClick={handleEditDetails}
+                    variant="outline"
+                    className="flex items-center gap-2 text-gray-600"
                   >
-                    Calculate Again
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Edit Details
                   </Button>
+                  
+                  <div className="flex gap-4">
+                    <Button
+                      onClick={resetCalculator}
+                      className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                    >
+                      Calculate Again
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Navigation Buttons */}
+            {/* Navigation Buttons for Steps 1-4 */}
             {currentStep < 5 && (
               <div className="flex justify-between mt-8">
                 <Button
